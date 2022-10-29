@@ -1,0 +1,36 @@
+#ifndef STATEHANDLER_H
+#define STATEHANDLER_H
+
+#include <unordered_map>
+#include <functional>
+#include "SharedContext.h"
+#include "states/State.h"
+
+class StateHandler
+{
+public:
+    using StateFactory = std::unordered_map<StateType, std::function<std::unique_ptr<State>(void)>>;
+    using States = std::vector<std::unique_ptr<State>>;
+
+    StateHandler(SharedContext& sharedCtx);
+    ~StateHandler() = default;
+
+    void switchTo(const StateType& stateType);
+
+    template<class State>
+    void registerState(const StateType& type)
+    {
+        mStateFactory[type] = [this, type]() -> std::unique_ptr<State>
+        {
+            return std::make_unique<State>(std::unique_ptr<StateHandler>(this), type);
+        };
+    }
+
+private:
+    StateFactory mStateFactory;
+    States states;
+    SharedContext& mSharedCtx;
+};
+
+
+#endif //STATEHANDLER_H
