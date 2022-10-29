@@ -3,5 +3,6 @@ project(Mausukira)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# Project modules
 add_subdirectory(dependencies)
 add_subdirectory(MausukiraApp)

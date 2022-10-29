@@ -1,4 +1,16 @@
-add_executable(MausukiraApp main.cpp)
+add_executable(MausukiraApp main.cpp Game.cpp Window.cpp scene/Scene.cpp scene/Scene.h)
+
+add_subdirectory(event)
+add_subdirectory(states_stack)
+add_subdirectory(gui)
+
+target_link_libraries(MausukiraApp
+        PRIVATE
+        sfml-graphics
+        sfml-system
+        sfml-window
+        EnTT::EnTT
+        )
 
 if(WIN32)
     add_custom_command(TARGET MausukiraApp POST_BUILD
@@ -9,10 +21,9 @@ if(WIN32)
             $<TARGET_FILE_DIR:MausukiraApp>)
 endif()
 
-target_link_libraries(MausukiraApp
-        PRIVATE
-        sfml-graphics
-        sfml-system
-        sfml-window
-        )
-
+# Ensure resource files are available by copying
+add_custom_command(
+        TARGET MausukiraApp POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E echo "Copying resources to binary directory."
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources  $<TARGET_FILE_DIR:MausukiraApp>/resources
+)
