@@ -1,9 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Window.h"
-#include "SFML/System/Time.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
+#include "SFML/System/Time.hpp"
+#include "Window.h"
 #include "states_stack/StateHandler.h"
 
 class EventDetails;
@@ -29,14 +29,16 @@ public:
 private:
     /**
      * @brief Updates logic of the game (moving sprites, collision detection etc.).
+     * @param dt Delta time.
      */
-    void update();
+    void update(const sf::Time& dt);
 
     /**
      * @brief Render every drawable object to the window.
      */
     void render();
-    void MoveSprite(std::unique_ptr<EventDetails> details);
+
+//    void MoveSprite(std::unique_ptr<EventDetails> details);
 
 
 private:
@@ -44,6 +46,5 @@ private:
     Window mWindow;
     StateHandler mStateHandler;
     SharedContext mContext{mWindow};
-    sf::RectangleShape rect;
 };
-#endif //GAME_H
+#endif//GAME_H

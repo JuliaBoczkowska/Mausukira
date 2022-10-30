@@ -1,10 +1,10 @@
 #ifndef STATEHANDLER_H
 #define STATEHANDLER_H
 
-#include <unordered_map>
-#include <functional>
 #include "SharedContext.h"
 #include "states/State.h"
+#include <functional>
+#include <unordered_map>
 
 class StateHandler
 {
@@ -16,21 +16,30 @@ public:
     ~StateHandler() = default;
 
     void switchTo(const StateType& stateType);
+    void closeGameWhenNoStatesLeft();
+
+    SharedContext& context()
+    {
+        return mSharedCtx;
+    }
+    States& states()
+    {
+        return mStates;
+    }
 
     template<class State>
     void registerState(const StateType& type)
     {
-        mStateFactory[type] = [this, type]() -> std::unique_ptr<State>
-        {
-            return std::make_unique<State>(std::unique_ptr<StateHandler>(this), type);
+        mStateFactory[type] = [this, type]() -> std::unique_ptr<State> {
+            return std::make_unique<State>((*this), type);
         };
     }
 
 private:
     StateFactory mStateFactory;
-    States states;
+    States mStates;
     SharedContext& mSharedCtx;
 };
 
 
-#endif //STATEHANDLER_H
+#endif//STATEHANDLER_H

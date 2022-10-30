@@ -1,8 +1,12 @@
-add_executable(MausukiraApp main.cpp Game.cpp Window.cpp scene/Scene.cpp scene/Scene.h)
+add_executable(MausukiraApp main.cpp Game.cpp Window.cpp scene/Scene.cpp scene/Scene.h components/TransformComponent.h components/SpriteComponent.h components/Components.h states_stack/states/GameState.cpp states_stack/states/GameState.h)
 
+add_subdirectory(components)
 add_subdirectory(event)
-add_subdirectory(states_stack)
 add_subdirectory(gui)
+add_subdirectory(scene)
+add_subdirectory(states_stack)
+add_subdirectory(systems)
+
 
 target_link_libraries(MausukiraApp
         PRIVATE
@@ -12,18 +16,18 @@ target_link_libraries(MausukiraApp
         EnTT::EnTT
         )
 
-if(WIN32)
+if (WIN32)
     add_custom_command(TARGET MausukiraApp POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:sfml-graphics>
             $<TARGET_FILE:sfml-window>
             $<TARGET_FILE:sfml-system>
             $<TARGET_FILE_DIR:MausukiraApp>)
-endif()
+endif ()
 
 # Ensure resource files are available by copying
 add_custom_command(
         TARGET MausukiraApp POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E echo "Copying resources to binary directory."
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources  $<TARGET_FILE_DIR:MausukiraApp>/resources
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:MausukiraApp>/resources
 )

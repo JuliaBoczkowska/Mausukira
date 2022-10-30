@@ -1,19 +1,13 @@
 #include "Window.h"
 
-Window::Window(sf::VideoMode videoMode) : mRenderWindow(videoMode, "Mausukira")
+Window::Window(sf::VideoMode videoMode)
+    : mRenderWindow(videoMode, "Mausukira")
 {
 }
 
-void Window::drawWindow()
+void Window::handlePolledEvents(sf::Event& event)
 {
-    mRenderWindow.clear();
-    mRenderWindow.display();
-}
-
-void Window::handlePolledEvents()
-{
-    sf::Event event;
-    while(mRenderWindow.pollEvent(event))
+    while (mRenderWindow.pollEvent(event))
     {
         if (event.type == sf::Event::LostFocus)
         {
@@ -37,9 +31,4 @@ void Window::handlePolledEvents()
 EventManager& Window::getEventManager()
 {
     return mEventManager;
-}
-
-sf::RenderWindow& Window::getWindow()
-{
-    return mRenderWindow;
 }

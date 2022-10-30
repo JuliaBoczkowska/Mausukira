@@ -1,1 +1,1 @@
-target_sources(MausukiraApp PRIVATE IntroState.cpp State.cpp)
+target_sources(MausukiraApp PRIVATE IntroState.cpp State.cpp MenuState.cpp GameState.cpp)
