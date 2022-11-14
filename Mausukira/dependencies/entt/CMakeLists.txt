@@ -1,3 +1,3 @@
-message(STATUS "Fetching EnTT ...")
+message(STATUS "Fetching EnTT...")
 
 FetchContent_MakeAvailable(EnTT)
