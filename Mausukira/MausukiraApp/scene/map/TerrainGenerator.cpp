@@ -19,6 +19,7 @@ GeneratedMap TerrainGenerator::procedurallyGenerateMap()
 {
     allocateRooms();
     triangulation();
+    minSpanningTree();
     std::cout << "MADE " << rooms << " ROOMS" << std::endl;
     return mGeneratedMap;
 }
@@ -55,9 +56,31 @@ sf::Vector2f TerrainGenerator::getCenter()
 
 void TerrainGenerator::triangulation()
 {
-    triangles.setPrimitiveType(sf::Triangles);
-    lines.setPrimitiveType(sf::Lines);
+    delaunayEdges.setPrimitiveType(sf::Triangles);
+    triangleLines.setPrimitiveType(sf::Lines);
 
+    sortRoomsCoordinatesClockwiseOrder();
+
+    std::list<Room>::iterator it;
+    for (it = mRooms.begin(); it != mRooms.end(); ++it)
+    {
+        std::cout << "ROOM CENTER IS: { " << it->mCenter.x << " , " << it->mCenter.y << " }" << std::endl;
+        polyline.push_back(new p2t::Point(it->mCenter.x, it->mCenter.y));
+    }
+
+    p2t::CDT cdt(polyline);
+    cdt.Triangulate();
+    const auto triangulatedFigure = cdt.GetTriangles();
+
+    delaunayEdges.resize(triangulatedFigure.size() * 3);
+    triangleLines.resize(triangulatedFigure.size() * 3 * 3);
+
+    populateTrianglesVertexArray(triangulatedFigure);
+    populateLinesVertexArray();
+}
+
+void TerrainGenerator::sortRoomsCoordinatesClockwiseOrder()
+{
     Room::setCenter(getCenter());
     mRooms.sort([](Room first, Room second)
     {
@@ -72,33 +95,32 @@ void TerrainGenerator::triangulation()
                  (180.0 / 3.141592653589793238463)) + 360) % 360;
         return a1 < a2;
     });
-
-
-    std::list<Room>::iterator it;
-    for (it = mRooms.begin(); it != mRooms.end(); ++it)
-    {
-        std::cout << "ROOM CENTER IS: { " << it->mCenter.x << " , " << it->mCenter.y << " }" << std::endl;
-        polyline.push_back(new p2t::Point(it->mCenter.x, it->mCenter.y));
-    }
-
-    p2t::CDT cdt(polyline);
-    cdt.Triangulate();
-    const auto triangulatedFigure = cdt.GetTriangles();
-    triangles.resize(triangulatedFigure.size() * 3);
-    lines.resize(triangulatedFigure.size() * 3 * 3);
-
-    populateTrianglesVertexArray(triangulatedFigure);
-    populateLinesVertexArray();
 }
 
 void TerrainGenerator::populateTrianglesVertexArray(const std::vector<p2t::Triangle*>& triangulatedFigure)
 {
+
+    for (auto* triangulatedTriangle: triangulatedFigure)
+    {
+        mTriangleEdges.emplace(
+            Edge(sf::Vector2f(triangulatedTriangle->GetPoint(0)->x, triangulatedTriangle->GetPoint(0)->y),
+                sf::Vector2f(triangulatedTriangle->GetPoint(1)->x, triangulatedTriangle->GetPoint(1)->y)));
+
+        mTriangleEdges.emplace(
+            Edge(sf::Vector2f(triangulatedTriangle->GetPoint(1)->x, triangulatedTriangle->GetPoint(1)->y),
+                sf::Vector2f(triangulatedTriangle->GetPoint(2)->x, triangulatedTriangle->GetPoint(2)->y)));
+
+        mTriangleEdges.emplace(
+            Edge(sf::Vector2f(triangulatedTriangle->GetPoint(0)->x, triangulatedTriangle->GetPoint(0)->y),
+                sf::Vector2f(triangulatedTriangle->GetPoint(2)->x, triangulatedTriangle->GetPoint(2)->y)));
+    }
+
     size_t arrayIndex = 0;
     for (auto* triangulatedTriangle: triangulatedFigure)
     {
         for (size_t vertexIndex = 0; vertexIndex < 3; ++vertexIndex)
         {
-            triangles[arrayIndex] = sf::Vertex(
+            delaunayEdges[arrayIndex] = sf::Vertex(
                 sf::Vector2f(triangulatedTriangle->GetPoint(vertexIndex)->x,
                     triangulatedTriangle->GetPoint(vertexIndex)->y));
             ++arrayIndex;
@@ -108,7 +130,7 @@ void TerrainGenerator::populateTrianglesVertexArray(const std::vector<p2t::Trian
 
 void TerrainGenerator::populateLinesVertexArray()
 {
-    for (int arrayIndex = 0, vertexIndex = 0; vertexIndex < triangles.getVertexCount();)
+    for (int arrayIndex = 0, vertexIndex = 0; vertexIndex < delaunayEdges.getVertexCount();)
     {
         auto first = vertexIndex;
         auto second = vertexIndex + 1;
@@ -116,28 +138,45 @@ void TerrainGenerator::populateLinesVertexArray()
         vertexIndex = vertexIndex + 3;
 
         // 1 -> 2 triangle edge
-        lines[arrayIndex] = sf::Vertex(
-            sf::Vector2f(triangles[first].position.x, triangles[first].position.y));
-        lines[++arrayIndex] = sf::Vertex(
-            sf::Vector2f(triangles[second].position.x, triangles[second].position.y));
+        triangleLines[arrayIndex] = sf::Vertex(
+            sf::Vector2f(delaunayEdges[first].position.x, delaunayEdges[first].position.y));
+        triangleLines[++arrayIndex] = sf::Vertex(
+            sf::Vector2f(delaunayEdges[second].position.x, delaunayEdges[second].position.y));
 
         // 1 -> 3 triangle edge
-        lines[++arrayIndex] = sf::Vertex(
-            sf::Vector2f(triangles[first].position.x, triangles[first].position.y));
-        lines[++arrayIndex] = sf::Vertex(
-            sf::Vector2f(triangles[third].position.x, triangles[third].position.y));
+        triangleLines[++arrayIndex] = sf::Vertex(
+            sf::Vector2f(delaunayEdges[first].position.x, delaunayEdges[first].position.y));
+        triangleLines[++arrayIndex] = sf::Vertex(
+            sf::Vector2f(delaunayEdges[third].position.x, delaunayEdges[third].position.y));
 
         // 2 -> 3 triangle edge
-        lines[++arrayIndex] = sf::Vertex(
-            sf::Vector2f(triangles[second].position.x, triangles[second].position.y));
-        lines[++arrayIndex] = sf::Vertex(
-            sf::Vector2f(triangles[third].position.x, triangles[third].position.y));
+        triangleLines[++arrayIndex] = sf::Vertex(
+            sf::Vector2f(delaunayEdges[second].position.x, delaunayEdges[second].position.y));
+        triangleLines[++arrayIndex] = sf::Vertex(
+            sf::Vector2f(delaunayEdges[third].position.x, delaunayEdges[third].position.y));
         ++arrayIndex;
     }
 
-    for (int arrayIndex = 0; arrayIndex < lines.getVertexCount(); ++arrayIndex)
+    for (int arrayIndex = 0; arrayIndex < triangleLines.getVertexCount(); ++arrayIndex)
     {
-        lines[arrayIndex].color = sf::Color::Green;
+        triangleLines[arrayIndex].color = sf::Color::Green;
+    }
+}
+
+void TerrainGenerator::populateMSTVertexArray()
+{
+    for (int arrayIndex = 0, vertexIndex = 0; vertexIndex < mMinSpanningTreeEdges.size(); ++vertexIndex, ++arrayIndex)
+    {
+        mstLines[arrayIndex] = sf::Vertex(
+            sf::Vector2f(mMinSpanningTreeEdges[vertexIndex].mVertexA.x, mMinSpanningTreeEdges[vertexIndex].mVertexA.y));
+        mstLines[++arrayIndex] = sf::Vertex(
+            sf::Vector2f(mMinSpanningTreeEdges[vertexIndex].mVertexB.x,
+                mMinSpanningTreeEdges[vertexIndex].mVertexB.y));;
+    }
+
+    for (int vertexIndex = 0; vertexIndex < mstLines.getVertexCount(); ++vertexIndex)
+    {
+        mstLines[vertexIndex].color = sf::Color::Blue;
     }
 }
 
@@ -254,5 +293,21 @@ void TerrainGenerator::draw(sf::RenderWindow* window)
 
     // triangles
     //window->draw(triangles);
-    window->draw(lines);
+    window->draw(triangleLines);
+    window->draw(mstLines);
+}
+
+void TerrainGenerator::minSpanningTree()
+{
+    std::set<Edge>::iterator itr;
+    for (itr = mTriangleEdges.begin(); itr != mTriangleEdges.end(); itr++)
+    {
+        mMinSpanningTreeEdges.push_back(*itr);
+    }
+
+    mMinSpanningTreeEdges = MinSpanningTree::processMST(mMinSpanningTreeEdges);
+    mstLines.setPrimitiveType(sf::Lines);
+    mstLines.resize(mMinSpanningTreeEdges.size() * 2);
+
+    populateMSTVertexArray();
 }

@@ -6,11 +6,11 @@
 #include "Tile.h"
 #include "Room.h"
 #include "SFML/Graphics/VertexArray.hpp"
+#include "MinSpanningTree.h"
 #include <functional>
 
 using RoomGrid = std::vector<std::vector<int>>;
 using GeneratedMap = std::array<std::array<int, 32>, 32>;
-using Vertex = sf::Vector2f;
 
 class Map;
 
@@ -73,12 +73,26 @@ private:
 
     sf::Vector2f getCenter();
 
+    void minSpanningTree();
+
+    void sortRoomsCoordinatesClockwiseOrder();
+
+    std::vector<p2t::Triangle*> handleTriangulation();
+
+    void populateMSTVertexArray();
+
 private:
-    sf::VertexArray triangles; //< Triangles (consisting of vertexes) building the current figure.
-    sf::VertexArray lines; //< Triangles (consisting of vertexes) building the current figure.
+    sf::VertexArray delaunayEdges; //< Triangles (consisting of vertexes) building the current figure.
+
+    std::list<Room> mRooms;
+    std::set<Edge> mTriangleEdges;
+    std::vector<Edge> mMinSpanningTreeEdges;
+
+    sf::VertexArray triangleLines;
+    sf::VertexArray mstLines;
+
     std::vector<p2t::Point*> polyline;
     GeneratedMap mGeneratedMap{ 0 };
-    std::list<Room> mRooms;
     int rooms{ 0 };
 };
 
