@@ -2,79 +2,8 @@
 #define MINSPANNINGTREE_H
 
 
-#include "SFML/System/Vector2.hpp"
+#include "MinimumSpanningTreeHelper.h"
 #include <vector>
-
-
-class Vertex : public sf::Vector2f
-{
-public:
-    Vertex(float x, float y)
-        : sf::Vector2f(x, y)
-    {
-
-    }
-
-    explicit Vertex(sf::Vector2f x)
-        : sf::Vector2f(x)
-    {
-
-    }
-
-    bool operator<(const Vertex& other) const
-    {
-        return (this->x < other.x) || ((this->x == other.x) && (this->y < other.y));
-    }
-};
-
-class Edge
-{
-public:
-    /**
-     * @brief Measure distance between two vertices.
-     * @param vertexA First vertex.
-     * @param vertexB Second vertex.
-     * @return measured Distance.
-     */
-    float measureDistance(const sf::Vector2f& vertexA, const sf::Vector2f& vertexB)
-    {
-        return sqrt(pow(vertexB.x - vertexA.x, 2) + pow(vertexB.y - vertexA.y, 2) * 1.0);
-    }
-
-    Edge(const sf::Vector2f& vertexA, const sf::Vector2f& vertexB)
-        : mVertexA(vertexA)
-        , mVertexB(vertexB)
-    {
-        mDistance = measureDistance(vertexA, vertexB);
-    }
-
-    Edge() = default;
-
-    Edge& operator=(const Edge& other)
-    {
-        mVertexA = other.mVertexA;
-        mVertexB = other.mVertexB;
-        mDistance = other.mDistance;
-
-        return *this;
-    }
-
-    Edge(const Edge& other)
-    {
-        mVertexA = other.mVertexA;
-        mVertexB = other.mVertexB;
-        mDistance = other.mDistance;
-    }
-
-    bool operator<(const Edge& other) const
-    {
-        return this->mDistance < other.mDistance;
-    }
-
-    sf::Vector2f mVertexA;
-    sf::Vector2f mVertexB;
-    float mDistance{ 0 };
-};
 
 class MinSpanningTree
 {

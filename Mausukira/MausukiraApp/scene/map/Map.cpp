@@ -15,7 +15,12 @@ Map::Map(SharedContext* sharedCtx)
     {
         for (int y = 0; y <= MAP_SIZE.y - 1; ++y)
         {
-            if (procedurallyGeneratedMap[x][y] == 1)
+            if (procedurallyGeneratedMap[x][y] == CellType::ROOM)
+            {
+                mTileMap.at(convertCoordsTo1D(x, y)) = std::move(
+                    std::make_unique<Tile>(mTileModels.at(TileID::FLOOR).get()));
+            }
+            else if (procedurallyGeneratedMap[x][y] == CellType::HALL)
             {
                 mTileMap.at(convertCoordsTo1D(x, y)) = std::move(
                     std::make_unique<Tile>(mTileModels.at(TileID::FLOOR).get()));
@@ -88,8 +93,7 @@ void Map::draw()
         {
             Tile& tile = getTile(x, y);
             sf::Sprite& sprite = tile.mTileModel->mSprite;
-            const auto& scale = tile.mTileModel->mScaleFactor;
-            sprite.setPosition(x * (TILE_SIZE * scale), y * (TILE_SIZE * scale));
+            sprite.setPosition(x * (TILE_SIZE), y * (TILE_SIZE));
             window.draw(sprite);
         }
     }

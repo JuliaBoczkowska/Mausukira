@@ -1,18 +1,25 @@
 #ifndef TERRAINGENERATOR_H
 #define TERRAINGENERATOR_H
 
-#include "../../utils/RandomNumberGenerator.h"
+
 #include <poly2tri/poly2tri.h>
 #include "Tile.h"
 #include "Room.h"
 #include "SFML/Graphics/VertexArray.hpp"
-#include "MinSpanningTree.h"
+#include "../algorithms/mst/MinSpanningTree.h"
 #include <functional>
 
 using RoomGrid = std::vector<std::vector<int>>;
 using GeneratedMap = std::array<std::array<int, 32>, 32>;
 
 class Map;
+
+enum CellType
+{
+    NONE = 0,
+    ROOM = 1,
+    HALL = 2
+};
 
 class TerrainGenerator
 {
@@ -21,13 +28,6 @@ class TerrainGenerator
         CELLULAR_AUTOMATA = 0,
         RECTANGLE,
         CIRCLE
-    };
-
-    enum CellType
-    {
-        ROOM = 0,
-        HALL,
-        NONE
     };
 
 public:
@@ -54,7 +54,7 @@ private:
 
     void generateRoomCircle();
 
-    bool placeRoomOnMap(std::vector<std::vector<int>> room);
+    bool placeRoomOnMap(std::vector<std::vector<int>> roomOutline);
 
     /**
      * @brief Randomly allocate some number of rooms on the map
@@ -81,6 +81,10 @@ private:
 
     void populateMSTVertexArray();
 
+    void addMoreEdgesToMap();
+
+    void createHallways();
+
 private:
     sf::VertexArray delaunayEdges; //< Triangles (consisting of vertexes) building the current figure.
 
@@ -93,7 +97,7 @@ private:
 
     std::vector<p2t::Point*> polyline;
     GeneratedMap mGeneratedMap{ 0 };
-    int rooms{ 0 };
+    int roomCounter{ 0 };
 };
 
 #endif //TERRAINGENERATOR_H

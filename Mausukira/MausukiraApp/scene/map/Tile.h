@@ -4,8 +4,9 @@
 #include "SFML/Graphics/Sprite.hpp"
 #include "../../states_stack/SharedContext.h"
 
-static constexpr unsigned TILE_SIZE = 16u;           ///< Tiles are going to be 32 px wide and 32 px tall
-static constexpr unsigned SHEET_SIZE = 128u;          ///< One row consists of 32 tiles
+static constexpr unsigned SPRITE_TILE_SIZE = 16;       ///< Tiles are 16 px wide and 16 px tall
+static constexpr int TILE_SIZE = 32;                   ///< Tiles are 16 px wide and 16 px tall
+static constexpr unsigned SHEET_SIZE = 128u;           ///< One row consists of 8 tiles
 
 enum TileID
 {
@@ -26,18 +27,17 @@ struct TileModel
         mSprite.setTexture(textureManager->get("TILE"));
 
         sf::IntRect tileBoundaries(
-            mID % (SHEET_SIZE / TILE_SIZE) * TILE_SIZE,
-            mID / (SHEET_SIZE / TILE_SIZE) * TILE_SIZE,
-            TILE_SIZE,
-            TILE_SIZE);
+            mID % (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
+            mID / (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
+            SPRITE_TILE_SIZE,
+            SPRITE_TILE_SIZE);
 
         mSprite.setTextureRect(tileBoundaries);
-        mSprite.setScale({ mScaleFactor, mScaleFactor });
+        mSprite.setScale({ 2, 2 });
     }
 
     sf::Sprite mSprite;
     SharedContext& mCtx;
-    const float mScaleFactor{ 2.f };
 
     bool mIsDeadly;
     TileID mID;

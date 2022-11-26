@@ -1,0 +1,1 @@
+target_sources(MausukiraApp PRIVATE Map.cpp Room.cpp TerrainGenerator.cpp ../algorithms/astar/AStar.cpp)

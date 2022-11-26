@@ -4,8 +4,6 @@
 #include <vector>
 #include "SFML/Graphics/Rect.hpp"
 
-constexpr double PI = 3.14159265359;
-
 class Room
 {
     using RoomGrid = std::vector<std::vector<int>>;
