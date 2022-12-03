@@ -1,8 +1,8 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "entt/entt.hpp"
 #include "../scene/Scene.h"
+#include "entt/entt.hpp"
 
 class Entity
 {
@@ -13,7 +13,7 @@ public:
 
 
     template<typename T, typename... Args>
-    T& AddComponent(Args&& ... args)
+    T& AddComponent(Args&&... args)
     {
         T& component = mScene->mRegistry.emplace<T>(mEntity, std::forward<Args>(args)...);
         return component;
@@ -38,8 +38,8 @@ public:
     }
 
 private:
-    entt::entity mEntity{ entt::null };
+    entt::entity mEntity{entt::null};
     Scene* mScene = nullptr;
 };
 
-#endif //ENTITY_H
+#endif// ENTITY_H

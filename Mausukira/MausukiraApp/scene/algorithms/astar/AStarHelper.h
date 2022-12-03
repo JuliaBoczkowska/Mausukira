@@ -1,16 +1,16 @@
 #ifndef ASTARHELPER_H
 #define ASTARHELPER_H
 
-#include "SFML/System/Vector2.hpp"
 #include "../Coordinate.h"
-#include <vector>
+#include "SFML/System/Vector2.hpp"
 #include <array>
+#include <vector>
 
 struct PathCost
 {
 public:
-
-    PathCost(int distanceFromStart, std::pair<sf::Vector2i, sf::Vector2i> cells, sf::Vector2i cameFrom)
+    PathCost(int distanceFromStart, std::pair<sf::Vector2i, sf::Vector2i> cells,
+             sf::Vector2i cameFrom)
         : mDistanceFromStart(distanceFromStart)
         , mParentTileCoords(std::move(cameFrom))
     {
@@ -19,7 +19,6 @@ public:
     }
 
     PathCost(const PathCost&) = default;
-
     PathCost(PathCost&&) = default;
 
     template<class T1, class T2>
@@ -47,4 +46,4 @@ public:
     int mOverallCost;
 };
 
-#endif //ASTARHELPER_H
+#endif// ASTARHELPER_H

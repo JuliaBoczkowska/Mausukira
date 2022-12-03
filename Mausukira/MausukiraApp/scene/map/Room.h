@@ -1,8 +1,8 @@
 #ifndef ROOM_H
 #define ROOM_H
 
-#include <vector>
 #include "SFML/Graphics/Rect.hpp"
+#include <vector>
 
 class Room
 {
@@ -29,9 +29,10 @@ public:
     sf::Vector2i mLocation;
     sf::Vector2i mSize;
     RoomGrid mGrid;
-    sf::Vector2f mCenter{ 0, 0 };
+    sf::Vector2f mCenter{0, 0};
+
 private:
     sf::IntRect bounding;
 };
 
-#endif //ROOM_H
+#endif// ROOM_H

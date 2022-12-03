@@ -1,41 +1,112 @@
 #include "Map.h"
 #include "Tile.h"
-#include <json/json.h>
+#include "TileHelper.h"
+#include <bitset>
+#include <cstdint>
 #include <fstream>
 #include <iostream>
+#include <json/json.h>
 
 Map::Map(SharedContext* sharedCtx)
     : mSharedCtx(sharedCtx)
 {
-    mSharedCtx->textureManager->load("TILE", "resources/tiles/tileset.jpg");
     loadTiles();
+    mProcedurallyGeneratedMap = mTerrainGenerator.procedurallyGenerateMap();
+    tileMap();
+}
 
-    std::array<std::array<int, 32>, 32> procedurallyGeneratedMap = mTerrainGenerator.procedurallyGenerateMap();
-    for (int x = 0; x <= MAP_SIZE.x - 1; ++x)
+void Map::tileMap()
+{
+    for (int x = 0; x < MAP_SIZE.x; ++x)
     {
-        for (int y = 0; y <= MAP_SIZE.y - 1; ++y)
+        for (int y = 0; y < MAP_SIZE.y; ++y)
         {
-            if (procedurallyGeneratedMap[x][y] == CellType::ROOM)
+            sf::Vector2i currentTile{x, y};
+            auto currentTileType = mProcedurallyGeneratedMap[currentTile.x][currentTile.y];
+
+            if (!currentTileType == NONE)
             {
-                mTileMap.at(convertCoordsTo1D(x, y)) = std::move(
-                    std::make_unique<Tile>(mTileModels.at(TileID::FLOOR).get()));
-            }
-            else if (procedurallyGeneratedMap[x][y] == CellType::HALL)
-            {
-                mTileMap.at(convertCoordsTo1D(x, y)) = std::move(
-                    std::make_unique<Tile>(mTileModels.at(TileID::FLOOR).get()));
+                isNotWallTile(currentTile, currentTileType);
             }
             else
             {
-                mTileMap.at(convertCoordsTo1D(x, y)) = std::move(
-                    std::make_unique<Tile>(mTileModels.at(TileID::WALL).get()));
+                isWallTile(currentTile);
             }
         }
     }
 }
+void Map::isNotWallTile(const sf::Vector2i& currentTile, const int& currentTileType)
+{
+    setTile(currentTile.x, currentTile.y, chooseTile(currentTileType));
+}
+void Map::isWallTile(const sf::Vector2i& currentTile)
+{
+
+    auto TOP_TILE = isValidForCalculations(currentTile + tile_helper::neighbouringFourTiles[0]);
+    auto LEFT_TILE = isValidForCalculations(currentTile + tile_helper::neighbouringFourTiles[1]);
+    auto RIGHT_TILE = isValidForCalculations(currentTile + tile_helper::neighbouringFourTiles[2]);
+    auto BOTTOM_TILE = isValidForCalculations(currentTile + tile_helper::neighbouringFourTiles[3]);
+
+    // Corners are only relevant when its primary neighbours have a true value
+    auto TOP_LEFT_TILE = (TOP_TILE && LEFT_TILE)
+                             ? isValidForCalculations(currentTile + tile_helper::cornerTiles[0])
+                             : 0;
+    auto TOP_RIGHT_TILE = (TOP_TILE && RIGHT_TILE)
+                              ? isValidForCalculations(currentTile + tile_helper::cornerTiles[1])
+                              : 0;
+    auto BOTTOM_LEFT_TILE = (BOTTOM_TILE && LEFT_TILE)
+                                ? isValidForCalculations(currentTile + tile_helper::cornerTiles[2])
+                                : 0;
+    auto BOTTOM_RIGHT_TILE = (BOTTOM_TILE && RIGHT_TILE)
+                                 ? isValidForCalculations(currentTile + tile_helper::cornerTiles[3])
+                                 : 0;
+
+    auto wallValue = TOP_LEFT_TILE * 1 + TOP_TILE * 2 + TOP_RIGHT_TILE * 4 + LEFT_TILE * 8 +
+                     RIGHT_TILE * 16 + BOTTOM_LEFT_TILE * 32 + BOTTOM_TILE * 64 +
+                     BOTTOM_RIGHT_TILE * 128;
+
+    setWallTile(currentTile, wallValue);
+}
+void Map::setWallTile(const sf::Vector2i& currentTile, int wallValue)
+{
+    if (mWallTiles.contains(wallValue))
+    {
+        setTile(currentTile.x, currentTile.y, mWallTiles.at(wallValue));
+    }
+    else
+    {
+        setTile(currentTile.x, currentTile.y, "WALL_2_4");
+    }
+}
+
+bool Map::isValidForCalculations(const sf::Vector2i& tile)
+{
+    if (!tile_helper::isInBorders(tile))
+    {
+        return true;
+    }
+    return (mProcedurallyGeneratedMap[tile.x][tile.y] == NONE) ? true : false;
+}
+
+std::string Map::chooseTile(const int& tileType)
+{
+    switch (tileType)
+    {
+        case ROOM:
+        case HALL: return "FLOOR"; break;
+        default: return "FLOOR";
+    }
+}
+
+void Map::setTile(int x, int y, const std::string& id)
+{
+    mTileMap.at(convertCoordsTo1D(x, y)) =
+        std::move(std::make_unique<Tile>(mTileModels.at(id).get(), x, y));
+}
 
 void Map::loadTiles()
 {
+    mSharedCtx->textureManager->load("TILES", "resources/tiles/tileset.png");
     Json::Value tiles;
     std::ifstream tileFile("resources/tiles/tiles.json", std::ifstream::binary);
     try
@@ -43,21 +114,18 @@ void Map::loadTiles()
         if (tileFile.fail())
         {
             throw std::runtime_error("ERR: Map::loadTiles - No tiles.json exists");
-
         }
         tileFile >> tiles;
-
+        auto tileID = 0;
         for (Json::Value::ArrayIndex index = 0; index != tiles.size(); index++)
         {
+            std::string name = tiles[index]["name"].asString();
             bool isDeadly = tiles[index]["deadly"].asBool();
-            unsigned int id = tiles[index]["id"].asUInt();
 
-            /** Converting numerical ID to an enum type */
-            TileID tileID = static_cast<TileID>(id);
-
-
-            std::unique_ptr<TileModel> tileModel = std::make_unique<TileModel>(*mSharedCtx, isDeadly, tileID);
-            mTileModels.insert({ tileID, std::move(tileModel) });
+            std::unique_ptr<TileModel> tileModel =
+                std::make_unique<TileModel>(*mSharedCtx, isDeadly, name, tileID);
+            mTileModels.insert({name, std::move(tileModel)});
+            ++tileID;
         }
     }
     catch (std::runtime_error& e)
@@ -79,23 +147,22 @@ Tile& Map::getTile(const unsigned int& x, const unsigned int& y)
 
 void Map::update(const sf::Time& deltaTime)
 {
-    sf::FloatRect viewSpace = mSharedCtx->window->getViewSpace();
 }
 
-void Map::draw()
+void Map::draw(sf::RenderWindow* window)
 {
-    sf::RenderWindow& window = mSharedCtx->window->mRenderWindow;
-    sf::FloatRect viewSpace = mSharedCtx->window->getViewSpace();
+    drawTiles(window);
+    mTerrainGenerator.drawDebugLines(window);
+}
 
-    for (int x = 0; x <= MAP_SIZE.x - 1; ++x)
+void Map::drawTiles(sf::RenderWindow* window)
+{
+    for (int x = 0; x < MAP_SIZE.x; ++x)
     {
-        for (int y = 0; y <= MAP_SIZE.y - 1; ++y)
+        for (int y = 0; y < MAP_SIZE.y; ++y)
         {
             Tile& tile = getTile(x, y);
-            sf::Sprite& sprite = tile.mTileModel->mSprite;
-            sprite.setPosition(x * (TILE_SIZE), y * (TILE_SIZE));
-            window.draw(sprite);
+            tile.draw(window);
         }
     }
-    mTerrainGenerator.draw(&window);
 }

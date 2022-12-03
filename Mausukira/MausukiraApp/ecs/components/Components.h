@@ -1,7 +1,7 @@
 #ifndef COMPONENTS_H
 #define COMPONENTS_H
 
-#include "TransformComponent.h"
 #include "SpriteComponent.h"
+#include "TransformComponent.h"
 
-#endif //COMPONENTS_H
+#endif// COMPONENTS_H

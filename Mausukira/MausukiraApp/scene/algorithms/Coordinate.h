@@ -6,40 +6,39 @@
 
 namespace as::helper
 {
-    struct Coordinate
+struct Coordinate
+{
+    Coordinate(sf::Vector2i coord)
+        : x(coord.x)
+        , y(coord.y)
     {
-        Coordinate(sf::Vector2i coord)
-            : x(coord.x)
-            , y(coord.y)
-        {
+    }
 
-        }
+    bool operator==(const Coordinate& other) const
+    {
+        return (x == other.x) && (y == other.y);
+    }
 
-        bool operator==(const Coordinate& other) const
-        {
-            return (x == other.x) && (y == other.y);
-        }
+    bool operator<(const Coordinate& other) const
+    {
+        return (this->x < other.x) || ((this->x == other.x) && (this->y < other.y));
+    }
 
-        bool operator<(const Coordinate& other) const
-        {
-            return (this->x < other.x) || ((this->x == other.x) && (this->y < other.y));
-        }
-
-        int x;
-        int y;
-    };
-}
+    int x;
+    int y;
+};
+}// namespace as::helper
 
 namespace std
 {
-    template<>
-    struct hash<as::helper::Coordinate>
+template<>
+struct hash<as::helper::Coordinate>
+{
+    std::size_t operator()(const as::helper::Coordinate& coord) const
     {
-        std::size_t operator()(const as::helper::Coordinate& coord) const
-        {
-            return ((hash<int>()(coord.x) ^ (hash<int>()(coord.x) << 1)) >> 1);
-        }
-    };
-}
+        return ((hash<int>()(coord.x) ^ (hash<int>()(coord.x) << 1)) >> 1);
+    }
+};
+}// namespace std
 
-#endif //COORDINATE_H
+#endif// COORDINATE_H

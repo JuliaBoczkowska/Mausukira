@@ -13,15 +13,18 @@ public:
     using States = std::vector<std::unique_ptr<State>>;
 
     StateHandler(SharedContext& sharedCtx);
+
     ~StateHandler() = default;
 
     void switchTo(const StateType& stateType);
+
     void closeGameWhenNoStatesLeft();
 
     SharedContext& context()
     {
         return mSharedCtx;
     }
+
     States& states()
     {
         return mStates;
@@ -30,8 +33,10 @@ public:
     template<class State>
     void registerState(const StateType& type)
     {
-        mStateFactory[type] = [this, type]() -> std::unique_ptr<State> {
-            return std::make_unique<State>((*this), type);
+        mStateFactory[type] = [this, type]() -> std::unique_ptr<State>
+        {
+            return std::make_unique<State>((*this), type,
+                                           mSharedCtx.window->mRenderWindow.getDefaultView());
         };
     }
 
@@ -42,4 +47,4 @@ private:
 };
 
 
-#endif//STATEHANDLER_H
+#endif// STATEHANDLER_H

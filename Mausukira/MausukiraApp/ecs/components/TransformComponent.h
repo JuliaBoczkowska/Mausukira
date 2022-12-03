@@ -5,7 +5,7 @@
 
 struct TransformComponent
 {
-    sf::Vector2f mPosition{ 0.f, 0.f };
+    sf::Vector2f mPosition{0.f, 0.f};
 
     TransformComponent() = default;
 
@@ -32,4 +32,4 @@ struct TransformComponent
     }
 };
 
-#endif//TRANSFORMCOMPONENT_H
+#endif// TRANSFORMCOMPONENT_H

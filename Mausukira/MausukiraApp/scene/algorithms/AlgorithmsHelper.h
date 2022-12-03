@@ -1,7 +1,8 @@
-#ifndef MINIMUMSPANNINGTREEHELPER_H
-#define MINIMUMSPANNINGTREEHELPER_H
+#ifndef ALGORITHMSHELPER_H
+#define ALGORITHMSHELPER_H
 
 #include "SFML/System/Vector2.hpp"
+#include <cmath>
 
 class Vertex : public sf::Vector2i
 {
@@ -9,13 +10,11 @@ public:
     Vertex(int x, int y)
         : sf::Vector2i(x, y)
     {
-
     }
 
     explicit Vertex(sf::Vector2i x)
         : sf::Vector2i(x)
     {
-
     }
 
     bool operator<(const Vertex& other) const
@@ -80,7 +79,7 @@ public:
 
     sf::Vector2i mVertexA;
     sf::Vector2i mVertexB;
-    float mDistance{ 0 };
+    float mDistance{0};
 };
 
-#endif //MINIMUMSPANNINGTREEHELPER_H
+#endif// ALGORITHMSHELPER_H

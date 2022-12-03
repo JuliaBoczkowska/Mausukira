@@ -1,5 +1,7 @@
 #ifndef STATE_H
 #define STATE_H
+
+#include "SFML/Graphics/View.hpp"
 #include "SFML/System/Time.hpp"
 #include "SFML/Window/Event.hpp"
 #include <memory>
@@ -18,16 +20,25 @@ enum class StateType
 class State
 {
 public:
-    explicit State(StateHandler& stateHandler, StateType type);
+    explicit State(StateHandler& stateHandler, StateType type, sf::View view);
+
     virtual ~State() = default;
 
+    sf::View& GetView()
+    {
+        return mView;
+    }
+
     virtual void handleInput(sf::Event& event) = 0;
+
     virtual void update(const sf::Time& dt) = 0;
+
     virtual void draw() = 0;
 
 protected:
     StateHandler& mStateHandler;
     StateType mStateType;
+    sf::View mView;
 };
 
-#endif//STATE_H
+#endif// STATE_H

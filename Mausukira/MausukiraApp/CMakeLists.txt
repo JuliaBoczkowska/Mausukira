@@ -1,11 +1,11 @@
-add_executable(MausukiraApp main.cpp Game.cpp Window.cpp scene/Scene.cpp scene/Scene.h components/TransformComponent.h components/SpriteComponent.h components/Components.h states_stack/states/GameState.cpp states_stack/states/GameState.h)
+add_executable(MausukiraApp main.cpp Game.cpp Window.cpp scene/algorithms/CoordinatesConverter.h ecs/systems/CollisionSystem.cpp ecs/systems/CollisionSystem.h scene/algorithms/Coordinate.h scene/algorithms/AlgorithmsHelper.h ecs/components/EntityComponent.h)
 
-add_subdirectory(components)
+add_subdirectory(ecs)
 add_subdirectory(event)
 add_subdirectory(gui)
 add_subdirectory(scene)
 add_subdirectory(states_stack)
-add_subdirectory(systems)
+add_subdirectory(utils)
 
 
 target_link_libraries(MausukiraApp
@@ -14,6 +14,8 @@ target_link_libraries(MausukiraApp
         sfml-system
         sfml-window
         EnTT::EnTT
+        jsoncpp_lib
+        poly2tri
         )
 
 if (WIN32)

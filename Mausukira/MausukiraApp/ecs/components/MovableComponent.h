@@ -20,4 +20,4 @@ struct MovableComponent
 };
 
 
-#endif //MOVABLECOMPONENT_H
+#endif// MOVABLECOMPONENT_H

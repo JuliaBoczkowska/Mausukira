@@ -3,10 +3,21 @@
 
 #include "../Window.h"
 #include "../scene/Scene.h"
+#include "../utils/TextureManager.h"
 
-struct SharedContext {
-    Window& window;
+struct SharedContext
+{
+    SharedContext(Window* window, TextureManager* textureManager)
+        : window(window)
+        , textureManager(textureManager)
+    {
+    }
+
+    SharedContext() = default;
+
+    Window* window;
+    TextureManager* textureManager;
     Scene activeScene;
 };
 
-#endif//SHAREDCONTEXT_H
+#endif// SHAREDCONTEXT_H

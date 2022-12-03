@@ -1,12 +1,10 @@
 #include "StateHandler.h"
 #include "states/GameState.h"
-#include "states/IntroState.h"
 #include "states/MenuState.h"
 
 StateHandler::StateHandler(SharedContext& sharedCtx)
     : mSharedCtx(sharedCtx)
 {
-    registerState<IntroState>(StateType::INTRO_STATE);
     registerState<MenuState>(StateType::MENU_STATE);
     registerState<GameState>(StateType::GAME_STATE);
 
@@ -21,12 +19,17 @@ void StateHandler::switchTo(const StateType& stateType)
     {
         return;
     }
-    mStates.emplace_back(std::unique_ptr<State>(newState->second()));
+
+    auto state = std::unique_ptr<State>(newState->second());
+    mSharedCtx.window->mRenderWindow.setView(state->GetView());
+
+    mStates.emplace_back(std::move(state));
 }
+
 void StateHandler::closeGameWhenNoStatesLeft()
 {
     if (mStates.empty())
     {
-        mSharedCtx.window().close();
+        mSharedCtx.window->mRenderWindow.close();
     }
 }

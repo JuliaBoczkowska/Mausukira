@@ -1,46 +1,41 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include "SFML/Graphics/Sprite.hpp"
 #include "../../states_stack/SharedContext.h"
+#include "SFML/Graphics/Sprite.hpp"
 
-static constexpr unsigned SPRITE_TILE_SIZE = 16;       ///< Tiles are 16 px wide and 16 px tall
-static constexpr int TILE_SIZE = 32;                   ///< Tiles are 16 px wide and 16 px tall
-static constexpr unsigned SHEET_SIZE = 128u;           ///< One row consists of 8 tiles
+static constexpr unsigned SPRITE_TILE_SIZE = 16;///< Tiles are 16 px wide and 16 px tall
+static constexpr int TILE_SIZE = 32;            ///< Tiles are 16 px wide and 16 px tall
+static constexpr unsigned SHEET_SIZE = 128u;    ///< One row consists of 8 tiles
 
-enum TileID
-{
-    FLOOR = 0,
-    WALL,
-    LAVA
-};
+using TileID = std::string;
 
 /** Struct containing information about not unique features of tile. */
 struct TileModel
 {
-    TileModel(SharedContext& mSharedCtx, bool isDeadly, TileID id)
+    TileModel(SharedContext& mSharedCtx, bool isDeadly, TileID name, unsigned id)
         : mCtx(mSharedCtx)
         , mIsDeadly(isDeadly)
+        , mName(name)
         , mID(id)
     {
         TextureManager* textureManager = mCtx.textureManager;
-        mSprite.setTexture(textureManager->get("TILE"));
+        mSprite.setTexture(textureManager->get("TILES"));
 
-        sf::IntRect tileBoundaries(
-            mID % (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
-            mID / (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
-            SPRITE_TILE_SIZE,
-            SPRITE_TILE_SIZE);
+        sf::IntRect tileBoundaries(mID % (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
+                                   mID / (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
+                                   SPRITE_TILE_SIZE, SPRITE_TILE_SIZE);
 
         mSprite.setTextureRect(tileBoundaries);
-        mSprite.setScale({ 2, 2 });
+        mSprite.setScale({2, 2});
     }
 
     sf::Sprite mSprite;
     SharedContext& mCtx;
 
     bool mIsDeadly;
-    TileID mID;
+    TileID mName;
+    unsigned mID;
 };
 
 /** Class that represents unique instance of the tile.
@@ -49,16 +44,27 @@ struct TileModel
 class Tile
 {
 public:
-    Tile(TileModel* tileModel)
+    Tile(TileModel* tileModel, const int& _x, const int& _y)
         : mTileModel(tileModel)
+        , x(_x)
+        , y(_y)
     {
+        mTileModel->mSprite.setPosition(x * (TILE_SIZE), y * (TILE_SIZE));
     }
 
     Tile() = default;
-
     ~Tile() = default;
 
+    void draw(sf::RenderWindow* window)
+    {
+        sf::Sprite& sprite = mTileModel->mSprite;
+        sprite.setPosition(x * (TILE_SIZE), y * (TILE_SIZE));
+        window->draw(sprite);
+    }
+
+    int x;
+    int y;
     TileModel* mTileModel;
 };
 
-#endif //TILE_H
+#endif// TILE_H

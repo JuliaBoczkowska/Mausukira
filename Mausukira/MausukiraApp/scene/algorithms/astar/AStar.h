@@ -17,16 +17,10 @@ public:
 
 private:
     void updateMapAroundTile(const sf::Vector2i& centerOfTileCoordinates, const PathCost& cost);
-
-    bool isInBorders(const sf::Vector2i& tileCoords) const;
-
     void checkTilesAround(const sf::Vector2i& cell, const PathCost& costOfTile);
-
     void drawFinalPathOnMap(const sf::Vector2i& lastHandledCell);
-
     void setCellTypeOnMap(const sf::Vector2i& tile, CellType type);
-
-    void reInitializeAlgorithm(const sf::Vector2i& startingPoint, const sf::Vector2i& finalPoint);
+    void reInitializeAlgorithm();
 
     CellType getCellType(const sf::Vector2i& cell);
 
@@ -45,4 +39,4 @@ private:
     bool isFinalPointFound = false;
 };
 
-#endif //ASTAR_H
+#endif// ASTAR_H

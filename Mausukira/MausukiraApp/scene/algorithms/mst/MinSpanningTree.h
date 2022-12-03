@@ -2,15 +2,19 @@
 #define MINSPANNINGTREE_H
 
 
-#include "MinimumSpanningTreeHelper.h"
+#include "../AlgorithmsHelper.h"
+#include "SFML/Graphics/RenderWindow.hpp"
+#include "SFML/Graphics/VertexArray.hpp"
+#include <set>
 #include <vector>
 
 class MinSpanningTree
 {
 public:
     MinSpanningTree() = default;
+    sf::VertexArray mstLines;
 
-    static std::vector<Edge> processMST(std::vector<Edge> edges)
+    std::vector<Edge> processMST(std::vector<Edge>& edges)
     {
         std::set<Vertex> openSet;
         std::set<Vertex> closedSet;
@@ -68,6 +72,33 @@ public:
         }
         return result;
     }
+
+    void draw(sf::RenderWindow* window, std::vector<Edge>& mFinalEdges)
+    {
+        mstLines.setPrimitiveType(sf::Lines);
+        mstLines.resize(mFinalEdges.size() * 2);
+        populateMSTVertexArray(mFinalEdges);
+    }
+
+    void populateMSTVertexArray(std::vector<Edge>& mFinalEdges)
+    {
+        for (int arrayIndex = 0, vertexIndex = 0; vertexIndex < mFinalEdges.size();
+             ++vertexIndex, ++arrayIndex)
+        {
+            mstLines[arrayIndex] = sf::Vertex(
+                sf::Vector2f(mFinalEdges[vertexIndex].mVertexA.x, mFinalEdges[vertexIndex].mVertexA.y));
+            mstLines[++arrayIndex] = sf::Vertex(
+                sf::Vector2f(mFinalEdges[vertexIndex].mVertexB.x, mFinalEdges[vertexIndex].mVertexB.y));
+            ;
+        }
+
+        for (int vertexIndex = 0; vertexIndex < mstLines.getVertexCount(); ++vertexIndex)
+        {
+            mstLines[vertexIndex].color = sf::Color::Blue;
+        }
+    }
 };
 
-#endif //MINSPANNINGTREE_H
+
+
+#endif// MINSPANNINGTREE_H

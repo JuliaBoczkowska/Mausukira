@@ -9,4 +9,4 @@ Room::Room(sf::Vector2i location, sf::Vector2i size, Room::RoomGrid grid, sf::Ve
     bounding = sf::IntRect(mLocation, mSize);
 }
 
-sf::Vector2f Room::centerOfAllPoints = { 0, 0 };
+sf::Vector2f Room::centerOfAllPoints = {0, 0};

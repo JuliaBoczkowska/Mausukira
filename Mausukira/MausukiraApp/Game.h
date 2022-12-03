@@ -22,7 +22,8 @@ public:
     ~Game() = default;
 
     /**
-     * @brief Main loop of the game. Here, all the elementary actions line update, handle events or render takes place
+     * @brief Main loop of the game. Here, all the elementary actions line update, handle events or
+     * render takes place
      */
     void run();
 
@@ -38,13 +39,15 @@ private:
      */
     void render();
 
-//    void MoveSprite(std::unique_ptr<EventDetails> details);
+    //    void MoveSprite(std::unique_ptr<EventDetails> details);
 
 
 private:
     const sf::Time deltaTime = sf::seconds(1.f / 60.f);
     Window mWindow;
+    TextureManager mTextureManager;
+    SharedContext mContext;
     StateHandler mStateHandler;
-    SharedContext mContext{mWindow};
 };
-#endif//GAME_H
+
+#endif// GAME_H

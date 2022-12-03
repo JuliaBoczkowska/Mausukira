@@ -1,0 +1,198 @@
+[
+        {
+            "name" : "WALL_0_0",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_0_1",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_0_2",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_0_3",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_0_4",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_0_5",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_0_6",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_0_7",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_1_0",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_1_1",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_1_2",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_1_3",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_1_4",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_1_5",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_1_6",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_1_7",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_2_0",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_2_1",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_2_2",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_2_3",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_2_4",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_2_5",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_2_6",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_2_7",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_3_0",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_3_1",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_3_2",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_3_3",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_3_4",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_3_5",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_3_6",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_3_7",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_4_0",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_4_1",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_4_2",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_4_3",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_4_4",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_4_5",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_4_6",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_4_7",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_5_0",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_5_1",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_5_2",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_5_3",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_5_4",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_5_5",
+            "deadly": false
+        },
+        {
+            "name" : "WALL_5_6",
+            "deadly": false
+        },
+        {
+            "name" : "FLOOR",
+            "deadly": true
+        },
+        {
+            "name" : "LAVA",
+            "deadly": false
+        }
+    ]

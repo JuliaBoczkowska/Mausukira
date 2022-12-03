@@ -19,9 +19,10 @@ public:
 
 private:
     friend Entity;
-    /** Registry is container for all components and registries. Contains component data and entity ID's*/
+    /** Registry is container for all components and registries. Contains component data and entity
+     * ID's*/
     entt::registry mRegistry;
 };
 
 
-#endif//SCENE_H
+#endif// SCENE_H

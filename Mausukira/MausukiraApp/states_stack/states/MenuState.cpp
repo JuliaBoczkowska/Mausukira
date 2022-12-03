@@ -3,14 +3,16 @@
 #include "../StateHandler.h"
 #include <iostream>
 
-MenuState::MenuState(StateHandler& stateManager, StateType type)
-    : State(stateManager, type)
+MenuState::MenuState(StateHandler& stateManager, StateType type, sf::View view)
+    : State(stateManager, type, view)
 {
     std::shared_ptr<Button> startGame;
     startGame->setText("BUTTON");
-    startGame->setCallback([]() {
-        std::cout << ":))" << std::endl;
-    });
+    startGame->setCallback(
+        []()
+        {
+            std::cout << ":))" << std::endl;
+        });
     mGuiComponents.addComponent(startGame);
 }
 

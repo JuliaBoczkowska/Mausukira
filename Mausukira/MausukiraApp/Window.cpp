@@ -7,6 +7,7 @@ Window::Window(sf::VideoMode videoMode)
 
 void Window::handlePolledEvents(sf::Event& event)
 {
+    sf::View view = mRenderWindow.getView();
     while (mRenderWindow.pollEvent(event))
     {
         if (event.type == sf::Event::LostFocus)
@@ -22,6 +23,14 @@ void Window::handlePolledEvents(sf::Event& event)
         else if (event.type == sf::Event::Closed)
         {
             mRenderWindow.close();
+        }
+        if (event.type == sf::Event::Resized)
+        {
+            // resize my view
+            view.setSize(
+                {static_cast<float>(event.size.width), static_cast<float>(event.size.height)});
+            mRenderWindow.setView(view);
+            // and align shape
         }
         mEventManager.handleEvent(event);
     }

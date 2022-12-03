@@ -1,0 +1,1 @@
+target_sources(MausukiraApp PRIVATE EventManager.cpp)

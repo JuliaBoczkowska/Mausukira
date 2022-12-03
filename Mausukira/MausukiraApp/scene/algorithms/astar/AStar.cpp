@@ -1,7 +1,8 @@
 #include "AStar.h"
+#include "../../map/DungeonGenerator.h"
+#include "../../map/TileHelper.h"
 #include <algorithm>
 #include <stdexcept>
-#include "../../map/TerrainGenerator.h"
 
 
 AStar::AStar(GeneratedMap& map)
@@ -13,19 +14,11 @@ AStar::AStar(GeneratedMap& map)
 
 void AStar::checkTilesAround(const sf::Vector2i& cell, const PathCost& costOfTile)
 {
-    static const sf::Vector2i neighbouringTiles[] = {
-        { 1,  0 },
-        { -1, 0 },
-        { 0,  1 },
-        { 0,  -1 },
-    };
-
     for (int neighbourIndex = 0; neighbourIndex < 4; ++neighbourIndex)
     {
-
-        //TODO CHECK THAT COMMENTED CODE!
-        if (const auto closeNode = cell + neighbouringTiles[neighbourIndex]; isInBorders(closeNode))
-            // && getCellType(closeNode) != Type::HALL)
+        if (const auto closeNode = cell + tile_helper::neighbouringFourTiles[neighbourIndex];
+            tile_helper::isInBorders(closeNode))
+        // && getCellType(closeNode) != Type::HALL)
         {
             if (closeNode == mFinalPoint)
             {
@@ -33,26 +26,23 @@ void AStar::checkTilesAround(const sf::Vector2i& cell, const PathCost& costOfTil
                 return;
             }
 
-            auto distanceToNeighbouringCell{ 0 };
+            auto distanceToNeighbouringCell{0};
             switch (mMap[cell.x][cell.y])
             {
-                case CellType::ROOM:distanceToNeighbouringCell = 10;
-                    break;
-                case CellType::NONE:distanceToNeighbouringCell = 5;
-                    break;
-                case CellType::HALL:distanceToNeighbouringCell = 1;
-                    break;
+                case CellType::ROOM: distanceToNeighbouringCell = 10; break;
+                case CellType::NONE: distanceToNeighbouringCell = 5; break;
+                case CellType::HALL: distanceToNeighbouringCell = 1; break;
             }
 
-            auto costOfCloseNode = PathCost(costOfTile.mDistanceFromStart
-                                            + distanceToNeighbouringCell,
-                std::pair<sf::Vector2i, sf::Vector2i>{ closeNode, mFinalPoint }, cell);
+            auto costOfCloseNode =
+                PathCost(costOfTile.mDistanceFromStart + distanceToNeighbouringCell,
+                         std::pair<sf::Vector2i, sf::Vector2i>{closeNode, mFinalPoint}, cell);
 
-            if (auto unvisitedNode = mVisitedTiles.find(closeNode); unvisitedNode == mVisitedTiles.end())
+            if (auto unvisitedNode = mVisitedTiles.find(closeNode);
+                unvisitedNode == mVisitedTiles.end())
             {
                 mUnvisitedTiles.emplace(std::move(costOfCloseNode), closeNode);
             }
-
         }
     }
 }
@@ -71,7 +61,7 @@ void AStar::drawFinalPathOnMap(const sf::Vector2i& lastHandledCell)
 
 void AStar::updateMapAroundTile(const sf::Vector2i& centerOfTileCoordinates, const PathCost& cost)
 {
-    if (isInBorders(centerOfTileCoordinates))
+    if (tile_helper::isInBorders(centerOfTileCoordinates))
     {
         checkTilesAround(centerOfTileCoordinates, cost);
         mVisitedTiles.emplace(centerOfTileCoordinates, cost);
@@ -82,18 +72,18 @@ void AStar::updateMapAroundTile(const sf::Vector2i& centerOfTileCoordinates, con
     }
 }
 
-bool AStar::isInBorders(const sf::Vector2i& tileCoords) const
+GeneratedMap AStar::generateHallway(const sf::Vector2i& startingPoint,
+                                    const sf::Vector2i& finalPoint)
 {
-    return tileCoords.x >= 0 && tileCoords.y >= 0 &&
-           tileCoords.x < mMapWidth && tileCoords.y < mMapHeight;
-}
-
-GeneratedMap AStar::generateHallway(const sf::Vector2i& startingPoint, const sf::Vector2i& finalPoint)
-{
+    mFinalPoint = finalPoint;
+    mStartPoint = startingPoint;
     updateMapAroundTile(startingPoint,
-        PathCost{ 0, std::pair<sf::Vector2i, sf::Vector2i>{ startingPoint, mFinalPoint }, startingPoint });
+                        PathCost{0,
+                                 std::pair<sf::Vector2i, sf::Vector2i>{startingPoint, mFinalPoint},
+                                 startingPoint});
 
-    for (auto it = mUnvisitedTiles.begin(); it != mUnvisitedTiles.end(); it = mUnvisitedTiles.begin())
+    for (auto it = mUnvisitedTiles.begin(); it != mUnvisitedTiles.end();
+         it = mUnvisitedTiles.begin())
     {
         const auto& [cost, tile] = *it;
 
@@ -112,14 +102,12 @@ GeneratedMap AStar::generateHallway(const sf::Vector2i& startingPoint, const sf:
 
         mUnvisitedTiles.erase(it);
     }
-    reInitializeAlgorithm(startingPoint, finalPoint);
+    reInitializeAlgorithm();
     return mMap;
 }
 
-void AStar::reInitializeAlgorithm(const sf::Vector2i& startingPoint, const sf::Vector2i& finalPoint)
+void AStar::reInitializeAlgorithm()
 {
-    mFinalPoint = finalPoint;
-    mStartPoint = startingPoint;
     mUnvisitedTiles.clear();
     mVisitedTiles.clear();
     isFinalPointFound = false;

@@ -1,6 +1,6 @@
 #include "TextureManager.h"
-#include <iostream>
 #include <exception>
+#include <iostream>
 
 void TextureManager::load(const std::string& name, const std::string& path)
 {
@@ -10,7 +10,8 @@ void TextureManager::load(const std::string& name, const std::string& path)
         std::unique_ptr<sf::Texture> texture(new sf::Texture());
         try
         {
-            /** sf::Texture::loadFromFile() returns a Boolean value that is true in case of success, and false in case of failure */
+            /** sf::Texture::loadFromFile() returns a Boolean value that is true in case of success,
+             * and false in case of failure */
             if (!texture->loadFromFile(path))
             {
                 throw std::runtime_error("ERR: TextureManager::load - Failed to load a texture");
