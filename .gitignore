@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+
+# Builds
+Mausukira/cmake-build-debug-visual-studio/*
+
+Mausukira/.idea/*

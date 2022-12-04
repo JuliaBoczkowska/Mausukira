@@ -17,7 +17,7 @@ void DungeonGenerator::procedurallyGenerateMap()
     minSpanningTree();
     createHallways();
 
-    mMapContext.centerOfTheFirstRoom = mRooms.begin()->mCenter;
+    updateCenterOfTheFirstRoom();
 }
 
 void DungeonGenerator::generateRooms()
@@ -34,7 +34,7 @@ void DungeonGenerator::triangulation()
 void DungeonGenerator::minSpanningTree()
 {
     copyTriangleEdgesToMst();
-    mFinalEdges = mMST.processMST(mFinalEdges);
+    mFinalEdges = mMinSpanningTree.processMST(mFinalEdges);
     addRandomEdgesToMst();
 }
 
@@ -48,7 +48,6 @@ void DungeonGenerator::createHallways()
             converter::worldCoordinateToTileCoordinate<int>(edge.mVertexA.x, edge.mVertexA.y),
             converter::worldCoordinateToTileCoordinate<int>(edge.mVertexB.x, edge.mVertexB.y));
     }
-
 #if DEBUG_ROOM_GENERATION
     for (auto point: mMapContext.mMap)
     {
@@ -65,19 +64,17 @@ void DungeonGenerator::drawDebugLines(sf::RenderWindow& window)
 {
 #if DEBUG_ROOM_GENERATION
     mDelaunayTriangulation.draw(window);
-    mMST.draw(window);
-    drawCenterOfTheRoom(window);
+    mMinSpanningTree.draw(window);
+    drawRoomCenter(window);
 #endif
 }
-void DungeonGenerator::drawCenterOfTheRoom(sf::RenderWindow& window)
+
+void DungeonGenerator::drawRoomCenter(sf::RenderWindow& window)
 {
-    sf::CircleShape shape(2);
-    shape.setFillColor(sf::Color(100, 250, 50));
     std::list<Room>::iterator it;
     for (it = mRooms.begin(); it != mRooms.end(); ++it)
     {
-        shape.setPosition(it->mCenter);
-        window.draw(shape);
+        it->draw(window);
     }
 }
 
@@ -106,8 +103,7 @@ void DungeonGenerator::addRandomEdgesToMst()
             mFinalEdges.push_back(edge);
         }
     }
-
-    mMST.setMstEdges(mFinalEdges);
+    mMinSpanningTree.setMstEdges(mFinalEdges);
 }
 
 void DungeonGenerator::storeUniqueEdges(UniqueEdges& addedEdges)
@@ -117,7 +113,7 @@ void DungeonGenerator::storeUniqueEdges(UniqueEdges& addedEdges)
         addedEdges.emplace(edge);
     }
 }
-sf::Vector2f DungeonGenerator::getCenterOfTheFirstRoom()
+void DungeonGenerator::updateCenterOfTheFirstRoom()
 {
-    return mRooms.begin()->mCenter;
+    mMapContext.centerOfTheFirstRoom = mRooms.begin()->mCenter;
 }

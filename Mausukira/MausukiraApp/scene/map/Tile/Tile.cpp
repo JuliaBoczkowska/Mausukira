@@ -6,12 +6,11 @@ Tile::Tile(TileModel* tileModel, const int& x, const int& y)
     , mX(x)
     , mY(y)
 {
-    mTileModel->mSprite.setPosition(mX * (TILE_SIZE), mY * (TILE_SIZE));
+    mSprite = mTileModel->mSprite;
+    mSprite.setPosition(mX * (TILE_SIZE), mY * (TILE_SIZE));
 }
 
 void Tile::draw(sf::RenderWindow& window)
 {
-    sf::Sprite& sprite = mTileModel->mSprite;
-    sprite.setPosition(mX * (TILE_SIZE), mY * (TILE_SIZE));
-    window.draw(sprite);
+    window.draw(mSprite);
 }

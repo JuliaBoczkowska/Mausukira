@@ -57,14 +57,6 @@ std::vector<std::vector<int>> RoomGenerator::generateRoomRectangle()
     return grid;
 }
 
-void RoomGenerator::generateRoomCA()
-{
-}
-
-void RoomGenerator::generateRoomCircle()
-{
-}
-
 bool RoomGenerator::placeRoomOnMap(std::vector<std::vector<int>> roomOutline)
 {
     /** Counter for debug purposes */

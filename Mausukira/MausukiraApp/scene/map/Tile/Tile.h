@@ -24,5 +24,6 @@ public:
     int mX;
     int mY;
     TileModel* mTileModel;
+    sf::Sprite mSprite;
 };
 #endif// TILE_H

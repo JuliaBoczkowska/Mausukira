@@ -30,7 +30,7 @@ public:
 
     void procedurallyGenerateMap();
     void drawDebugLines(sf::RenderWindow& window);
-    sf::Vector2f getCenterOfTheFirstRoom();
+    void updateCenterOfTheFirstRoom();
 
 private:
     /**
@@ -42,13 +42,14 @@ private:
     void addRandomEdgesToMst();
     void createHallways();
     void generateRooms();
-    void drawCenterOfTheRoom(sf::RenderWindow& window);
+
+    void drawRoomCenter(sf::RenderWindow& window);
     void copyTriangleEdgesToMst();
     void storeUniqueEdges(UniqueEdges& addedEdges);
 
 private:
     Rooms mRooms;
-    MinSpanningTree mMST;
+    MinSpanningTree mMinSpanningTree;
     DelaunayTriangulation mDelaunayTriangulation;
     MapContext& mMapContext;
 
