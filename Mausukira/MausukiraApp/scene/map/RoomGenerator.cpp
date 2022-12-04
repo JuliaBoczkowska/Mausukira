@@ -1,7 +1,7 @@
 #include "RoomGenerator.h"
 #include "../../utils/RandomNumberGenerator.h"
 #include "../algorithms/CoordinatesConverter.h"
-#include "TileHelper.h"
+#include "scene/map/Tile/TileHelper.h"
 
 RoomGenerator::RoomGenerator(std::array<std::array<int, 32>, 32>& map)
     : mMap(map)

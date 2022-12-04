@@ -3,3 +3,5 @@ target_sources(MausukiraApp PRIVATE
         Room.cpp
         DungeonGenerator.cpp
         RoomGenerator.cpp)
+
+add_subdirectory(tile)

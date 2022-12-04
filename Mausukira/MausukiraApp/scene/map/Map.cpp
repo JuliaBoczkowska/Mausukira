@@ -1,8 +1,7 @@
 #include "Map.h"
-#include "Tile.h"
-#include "TileHelper.h"
+#include "scene/map/Tile/Tile.h"
+#include "scene/map/Tile/TileHelper.h"
 #include <bitset>
-#include <cstdint>
 #include <fstream>
 #include <iostream>
 #include <json/json.h>

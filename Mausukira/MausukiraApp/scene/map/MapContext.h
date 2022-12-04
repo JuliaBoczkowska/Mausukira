@@ -1,7 +1,7 @@
 #ifndef MAPCONTEXT_H
 #define MAPCONTEXT_H
 
-#include "Tile.h"
+#include "scene/map/Tile/Tile.h"
 #include <array>
 #include <iostream>
 

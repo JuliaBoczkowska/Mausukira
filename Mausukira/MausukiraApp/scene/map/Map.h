@@ -5,13 +5,12 @@
 #include "DungeonGenerator.h"
 #include "MapContext.h"
 #include "SFML/System/Time.hpp"
-#include "TileHelper.h"
+#include "scene/map/Tile/TileHelper.h"
 #include <array>
 #include <bitset>
 #include <unordered_map>
 
 struct Tile;
-struct TileModel;
 
 using TileModels = std::unordered_map<std::string, std::unique_ptr<TileModel>>;
 using TileMap = std::array<std::unique_ptr<Tile>, 1024>;
@@ -31,7 +30,6 @@ private:
     void setTile(int x, int y, const std::string& id);
     Tile& getTile(const unsigned int& x, const unsigned int& y);
     unsigned int convertCoordsTo1D(const unsigned int& x, const unsigned int& y) const;
-    std::string chooseWallTile(const std::bitset<8>& tileBitmask);
     std::string chooseTile(const int& tileType);
     void drawTiles(sf::RenderWindow& window);
     bool isValidForCalculations(const sf::Vector2i& tile);

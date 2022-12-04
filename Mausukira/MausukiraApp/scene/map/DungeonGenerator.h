@@ -7,7 +7,7 @@
 #include "Room.h"
 #include "RoomGenerator.h"
 #include "SFML/Graphics/VertexArray.hpp"
-#include "Tile.h"
+#include "scene/map/Tile/Tile.h"
 #include <functional>
 
 class Map;

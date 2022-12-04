@@ -1,6 +1,6 @@
 #include "AStar.h"
 #include "../../map/DungeonGenerator.h"
-#include "../../map/TileHelper.h"
+#include "scene/map/Tile/TileHelper.h"
 #include <algorithm>
 #include <stdexcept>
 

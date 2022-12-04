@@ -12,9 +12,7 @@ public:
     ~MenuState() = default;
 
     void handleInput(sf::Event& event) override;
-
     void update(const sf::Time& dt) override;
-
     void draw() override;
 
 private:
