@@ -7,11 +7,6 @@ EventManager::~EventManager()
 {
 }
 
-sf::Vector2i getMousePos(sf::RenderWindow* window)
-{
-    return (window ? sf::Mouse::getPosition(*window) : sf::Mouse::getPosition());
-}
-
 bool EventManager::addBinding(std::unique_ptr<Binding> binding)
 {
     if (mBindings.find(binding->mName) != mBindings.end())

@@ -7,7 +7,7 @@
 
 struct SharedContext
 {
-    SharedContext(Window* window, TextureManager* textureManager)
+    SharedContext(Window& window, TextureManager& textureManager)
         : window(window)
         , textureManager(textureManager)
     {
@@ -15,9 +15,8 @@ struct SharedContext
 
     SharedContext() = default;
 
-    Window* window;
-    TextureManager* textureManager;
-    Scene activeScene;
+    Window& window;
+    TextureManager& textureManager;
 };
 
 #endif// SHAREDCONTEXT_H

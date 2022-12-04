@@ -5,12 +5,8 @@
 
 struct TransformComponent
 {
-    sf::Vector2f mPosition{0.f, 0.f};
-
     TransformComponent() = default;
-
     TransformComponent(const TransformComponent&) = default;
-
     TransformComponent(const sf::Vector2f& position)
         : mPosition(position)
     {
@@ -30,6 +26,16 @@ struct TransformComponent
     {
         mPosition = position;
     }
+
+    void MoveBy(const sf::Vector2f& mov)
+    {
+        mPositionOld = mPosition;
+        mPosition += mov;
+    }
+
+private:
+    sf::Vector2f mPosition{0.f, 0.f};
+    sf::Vector2f mPositionOld;
 };
 
 #endif// TRANSFORMCOMPONENT_H

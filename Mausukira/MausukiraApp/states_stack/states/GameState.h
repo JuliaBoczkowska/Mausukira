@@ -14,14 +14,13 @@ public:
     ~GameState() = default;
 
     void handleInput(sf::Event& event) override;
-
     void update(const sf::Time& dt) override;
-
     void draw() override;
 
-    SharedContext& mContext;
-    sf::RectangleShape rect;
-    Map map;
+    entt::registry registry;
+    MapContext mMapContext;
+    Scene mScene;
+    Map mMap;
 };
 
 #endif// GAMESTATE_H

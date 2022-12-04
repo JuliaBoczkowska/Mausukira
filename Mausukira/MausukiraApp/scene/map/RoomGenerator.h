@@ -9,9 +9,8 @@ using RoomGrid = std::vector<std::vector<int>>;
 class RoomGenerator
 {
 public:
-    RoomGenerator(std::array<std::array<int, 32>, 32>& map)
-        : map(map){};
-    
+    RoomGenerator(std::array<std::array<int, 32>, 32>& map);
+
     enum RoomTypes
     {
         CELLULAR_AUTOMATA = 0,
@@ -35,7 +34,7 @@ private:
 
 private:
     int roomCounter{0};
-    std::array<std::array<int, 32>, 32>& map;
+    std::array<std::array<int, 32>, 32>& mMap;
     std::list<Room> mRooms;
 };
 

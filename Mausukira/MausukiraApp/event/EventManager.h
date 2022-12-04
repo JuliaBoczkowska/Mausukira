@@ -74,11 +74,6 @@ public:
      */
     void update();
 
-    inline sf::Vector2i getMousePos(sf::RenderWindow* window = nullptr)
-    {
-        return (window ? sf::Mouse::getPosition(*window) : sf::Mouse::getPosition());
-    }
-
 private:
     void updateCounterAndBindEventKeyCode(Binding* bind, const EventInfo& eventInfo) const;
     void checkOtherEventTypes(const sf::Event& event, Binding* bind,

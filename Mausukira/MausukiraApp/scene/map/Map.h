@@ -3,6 +3,7 @@
 
 #include "../../states_stack/SharedContext.h"
 #include "DungeonGenerator.h"
+#include "MapContext.h"
 #include "SFML/System/Time.hpp"
 #include "TileHelper.h"
 #include <array>
@@ -18,11 +19,11 @@ using TileMap = std::array<std::unique_ptr<Tile>, 1024>;
 class Map
 {
 public:
-    Map(SharedContext* sharedCtx);
+    Map(SharedContext& sharedCtx, MapContext& mapContext);
     ~Map() = default;
 
     void update(const sf::Time& deltaTime);
-    void draw(sf::RenderWindow* window);
+    void draw(sf::RenderWindow& window);
 
 private:
     void loadTiles();
@@ -32,19 +33,17 @@ private:
     unsigned int convertCoordsTo1D(const unsigned int& x, const unsigned int& y) const;
     std::string chooseWallTile(const std::bitset<8>& tileBitmask);
     std::string chooseTile(const int& tileType);
-    void drawTiles(sf::RenderWindow* window);
+    void drawTiles(sf::RenderWindow& window);
     bool isValidForCalculations(const sf::Vector2i& tile);
     void isWallTile(const sf::Vector2i& currentTile);
     void isNotWallTile(const sf::Vector2i& currentTile, const int& currentTileType);
+    void setWallTile(const sf::Vector2i& currentTile, int wallValue);
 
 private:
-    const sf::Vector2u MAP_SIZE = {32, 32};
-    std::array<std::array<int, 32>, 32> mProcedurallyGeneratedMap;
     TileModels mTileModels;
-    TileMap mTileMap;
-    SharedContext* mSharedCtx;
-    DungeonGenerator mTerrainGenerator;
-
+    SharedContext& mSharedCtx;
+    MapContext& mMapContext;
+    DungeonGenerator mDungeonGenerator;
 
     std::unordered_map<uint8_t, std::string> mWallTiles{
         {255, "WALL_0_0"}, {0, "WALL_0_1"},   {80, "WALL_0_2"},  {8, "WALL_0_3"},
@@ -64,7 +63,6 @@ private:
 
         {88, "WALL_5_0"},  {26, "WALL_5_1"},  {30, "WALL_5_2"},  {126, "WALL_5_3"},
         {219, "WALL_5_4"}, {123, "WALL_5_5"}, {95, "WALL_5_6"}};
-    void setWallTile(const sf::Vector2i& currentTile, int wallValue);
 };
 
 #endif// MAP_H

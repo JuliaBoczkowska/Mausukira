@@ -7,6 +7,7 @@
 #include <memory>
 
 class StateHandler;
+class SharedContext;
 
 enum class StateType
 {
@@ -21,19 +22,14 @@ class State
 {
 public:
     explicit State(StateHandler& stateHandler, StateType type, sf::View view);
-
     virtual ~State() = default;
 
-    sf::View& GetView()
-    {
-        return mView;
-    }
-
     virtual void handleInput(sf::Event& event) = 0;
-
     virtual void update(const sf::Time& dt) = 0;
-
     virtual void draw() = 0;
+
+    SharedContext& context();
+    sf::View& GetView();
 
 protected:
     StateHandler& mStateHandler;

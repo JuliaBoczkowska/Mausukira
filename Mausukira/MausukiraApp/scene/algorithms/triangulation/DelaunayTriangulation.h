@@ -12,13 +12,15 @@ class DelaunayTriangulation
 public:
     DelaunayTriangulation() = default;
     std::set<Edge>& triangulation(std::list<Room>& rooms);
-    void draw(sf::RenderWindow* window);
+    void draw(sf::RenderWindow& window);
 
 private:
-    void sortRoomsCoordinatesClockwiseOrder(std::list<Room>& rooms);
+    void sortRoomsCoordinatesClockwiseOrder(std::list<Room>&);
     void populateLinesVertexArray();
-    void populateTrianglesVertexArray(const std::vector<p2t::Triangle*>& triangulatedFigure);
-    sf::Vector2f getAveragedRoomCenter(std::list<Room>& rooms);
+    void populateTrianglesVertexArray(const std::vector<p2t::Triangle*>&);
+    sf::Vector2f getAveragedRoomCenter(std::list<Room>&);
+    float calculateArcTan(const Room&) const;
+    void cartesianToPolarCoordinates(const Room&, const Room&, double&, double&) const;
 
 private:
     /** Triangles (consisting of vertexes) building the current figure. */
@@ -26,5 +28,6 @@ private:
     sf::VertexArray triangleLines;
     std::vector<p2t::Point*> polyline;
     std::set<Edge> mTriangleEdges;
+    ;
 };
 #endif// DELAUNAYTRIANGULATION_H

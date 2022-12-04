@@ -3,6 +3,7 @@
 
 #include "../algorithms/mst/MinSpanningTree.h"
 #include "../algorithms/triangulation/DelaunayTriangulation.h"
+#include "MapContext.h"
 #include "Room.h"
 #include "RoomGenerator.h"
 #include "SFML/Graphics/VertexArray.hpp"
@@ -15,18 +16,21 @@ enum CellType
     NONE = 0,
     ROOM = 1,
     HALL = 2,
-    //    WALL = 3,
 };
 
 class DungeonGenerator
 {
+    using Rooms = std::list<Room>;
+    using Edges = std::vector<Edge>;
+    using UniqueEdges = std::set<Edge>;
+
 public:
-    DungeonGenerator() = default;
-    explicit DungeonGenerator(const std::list<Room>& mRooms);
+    DungeonGenerator(MapContext& mapContext);
     ~DungeonGenerator() = default;
 
-    std::array<std::array<int, 32>, 32> procedurallyGenerateMap();
-    void drawDebugLines(sf::RenderWindow* window);
+    void procedurallyGenerateMap();
+    void drawDebugLines(sf::RenderWindow& window);
+    sf::Vector2f getCenterOfTheFirstRoom();
 
 private:
     /**
@@ -35,22 +39,21 @@ private:
      */
     void triangulation();
     void minSpanningTree();
-    void populateMSTVertexArray();
     void addRandomEdgesToMst();
     void createHallways();
     void generateRooms();
+    void drawCenterOfTheRoom(sf::RenderWindow& window);
+    void copyTriangleEdgesToMst();
+    void storeUniqueEdges(UniqueEdges& addedEdges);
 
 private:
-    std::list<Room> mRooms;
-    std::vector<Edge> mFinalEdges;
-    std::set<Edge> mTriangleEdges;
+    Rooms mRooms;
     MinSpanningTree mMST;
     DelaunayTriangulation mDelaunayTriangulation;
+    MapContext& mMapContext;
 
-    std::array<std::array<int, 32>, 32> mGeneratedMap{0};
-    void drawCenterOfTheRoom(sf::RenderWindow* window);
-    void copyTriangleEdgesToMst();
-    void storeUniqueEdges(std::set<Edge>& addedEdges);
+    Edges mFinalEdges;
+    UniqueEdges mTriangleEdges;
 };
 
 #endif// DUNGEONGENERATOR_H

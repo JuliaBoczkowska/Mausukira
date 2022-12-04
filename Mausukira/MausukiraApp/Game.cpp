@@ -2,7 +2,7 @@
 #include "SFML/Window/Event.hpp"
 
 Game::Game()
-    : mContext(SharedContext(&mWindow, &mTextureManager))
+    : mContext(SharedContext(mWindow, mTextureManager))
     , mStateHandler(mContext)
 {
 }

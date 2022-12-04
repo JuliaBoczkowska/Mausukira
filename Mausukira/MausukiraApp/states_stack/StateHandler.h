@@ -36,7 +36,7 @@ public:
         mStateFactory[type] = [this, type]() -> std::unique_ptr<State>
         {
             return std::make_unique<State>((*this), type,
-                                           mSharedCtx.window->mRenderWindow.getDefaultView());
+                                           mSharedCtx.window.mRenderWindow.getDefaultView());
         };
     }
 

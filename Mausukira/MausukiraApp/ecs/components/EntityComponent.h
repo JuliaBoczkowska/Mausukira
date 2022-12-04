@@ -1,16 +1,7 @@
-//
-// Created by Julchan on 27-Nov-22.
-//
-
 #ifndef ENTITYCOMPONENT_H
 #define ENTITYCOMPONENT_H
-
-enum class EntityType
-{
-    Base,
-    Enemy,
-    Player
-};
+#include <functional>
+#include <string>
 
 enum class EntityState
 {
@@ -22,14 +13,25 @@ enum class EntityState
     Dying
 };
 
-struct EntityComponent
-{
-    EntityState state{EntityState::Idle};
-};
-
+/** Just to differentiate between entities */
 struct Player
 {
 };
 
+struct Attack
+{
+    int minDamage;
+    int maxDamage;
+    std::function<void()> hit;
+};
+
+class EntityComponent
+{
+    std::string name;
+    int maxHealth;
+    int minHealth;
+
+    Attack attack;
+};
 
 #endif// ENTITYCOMPONENT_H

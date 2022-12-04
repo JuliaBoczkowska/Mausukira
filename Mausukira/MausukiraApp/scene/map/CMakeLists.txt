@@ -1,1 +1,5 @@
-target_sources(MausukiraApp PRIVATE Map.cpp Room.cpp DungeonGenerator.cpp ../algorithms/astar/AStar.cpp RoomGenerator.cpp)
+target_sources(MausukiraApp PRIVATE
+        Map.cpp
+        Room.cpp
+        DungeonGenerator.cpp
+        RoomGenerator.cpp)

@@ -1,4 +1,5 @@
 #include "DelaunayTriangulation.h"
+#include "../../Debug.h"
 
 static constexpr auto PI = 3.141592653589793238463;
 
@@ -47,20 +48,24 @@ void DelaunayTriangulation::sortRoomsCoordinatesClockwiseOrder(std::list<Room>& 
 {
     Room::setCenter(getAveragedRoomCenter(rooms));
     rooms.sort(
-        [](Room first, Room second)
+        [this](Room first, Room second)
         {
-            double a1 = (static_cast<int>(atan2(first.mCenter.x - Room::centerOfAllPoints.x,
-                                                first.mCenter.y - Room::centerOfAllPoints.y) *
-                                          (180.0 / PI)) +
-                         360) %
-                        360;
-            double a2 = (static_cast<int>(atan2(second.mCenter.x - Room::centerOfAllPoints.x,
-                                                second.mCenter.y - Room::centerOfAllPoints.y) *
-                                          (180.0 / PI)) +
-                         360) %
-                        360;
+            double a1;
+            double a2;
+            cartesianToPolarCoordinates(first, second, a1, a2);
             return a1 < a2;
         });
+}
+void DelaunayTriangulation::cartesianToPolarCoordinates(const Room& first, const Room& second,
+                                                        double& a1, double& a2) const
+{
+    a1 = (static_cast<int>(calculateArcTan(first) * (180.0 / PI)) + 360) % 360;
+    a2 = (static_cast<int>(calculateArcTan(second) * (180.0 / PI)) + 360) % 360;
+}
+float DelaunayTriangulation::calculateArcTan(const Room& second) const
+{
+    return atan2(second.mCenter.x - Room::centerOfAllPoints.x,
+                 second.mCenter.y - Room::centerOfAllPoints.y);
 }
 
 void DelaunayTriangulation::populateLinesVertexArray()
@@ -133,7 +138,9 @@ void DelaunayTriangulation::populateTrianglesVertexArray(
     }
 }
 
-void DelaunayTriangulation::draw(sf::RenderWindow* window)
+void DelaunayTriangulation::draw(sf::RenderWindow& window)
 {
-    window->draw(triangleLines);
+#if DEBUG_ROOM_GENERATION
+    window.draw(triangleLines);
+#endif
 }

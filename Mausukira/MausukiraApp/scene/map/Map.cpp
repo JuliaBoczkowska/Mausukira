@@ -7,22 +7,24 @@
 #include <iostream>
 #include <json/json.h>
 
-Map::Map(SharedContext* sharedCtx)
+Map::Map(SharedContext& sharedCtx, MapContext& mapContext)
     : mSharedCtx(sharedCtx)
+    , mMapContext(mapContext)
+    , mDungeonGenerator(mMapContext)
 {
     loadTiles();
-    mProcedurallyGeneratedMap = mTerrainGenerator.procedurallyGenerateMap();
+    mDungeonGenerator.procedurallyGenerateMap();
     tileMap();
 }
 
 void Map::tileMap()
 {
-    for (int x = 0; x < MAP_SIZE.x; ++x)
+    for (int x = 0; x < MAP_SIZE_X; ++x)
     {
-        for (int y = 0; y < MAP_SIZE.y; ++y)
+        for (int y = 0; y < MAP_SIZE_Y; ++y)
         {
             sf::Vector2i currentTile{x, y};
-            auto currentTileType = mProcedurallyGeneratedMap[currentTile.x][currentTile.y];
+            auto currentTileType = mMapContext.mMap[currentTile.x][currentTile.y];
 
             if (!currentTileType == NONE)
             {
@@ -67,6 +69,7 @@ void Map::isWallTile(const sf::Vector2i& currentTile)
 
     setWallTile(currentTile, wallValue);
 }
+
 void Map::setWallTile(const sf::Vector2i& currentTile, int wallValue)
 {
     if (mWallTiles.contains(wallValue))
@@ -85,7 +88,7 @@ bool Map::isValidForCalculations(const sf::Vector2i& tile)
     {
         return true;
     }
-    return (mProcedurallyGeneratedMap[tile.x][tile.y] == NONE) ? true : false;
+    return (mMapContext.mMap[tile.x][tile.y] == NONE) ? true : false;
 }
 
 std::string Map::chooseTile(const int& tileType)
@@ -100,13 +103,13 @@ std::string Map::chooseTile(const int& tileType)
 
 void Map::setTile(int x, int y, const std::string& id)
 {
-    mTileMap.at(convertCoordsTo1D(x, y)) =
+    mMapContext.mTileMap.at(convertCoordsTo1D(x, y)) =
         std::move(std::make_unique<Tile>(mTileModels.at(id).get(), x, y));
 }
 
 void Map::loadTiles()
 {
-    mSharedCtx->textureManager->load("TILES", "resources/tiles/tileset.png");
+    mSharedCtx.textureManager.load("TILES", "resources/tiles/tileset.png");
     Json::Value tiles;
     std::ifstream tileFile("resources/tiles/tiles.json", std::ifstream::binary);
     try
@@ -122,8 +125,8 @@ void Map::loadTiles()
             std::string name = tiles[index]["name"].asString();
             bool isDeadly = tiles[index]["deadly"].asBool();
 
-            std::unique_ptr<TileModel> tileModel =
-                std::make_unique<TileModel>(*mSharedCtx, isDeadly, name, tileID);
+            auto tileModel =
+                std::make_unique<TileModel>(mSharedCtx.textureManager, isDeadly, name, tileID);
             mTileModels.insert({name, std::move(tileModel)});
             ++tileID;
         }
@@ -136,12 +139,12 @@ void Map::loadTiles()
 
 unsigned int Map::convertCoordsTo1D(const unsigned int& x, const unsigned int& y) const
 {
-    return (x * MAP_SIZE.x) + y;
+    return (x * MAP_SIZE_X) + y;
 }
 
 Tile& Map::getTile(const unsigned int& x, const unsigned int& y)
 {
-    auto tile = mTileMap.at(convertCoordsTo1D(x, y)).get();
+    auto tile = mMapContext.mTileMap.at(convertCoordsTo1D(x, y)).get();
     return *tile;
 }
 
@@ -149,17 +152,17 @@ void Map::update(const sf::Time& deltaTime)
 {
 }
 
-void Map::draw(sf::RenderWindow* window)
+void Map::draw(sf::RenderWindow& window)
 {
     drawTiles(window);
-    mTerrainGenerator.drawDebugLines(window);
+    mDungeonGenerator.drawDebugLines(window);
 }
 
-void Map::drawTiles(sf::RenderWindow* window)
+void Map::drawTiles(sf::RenderWindow& window)
 {
-    for (int x = 0; x < MAP_SIZE.x; ++x)
+    for (int x = 0; x < MAP_SIZE_X; ++x)
     {
-        for (int y = 0; y < MAP_SIZE.y; ++y)
+        for (int y = 0; y < MAP_SIZE_Y; ++y)
         {
             Tile& tile = getTile(x, y);
             tile.draw(window);

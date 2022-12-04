@@ -1,8 +1,9 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include "../../states_stack/SharedContext.h"
+#include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/Sprite.hpp"
+#include "utils/TextureManager.h"
 
 static constexpr unsigned SPRITE_TILE_SIZE = 16;///< Tiles are 16 px wide and 16 px tall
 static constexpr int TILE_SIZE = 32;            ///< Tiles are 16 px wide and 16 px tall
@@ -13,14 +14,13 @@ using TileID = std::string;
 /** Struct containing information about not unique features of tile. */
 struct TileModel
 {
-    TileModel(SharedContext& mSharedCtx, bool isDeadly, TileID name, unsigned id)
-        : mCtx(mSharedCtx)
+    TileModel(TextureManager& textureManager, bool isDeadly, TileID name, unsigned id)
+        : mTextureManager(textureManager)
         , mIsDeadly(isDeadly)
         , mName(name)
         , mID(id)
     {
-        TextureManager* textureManager = mCtx.textureManager;
-        mSprite.setTexture(textureManager->get("TILES"));
+        mSprite.setTexture(mTextureManager.get("TILES"));
 
         sf::IntRect tileBoundaries(mID % (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
                                    mID / (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
@@ -31,7 +31,7 @@ struct TileModel
     }
 
     sf::Sprite mSprite;
-    SharedContext& mCtx;
+    TextureManager& mTextureManager;
 
     bool mIsDeadly;
     TileID mName;
@@ -55,11 +55,11 @@ public:
     Tile() = default;
     ~Tile() = default;
 
-    void draw(sf::RenderWindow* window)
+    void draw(sf::RenderWindow& window)
     {
         sf::Sprite& sprite = mTileModel->mSprite;
         sprite.setPosition(x * (TILE_SIZE), y * (TILE_SIZE));
-        window->draw(sprite);
+        window.draw(sprite);
     }
 
     int x;

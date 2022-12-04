@@ -1,26 +1,28 @@
 #include "DungeonGenerator.h"
 #include "../../utils/RandomNumberGenerator.h"
+#include "../Debug.h"
 #include "../algorithms/CoordinatesConverter.h"
 #include "../algorithms/astar/AStar.h"
 #include "SFML/Graphics/CircleShape.hpp"
 
-DungeonGenerator::DungeonGenerator(const std::list<Room>& mRooms)
+DungeonGenerator::DungeonGenerator(MapContext& mapContext)
+    : mMapContext(mapContext)
 {
 }
 
-GeneratedMap DungeonGenerator::procedurallyGenerateMap()
+void DungeonGenerator::procedurallyGenerateMap()
 {
     generateRooms();
     triangulation();
     minSpanningTree();
     createHallways();
 
-    return mGeneratedMap;
+    mMapContext.centerOfTheFirstRoom = mRooms.begin()->mCenter;
 }
 
 void DungeonGenerator::generateRooms()
 {
-    RoomGenerator generator(mGeneratedMap);
+    RoomGenerator generator(mMapContext.mMap);
     mRooms = generator.allocateRooms();
 }
 
@@ -32,13 +34,13 @@ void DungeonGenerator::triangulation()
 void DungeonGenerator::minSpanningTree()
 {
     copyTriangleEdgesToMst();
-    mMST.processMST(mFinalEdges);
+    mFinalEdges = mMST.processMST(mFinalEdges);
     addRandomEdgesToMst();
 }
 
 void DungeonGenerator::createHallways()
 {
-    AStar pathFinder(mGeneratedMap);
+    AStar pathFinder(mMapContext.mMap);
     for (auto& edge: mFinalEdges)
     {
 
@@ -47,8 +49,8 @@ void DungeonGenerator::createHallways()
             converter::worldCoordinateToTileCoordinate<int>(edge.mVertexB.x, edge.mVertexB.y));
     }
 
-#if DEBUG
-    for (auto point: mGeneratedMap)
+#if DEBUG_ROOM_GENERATION
+    for (auto point: mMapContext.mMap)
     {
         for (auto point2: point)
         {
@@ -59,15 +61,15 @@ void DungeonGenerator::createHallways()
 #endif
 }
 
-void DungeonGenerator::drawDebugLines(sf::RenderWindow* window)
+void DungeonGenerator::drawDebugLines(sf::RenderWindow& window)
 {
-    mMST.draw(window, mFinalEdges);
+#if DEBUG_ROOM_GENERATION
+    mDelaunayTriangulation.draw(window);
+    mMST.draw(window);
     drawCenterOfTheRoom(window);
-#if DEBUG
-
 #endif
 }
-void DungeonGenerator::drawCenterOfTheRoom(sf::RenderWindow* window)
+void DungeonGenerator::drawCenterOfTheRoom(sf::RenderWindow& window)
 {
     sf::CircleShape shape(2);
     shape.setFillColor(sf::Color(100, 250, 50));
@@ -75,13 +77,13 @@ void DungeonGenerator::drawCenterOfTheRoom(sf::RenderWindow* window)
     for (it = mRooms.begin(); it != mRooms.end(); ++it)
     {
         shape.setPosition(it->mCenter);
-        window->draw(shape);
+        window.draw(shape);
     }
 }
 
 void DungeonGenerator::copyTriangleEdgesToMst()
 {
-    std::set<Edge>::iterator itr;
+    UniqueEdges::iterator itr;
     for (itr = mTriangleEdges.begin(); itr != mTriangleEdges.end(); itr++)
     {
         mFinalEdges.push_back(*itr);
@@ -90,9 +92,8 @@ void DungeonGenerator::copyTriangleEdgesToMst()
 
 void DungeonGenerator::addRandomEdgesToMst()
 {
-    std::set<Edge> notAddedEdges = mTriangleEdges;
-    std::set<Edge> mstUniqueEdges;
-    std::set<Edge> result;
+    UniqueEdges notAddedEdges = mTriangleEdges;
+    UniqueEdges mstUniqueEdges;
     float chanceOfAddingEdge{20.f};
 
     storeUniqueEdges(mstUniqueEdges);
@@ -105,11 +106,18 @@ void DungeonGenerator::addRandomEdgesToMst()
             mFinalEdges.push_back(edge);
         }
     }
+
+    mMST.setMstEdges(mFinalEdges);
 }
-void DungeonGenerator::storeUniqueEdges(std::set<Edge>& addedEdges)
+
+void DungeonGenerator::storeUniqueEdges(UniqueEdges& addedEdges)
 {
     for (auto edge: mFinalEdges)
     {
         addedEdges.emplace(edge);
     }
+}
+sf::Vector2f DungeonGenerator::getCenterOfTheFirstRoom()
+{
+    return mRooms.begin()->mCenter;
 }

@@ -1,3 +1,4 @@
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 add_executable(MausukiraApp main.cpp Game.cpp Window.cpp scene/algorithms/CoordinatesConverter.h ecs/systems/CollisionSystem.cpp ecs/systems/CollisionSystem.h scene/algorithms/Coordinate.h scene/algorithms/AlgorithmsHelper.h ecs/components/EntityComponent.h)
 
 add_subdirectory(ecs)
@@ -6,7 +7,6 @@ add_subdirectory(gui)
 add_subdirectory(scene)
 add_subdirectory(states_stack)
 add_subdirectory(utils)
-
 
 target_link_libraries(MausukiraApp
         PRIVATE

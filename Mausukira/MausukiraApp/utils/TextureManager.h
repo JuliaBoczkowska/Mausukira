@@ -24,8 +24,8 @@ public:
     const sf::Texture& get(const std::string& name);
 
 private:
-    std::map<std::string, std::unique_ptr<sf::Texture>>
-        textures;///< Map storing all textures loaded during the game.
+    /** Map storing all textures loaded during the game. */
+    std::map<std::string, std::unique_ptr<sf::Texture>> textures;
 };
 
 #endif

@@ -3,6 +3,12 @@
 #include "../algorithms/CoordinatesConverter.h"
 #include "TileHelper.h"
 
+RoomGenerator::RoomGenerator(std::array<std::array<int, 32>, 32>& map)
+    : mMap(map)
+{
+}
+
+
 RoomGrid RoomGenerator::getMultiDimGrid(int width, int height, int value)
 {
     std::vector<int> row(height, value);
@@ -97,8 +103,7 @@ bool RoomGenerator::placeRoomOnMap(std::vector<std::vector<int>> roomOutline)
 
         /** Additional two is added in order to obtain space between rooms and for outlines of
          * rooms*/
-        roomToBeAdded =
-            Room(tileLocation, sf::Vector2i{roomRow + 1, roomCol + 1}, roomOutline, center);
+        roomToBeAdded = Room(tileLocation, sf::Vector2i{roomRow, roomCol}, roomOutline, center);
         ++count;
     }
     while (isRoomColliding(roomToBeAdded));
@@ -108,16 +113,16 @@ bool RoomGenerator::placeRoomOnMap(std::vector<std::vector<int>> roomOutline)
     //    int index = 0;
 
     for (int i = roomToBeAdded.mLocation.x;
-         i < map.size() && (i < (roomToBeAdded.mLocation.x + roomRow)); ++i)
+         i < mMap.size() && (i < (roomToBeAdded.mLocation.x + roomRow)); ++i)
     {
         for (int j = roomToBeAdded.mLocation.y;
-             j < map.size() && (j < (roomToBeAdded.mLocation.y + roomCol)); ++j)
+             j < mMap.size() && (j < (roomToBeAdded.mLocation.y + roomCol)); ++j)
         {
             // TODO Solution for circle and CA. For square only value "1" is sufficient
             // temp_row = index % roomRow;
             // temp_col = index / roomRow;
 
-            map[i][j] = 1;
+            mMap[i][j] = 1;
             // index++;
         }
     }
