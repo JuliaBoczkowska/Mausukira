@@ -9,7 +9,7 @@ public:
     SystemQueue(entt::registry& registry);
 
     template<typename System, typename... Args>
-    void addSystem(Args... args)
+    void addSystem(Args&... args)
     {
         mSystemsQueue.emplace_back(
             std::unique_ptr<System>(std::make_unique<System>(mRegistry, args...)));

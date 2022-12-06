@@ -1,2 +1,2 @@
 #include <iostream>
-#define DEBUG_ROOM_GENERATION 1
+#define DEBUG_ROOM_GENERATION 0

@@ -7,6 +7,7 @@ GameState::GameState(StateHandler& stateManager, StateType type, sf::View view)
     , mMap(stateManager.context(), mMapContext)
     , mScene(stateManager.context().textureManager, mMapContext)
 {
+    mScene.buildScene();
 }
 
 void GameState::handleInput(sf::Event& event)

@@ -28,8 +28,6 @@ private:
     void loadTiles();
     void tileMap();
     void setTile(int x, int y, const std::string& id);
-    Tile& getTile(const unsigned int& x, const unsigned int& y);
-    unsigned int convertCoordsTo1D(const unsigned int& x, const unsigned int& y) const;
     std::string chooseTile(const int& tileType);
     void drawTiles(sf::RenderWindow& window);
     bool isValidForCalculations(const sf::Vector2i& tile);

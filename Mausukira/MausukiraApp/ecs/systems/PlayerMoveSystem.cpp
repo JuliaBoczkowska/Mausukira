@@ -1,6 +1,7 @@
+#include "PlayerMoveSystem.h"
 #include "../components/MovableComponent.h"
 #include "../components/SpriteComponent.h"
-#include "MovingSystem.h"
+#include "ecs/components/ColliderComponent.h"
 
 PlayerMoveSystem::PlayerMoveSystem(entt::registry& registry)
     : System(registry)
@@ -39,11 +40,20 @@ void PlayerMoveSystem::update(const sf::Time& dt)
     }
     velocity = preventHigherSpeedOnDiagonalMov(velocity);
 
-    mRegistry.view<MovableComponent, SpriteComponent>().each(
-        [&](MovableComponent& movableComponent, SpriteComponent& spriteComponent)
+    mRegistry.view<MovableComponent, SpriteComponent, ColliderComponent, TransformComponent>().each(
+        [&](MovableComponent& movableComponent, SpriteComponent& spriteComponent,
+            ColliderComponent& colliderComponent, TransformComponent& transformComponent)
         {
-            spriteComponent.mCurrentSprite.move(velocity * dt.asSeconds());
-            movableComponent.mDirection = direction;
+            if (colliderComponent.mIsColliding)
+            {
+                transformComponent.setPosition(transformComponent.mPositionOld);
+                velocity = sf::Vector2f{0.f, 0.f};
+            }
+            else
+            {
+                spriteComponent.moveBy(velocity * dt.asSeconds());
+                movableComponent.mDirection = direction;
+            }
         });
 }
 sf::Vector2f& PlayerMoveSystem::preventHigherSpeedOnDiagonalMov(sf::Vector2f& velocity) const

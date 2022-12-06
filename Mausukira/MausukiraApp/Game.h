@@ -22,7 +22,7 @@ public:
     ~Game() = default;
 
     /**
-     * @brief Main loop of the game. Here, all the elementary actions line update, handle events or
+     * @brief Main loop of the game. Here, all the elementary actions line moveBy, handle events or
      * render takes place
      */
     void run();

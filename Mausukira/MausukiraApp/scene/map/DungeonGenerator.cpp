@@ -1,9 +1,9 @@
 #include "DungeonGenerator.h"
 #include "../../utils/RandomNumberGenerator.h"
 #include "../Debug.h"
-#include "../algorithms/CoordinatesConverter.h"
 #include "../algorithms/astar/AStar.h"
 #include "SFML/Graphics/CircleShape.hpp"
+#include "scene/map/Tile/TileHelper.h"
 
 DungeonGenerator::DungeonGenerator(MapContext& mapContext)
     : mMapContext(mapContext)
@@ -45,8 +45,8 @@ void DungeonGenerator::createHallways()
     {
 
         pathFinder.generateHallway(
-            converter::worldCoordinateToTileCoordinate<int>(edge.mVertexA.x, edge.mVertexA.y),
-            converter::worldCoordinateToTileCoordinate<int>(edge.mVertexB.x, edge.mVertexB.y));
+            tile_helper::worldCoordinateToTileCoordinate<int>(edge.mVertexA.x, edge.mVertexA.y),
+            tile_helper::worldCoordinateToTileCoordinate<int>(edge.mVertexB.x, edge.mVertexB.y));
     }
 #if DEBUG_ROOM_GENERATION
     for (auto point: mMapContext.mMap)
@@ -115,5 +115,5 @@ void DungeonGenerator::storeUniqueEdges(UniqueEdges& addedEdges)
 }
 void DungeonGenerator::updateCenterOfTheFirstRoom()
 {
-    mMapContext.centerOfTheFirstRoom = mRooms.begin()->mCenter;
+    mMapContext.centerOfTheFirstRoom = mRooms.front().mCenter;
 }

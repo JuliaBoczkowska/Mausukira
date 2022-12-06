@@ -1,7 +1,6 @@
 #include "RoomGenerator.h"
-#include "../../utils/RandomNumberGenerator.h"
-#include "../algorithms/CoordinatesConverter.h"
 #include "scene/map/Tile/TileHelper.h"
+#include "utils/RandomNumberGenerator.h"
 
 RoomGenerator::RoomGenerator(std::array<std::array<int, 32>, 32>& map)
     : mMap(map)
@@ -86,8 +85,8 @@ bool RoomGenerator::placeRoomOnMap(std::vector<std::vector<int>> roomOutline)
         }
 
         auto worldLocation =
-            converter::tileToWorldCoordinate<float>(tileLocation.x, tileLocation.y);
-        auto worldRoomDimension = converter::tileToWorldCoordinate<float>(roomRow, roomCol);
+            tile_helper::tileToWorldCoordinate<float>(tileLocation.x, tileLocation.y);
+        auto worldRoomDimension = tile_helper::tileToWorldCoordinate<float>(roomRow, roomCol);
 
 
         /** Center of the room */

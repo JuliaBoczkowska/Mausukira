@@ -1,23 +1,30 @@
 #include "Scene.h"
-#include "../ecs/Entity.h"
-#include "../ecs/components/Components.h"
-#include "../ecs/systems/CollisionSystem.h"
-#include "../ecs/systems/MovingSystem.h"
-#include "../ecs/systems/RenderingSystem.h"
+#include "ecs/Entity.h"
+#include "ecs/components/ColliderComponent.h"
+#include "ecs/components/Components.h"
+#include "ecs/systems/CollisionSystem.h"
+#include "ecs/systems/PlayerMoveSystem.h"
+#include "ecs/systems/RenderingSystem.h"
+#include "scene/CollisionBox.h"
 
 Scene::Scene(TextureManager& textureManager, MapContext& mapContext)
     : mSystemQueue(mRegistry)
     , mTextureManager(textureManager)
     , mMapContext(mapContext)
 {
+}
+void Scene::buildScene()
+{
     createSystems();
     createPlayer();
 }
+
 void Scene::createSystems()
 {
-    mSystemQueue.addSystem<CollisionSystem>();
     mSystemQueue.addSystem<PlayerMoveSystem>();
-    mSystemQueue.addSystem<RenderingSystem>();
+    mSystemQueue.addSystem<CollisionSystem>(mMapContext);
+
+    mSystemQueue.addSystem<RenderingSystem>(mMapContext);
 }
 
 Scene::~Scene()
@@ -57,8 +64,11 @@ void Scene::createPlayer()
     mSprite.setScale({2, 2});
 
     Entity player = {mRegistry.create(), this};
-    player.AddComponent<TransformComponent>();
+    player.AddComponent<ColliderComponent>(
+        "PLAYER", CollisionBox{mSprite.getGlobalBounds(), CollisionBox::COLLISION_TYPE::FOOT});
+    player.AddComponent<TransformComponent>(player.GetComponent<ColliderComponent>(),
+                                            mMapContext.centerOfTheFirstRoom);
     player.AddComponent<MovableComponent>();
-    player.AddComponent<SpriteComponent>(mSprite);
+    player.AddComponent<SpriteComponent>(player.GetComponent<TransformComponent>(), mSprite);
     player.AddComponent<EntityComponent>();
 }

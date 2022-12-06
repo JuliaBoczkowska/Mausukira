@@ -1,1 +1,7 @@
-target_sources(MausukiraApp PRIVATE PlayerMoveSystem.cpp System.cpp SystemQueue.cpp RenderingSystem.cpp CollisionSystem.cpp)
+target_sources(MausukiraApp PRIVATE
+        PlayerMoveSystem.cpp
+        System.cpp
+        SystemQueue.cpp
+        RenderingSystem.cpp
+        CollisionSystem.cpp
+        )

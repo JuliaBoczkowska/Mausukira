@@ -16,10 +16,10 @@ public:
     Scene(TextureManager& textureManager, MapContext& mapContext);
     ~Scene();
 
+    void buildScene();
     void update(const sf::Time& deltaTime);
     void handleInput(sf::Event& event);
     void draw(sf::RenderWindow& window);
-    Entity createEntity();
     void createPlayer();
     void createSystems();
 

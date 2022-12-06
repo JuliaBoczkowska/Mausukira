@@ -1,5 +1,5 @@
-#ifndef MOVINGSYSTEM_H
-#define MOVINGSYSTEM_H
+#ifndef PLAYERMOVESYSTEM_H
+#define PLAYERMOVESYSTEM_H
 #include "System.h"
 
 class PlayerMoveSystem : public System
@@ -12,4 +12,4 @@ public:
 };
 
 
-#endif// MOVINGSYSTEM_H
+#endif// PLAYERMOVESYSTEM_H

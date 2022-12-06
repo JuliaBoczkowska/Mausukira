@@ -1,8 +1,9 @@
 #include "TileModel.h"
 
-TileModel::TileModel(TextureManager& textureManager, bool isDeadly, TileID name, unsigned id)
+TileModel::TileModel(TextureManager& textureManager, const TileProperties& properties, TileID name,
+                     unsigned id)
     : mTextureManager(textureManager)
-    , mIsDeadly(isDeadly)
+    , mTileProperties(properties)
     , mName(name)
     , mID(id)
 {

@@ -1,8 +1,10 @@
 #include "RenderingSystem.h"
 #include "../components/SpriteComponent.h"
+#include "ecs/components/ColliderComponent.h"
 
-RenderingSystem::RenderingSystem(entt::registry& registry)
+RenderingSystem::RenderingSystem(entt::registry& registry, MapContext& mapContext)
     : System(registry)
+    , mMapContext(mapContext)
 {
 }
 
@@ -34,10 +36,11 @@ void RenderingSystem::update(const sf::Time& dt)
 
 void RenderingSystem::draw(sf::RenderWindow& window)
 {
-    mRegistry.view<SpriteComponent>().each(
-        [&](SpriteComponent& spriteComponent)
+    mRegistry.view<SpriteComponent, ColliderComponent>().each(
+        [&](SpriteComponent& spriteComponent, ColliderComponent& colliderComponent)
         {
             spriteComponent.draw(window);
+            colliderComponent.draw(window);
         });
 
     // sf::FloatRect Window::GetViewSpace(){

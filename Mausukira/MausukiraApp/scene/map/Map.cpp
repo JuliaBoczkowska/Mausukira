@@ -1,4 +1,5 @@
 #include "Map.h"
+#include "MapUtils.h"
 #include "scene/map/Tile/Tile.h"
 #include "scene/map/Tile/TileHelper.h"
 #include <bitset>
@@ -102,7 +103,7 @@ std::string Map::chooseTile(const int& tileType)
 
 void Map::setTile(int x, int y, const std::string& id)
 {
-    mMapContext.mTileMap.at(convertCoordsTo1D(x, y)) =
+    mMapContext.mTileMap.at(map_utils::convertCoordsTo1D(x, y)) =
         std::move(std::make_unique<Tile>(mTileModels.at(id).get(), x, y));
 }
 
@@ -122,10 +123,14 @@ void Map::loadTiles()
         for (Json::Value::ArrayIndex index = 0; index != tiles.size(); index++)
         {
             std::string name = tiles[index]["name"].asString();
-            bool isDeadly = tiles[index]["deadly"].asBool();
+            TileModel::DANGEROUS isDeadly =
+                static_cast<TileModel::DANGEROUS>(tiles[index]["isDeadly"].asBool());
+            TileModel::TILE_TYPE isTraversable =
+                static_cast<TileModel::TILE_TYPE>(tiles[index]["isTraversable"].asBool());
 
-            auto tileModel =
-                std::make_unique<TileModel>(mSharedCtx.textureManager, isDeadly, name, tileID);
+            auto tileModel = std::make_unique<TileModel>(
+                mSharedCtx.textureManager, TileModel::TileProperties{isDeadly, isTraversable}, name,
+                tileID);
             mTileModels.insert({name, std::move(tileModel)});
             ++tileID;
         }
@@ -134,17 +139,6 @@ void Map::loadTiles()
     {
         std::cout << e.what() << std::endl;
     }
-}
-
-unsigned int Map::convertCoordsTo1D(const unsigned int& x, const unsigned int& y) const
-{
-    return (x * MAP_SIZE_X) + y;
-}
-
-Tile& Map::getTile(const unsigned int& x, const unsigned int& y)
-{
-    auto tile = mMapContext.mTileMap.at(convertCoordsTo1D(x, y)).get();
-    return *tile;
 }
 
 void Map::update(const sf::Time& deltaTime)
@@ -163,7 +157,7 @@ void Map::drawTiles(sf::RenderWindow& window)
     {
         for (int y = 0; y < MAP_SIZE_Y; ++y)
         {
-            Tile& tile = getTile(x, y);
+            Tile& tile = map_utils::getTile(mMapContext.mTileMap, x, y);
             tile.draw(window);
         }
     }
