@@ -1,6 +1,7 @@
 #ifndef PLAYERMOVESYSTEM_H
 #define PLAYERMOVESYSTEM_H
 #include "System.h"
+#include "ecs/components/MovableComponent.h"
 
 class PlayerMoveSystem : public System
 {

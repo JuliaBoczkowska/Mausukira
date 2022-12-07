@@ -2,6 +2,7 @@
 #include "ecs/Entity.h"
 #include "ecs/components/ColliderComponent.h"
 #include "ecs/components/Components.h"
+#include "ecs/components/SpriteComponent.h"
 #include "ecs/systems/CollisionSystem.h"
 #include "ecs/systems/PlayerMoveSystem.h"
 #include "ecs/systems/RenderingSystem.h"
@@ -21,9 +22,8 @@ void Scene::buildScene()
 
 void Scene::createSystems()
 {
-    mSystemQueue.addSystem<PlayerMoveSystem>();
     mSystemQueue.addSystem<CollisionSystem>(mMapContext);
-
+    mSystemQueue.addSystem<PlayerMoveSystem>();
     mSystemQueue.addSystem<RenderingSystem>(mMapContext);
 }
 
@@ -66,9 +66,10 @@ void Scene::createPlayer()
     Entity player = {mRegistry.create(), this};
     player.AddComponent<ColliderComponent>(
         "PLAYER", CollisionBox{mSprite.getGlobalBounds(), CollisionBox::COLLISION_TYPE::FOOT});
-    player.AddComponent<TransformComponent>(player.GetComponent<ColliderComponent>(),
-                                            mMapContext.centerOfTheFirstRoom);
     player.AddComponent<MovableComponent>();
-    player.AddComponent<SpriteComponent>(player.GetComponent<TransformComponent>(), mSprite);
+    player.AddComponent<SpriteComponent>(mSprite);
+    player.AddComponent<TransformComponent>(player.GetComponent<ColliderComponent>(),
+                                            player.GetComponent<SpriteComponent>(),
+                                            mMapContext.centerOfTheFirstRoom);
     player.AddComponent<EntityComponent>();
 }

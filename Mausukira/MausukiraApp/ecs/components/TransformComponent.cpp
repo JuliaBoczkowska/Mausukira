@@ -1,4 +1,6 @@
 #include "TransformComponent.h"
+#include "ColliderComponent.h"
+#include "SpriteComponent.h"
 
 const sf::Vector2f& TransformComponent::operator()()
 {
@@ -10,21 +12,25 @@ const sf::Vector2f& TransformComponent::operator()() const
     return mPosition;
 }
 
-TransformComponent::TransformComponent(ColliderComponent& colliderComponent, sf::Vector2f position)
+TransformComponent::TransformComponent(ColliderComponent& colliderComponent,
+                                       SpriteComponent& spriteComponent, sf::Vector2f position)
     : mColliderComponent(colliderComponent)
+    , mSpriteComponent(spriteComponent)
     , mPosition(position)
 {
-    mColliderComponent.mCollisionBox.setInitialPosition(position);
+    mColliderComponent.setPosition(position);
+    mSpriteComponent.setPosition(position);
 }
 
 TransformComponent::TransformComponent(const TransformComponent& c)
     : mColliderComponent(c.mColliderComponent)
+    , mSpriteComponent(c.mSpriteComponent)
     , mPosition(c.mPosition)
 {
 }
 
 TransformComponent::TransformComponent(TransformComponent&& c) noexcept
-    : TransformComponent(c.mColliderComponent, c.mPosition)
+    : TransformComponent(c.mColliderComponent, c.mSpriteComponent, c.mPosition)
 {
 }
 
@@ -37,19 +43,14 @@ TransformComponent& TransformComponent::operator=(TransformComponent&& other)
 
 void TransformComponent::setPosition(sf::Vector2f position)
 {
-    mPositionOld = mPosition;
     mPosition = position;
-    mColliderComponent.mCollisionBox.setInitialPosition(mPosition);
+    mColliderComponent.setPosition(position);
+    mSpriteComponent.setPosition(position);
 }
 
 void TransformComponent::moveBy(const sf::Vector2f& mov)
 {
-    mPositionOld = mPosition;
     mPosition += mov;
     mColliderComponent.moveBy(mov);
-}
-
-sf::Vector2f TransformComponent::position()
-{
-    return mPosition;
+    mSpriteComponent.moveBy(mov);
 }

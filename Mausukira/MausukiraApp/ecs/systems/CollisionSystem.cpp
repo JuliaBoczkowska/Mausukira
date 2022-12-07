@@ -7,28 +7,46 @@ CollisionSystem::CollisionSystem(entt::registry& registry, MapContext& mapContex
     : System(registry)
     , mMapContext(mapContext)
 {
+    shape.setRadius(4);
+    shape.setFillColor(sf::Color::Red);
 }
 
 void CollisionSystem::handleInput(sf::Event& event)
 {
 }
 
+bool CollisionSystem::checkIfAllowsToUpdatePosition(ColliderComponent& colliderComponent,
+                                                    const sf::Vector2f& futurePositionToCheck) const
+{
+    auto colliders =
+        map_utils::getSurroundingCollisionBoxes(futurePositionToCheck, mMapContext.mTileMap);
+    for (auto& collider: colliders)
+    {
+        if (collider->isColliding(colliderComponent.mCollisionBox))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 void CollisionSystem::update(const sf::Time& dt)
 {
-
     mRegistry.view<ColliderComponent, TransformComponent>().each(
         [&](ColliderComponent& colliderComponent, TransformComponent& transformComponent)
         {
-            auto colliders = map_utils::getSurroundingCollisionBoxes(transformComponent.position(),
-                                                                     mMapContext.mTileMap);
-            colliderComponent.mIsColliding = false;
-            for (auto& collider: colliders)
+            auto futurePositionToCheck =
+                transformComponent() + transformComponent.mVelocity * dt.asSeconds();
+            transformComponent.mColliderComponent.setPosition(futurePositionToCheck);
+            shape.setPosition(futurePositionToCheck);
+            if (checkIfAllowsToUpdatePosition(colliderComponent, futurePositionToCheck))
             {
-                if (collider->intersects(colliderComponent.mCollisionBox))
-                {
-                    colliderComponent.mIsColliding = true;
-                }
+                transformComponent.mVelocity = sf::Vector2f{0.f, 0.f};
             }
-            // = isColliding;
         });
+}
+void CollisionSystem::draw(sf::RenderWindow& window)
+{
+    window.draw(shape);
 }

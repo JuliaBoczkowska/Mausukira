@@ -1,7 +1,7 @@
 #include "PlayerMoveSystem.h"
-#include "../components/MovableComponent.h"
-#include "../components/SpriteComponent.h"
 #include "ecs/components/ColliderComponent.h"
+#include "ecs/components/MovableComponent.h"
+#include "ecs/components/TransformComponent.h"
 
 PlayerMoveSystem::PlayerMoveSystem(entt::registry& registry)
     : System(registry)
@@ -9,10 +9,6 @@ PlayerMoveSystem::PlayerMoveSystem(entt::registry& registry)
 }
 
 void PlayerMoveSystem::handleInput(sf::Event& event)
-{
-}
-
-void PlayerMoveSystem::update(const sf::Time& dt)
 {
     sf::Vector2f velocity{0.f, 0.f};
     float speed = 100.f;
@@ -38,22 +34,26 @@ void PlayerMoveSystem::update(const sf::Time& dt)
         velocity.y += speed;
         direction = Direction::DOWN;
     }
-    velocity = preventHigherSpeedOnDiagonalMov(velocity);
 
-    mRegistry.view<MovableComponent, SpriteComponent, ColliderComponent, TransformComponent>().each(
-        [&](MovableComponent& movableComponent, SpriteComponent& spriteComponent,
-            ColliderComponent& colliderComponent, TransformComponent& transformComponent)
+    velocity = preventHigherSpeedOnDiagonalMov(velocity);
+    mRegistry.view<MovableComponent, ColliderComponent, TransformComponent>().each(
+        [&](MovableComponent& movableComponent, ColliderComponent& colliderComponent,
+            TransformComponent& transformComponent)
         {
-            if (colliderComponent.mIsColliding)
-            {
-                transformComponent.setPosition(transformComponent.mPositionOld);
-                velocity = sf::Vector2f{0.f, 0.f};
-            }
-            else
-            {
-                spriteComponent.moveBy(velocity * dt.asSeconds());
-                movableComponent.mDirection = direction;
-            }
+            transformComponent.mVelocity = velocity;
+            movableComponent.mDirection = direction;
+        });
+}
+#include <iostream>
+void PlayerMoveSystem::update(const sf::Time& dt)
+{
+    mRegistry.view<MovableComponent, ColliderComponent, TransformComponent>().each(
+        [&](MovableComponent& movableComponent, ColliderComponent& colliderComponent,
+            TransformComponent& transformComponent)
+        {
+            auto dupchan = dt.asSeconds();
+            auto dupiarz = transformComponent.mVelocity * dupchan;
+            transformComponent.moveBy(dupiarz);
         });
 }
 sf::Vector2f& PlayerMoveSystem::preventHigherSpeedOnDiagonalMov(sf::Vector2f& velocity) const

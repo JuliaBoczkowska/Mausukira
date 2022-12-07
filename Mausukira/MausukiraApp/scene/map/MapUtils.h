@@ -27,12 +27,13 @@ static std::vector<CollisionBox*> getSurroundingCollisionBoxes(sf::Vector2f play
         tile_helper::worldCoordinateToTileCoordinate(playerPosition.x, playerPosition.y));
 
     std::vector<CollisionBox*> collisions;
-//    for (int neighbourIndex = 0; neighbourIndex < 8; ++neighbourIndex)
-//    {
-//        if (const auto neighbouringTile =
-//                playerTileCoordinates + tile_helper::neighbouringEightTiles[neighbourIndex];
-//            tile_helper::isInBorders(neighbouringTile))
-//        {
+    //    for (int neighbourIndex = 0; neighbourIndex < 8; ++neighbourIndex)
+    //    {
+    //        if (const auto neighbouringTile =
+    //                playerTileCoordinates +
+    //                tile_helper::neighbouringEightTiles[neighbourIndex];
+    //            tile_helper::isInBorders(neighbouringTile))
+    //        {
     for (int x = 0; x < MAP_SIZE_X; ++x)
     {
         for (int y = 0; y < MAP_SIZE_Y; ++y)
@@ -44,10 +45,8 @@ static std::vector<CollisionBox*> getSurroundingCollisionBoxes(sf::Vector2f play
                 collisions.push_back(&tile.mCollisionBox);
             }
         }
+        //        }
     }
-
-       // }
-    //}
     return collisions;
 }
 }// namespace map_utils

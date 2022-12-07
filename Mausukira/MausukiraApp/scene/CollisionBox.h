@@ -14,23 +14,22 @@ public:
 
     CollisionBox(sf::FloatRect rect, COLLISION_TYPE type);
     CollisionBox(sf::FloatRect rect);
-    CollisionBox();
+    CollisionBox() = default;
 
-    void setupRectangle(const COLLISION_TYPE& type = COLLISION_TYPE::WHOLE);
-    void setupRectForWholeObject();
-    void setupRectForFoot();
-    void setup(sf::FloatRect rect);
-    void setInitialPosition(const sf::Vector2f& pos);
-
-    bool intersects(CollisionBox& otherRom);
-    void updateCollider(sf::Vector2f position);
-    void updatePosition(sf::Vector2f position);
+    void setPosition(const sf::Vector2f& pos);
+    void setupFromSpriteRect(sf::FloatRect rect);
+    void moveCollisionBox(sf::Vector2f position);
+    bool isColliding(CollisionBox& otherRom);
     void draw(sf::RenderWindow& window);
 
-
 private:
+    void setupCollider(sf::FloatRect& rect, const COLLISION_TYPE& type = COLLISION_TYPE::WHOLE);
+    void setupColliderForGivenSurface(sf::FloatRect& rect);
+    void setupColliderForFoot(sf::FloatRect& rect);
+
+
+public:
     sf::RectangleShape mRectangle;
-    sf::FloatRect mCollisionBox;
 };
 
 

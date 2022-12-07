@@ -8,7 +8,7 @@ Tile::Tile(TileModel* tileModel, const int& x, const int& y)
 {
     mSprite = mTileModel->mSprite;
     mSprite.setPosition(mX * (TILE_SIZE), mY * (TILE_SIZE));
-    mCollisionBox.setup(mSprite.getGlobalBounds());
+    mCollisionBox.setupFromSpriteRect(mSprite.getGlobalBounds());
 }
 
 void Tile::draw(sf::RenderWindow& window)

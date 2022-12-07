@@ -22,9 +22,9 @@ void Game::run()
         {
             mStateHandler.closeGameWhenNoStatesLeft();
             elapsedSinceUpdate -= deltaTime;// we subtract the desired length of this frame delta
-            update(deltaTime);
             mWindow.handlePolledEvents(event);
             mStateHandler.states().begin()->get()->handleInput(event);
+            update(deltaTime);
         }
         render();
     }

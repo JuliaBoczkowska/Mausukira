@@ -8,9 +8,9 @@ namespace tile_helper
 {
 // clang-format off
     static const sf::Vector2i neighbouringEightTiles[8] = {
-        {-1,  1}, {0,  1}, {1,  1},
+        {-1,  1}, {0,  1}, {-1,  1},
         {-1,  0},          {1,  0},
-        {-1, -1}, {0, -1}, {1, -1}
+        {-1, 1}, {0, -1}, {1, 1}
     };
 
     static const sf::Vector2i neighbouringFourTiles[4] = {
