@@ -24,10 +24,9 @@ void CollisionBox::setupCollider(sf::FloatRect& rect, const COLLISION_TYPE& type
 }
 void CollisionBox::setupColliderForFoot(sf::FloatRect& rect)
 {
-    auto newTop = rect.top + rect.width - 4;
-
     mRectangle.setPosition(rect.left, rect.top);
-    mRectangle.setSize(sf::Vector2f(rect.width, rect.height));
+    mRectangle.setOrigin(FOOT_ORIGIN_X, FOOT_ORIGIN_Y);
+    mRectangle.setSize(sf::Vector2f(rect.width / 4, FOOT_SIZE_Y));
     mRectangle.setFillColor(sf::Color::Transparent);
     mRectangle.setOutlineColor(sf::Color::Red);
     mRectangle.setOutlineThickness(1);

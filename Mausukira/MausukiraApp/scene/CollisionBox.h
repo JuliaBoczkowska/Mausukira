@@ -11,6 +11,9 @@ public:
         FOOT,
         WHOLE
     };
+    static constexpr int FOOT_ORIGIN_X = -12;
+    static constexpr int FOOT_ORIGIN_Y = -28;
+    static constexpr int FOOT_SIZE_Y = 3;
 
     CollisionBox(sf::FloatRect rect, COLLISION_TYPE type);
     CollisionBox(sf::FloatRect rect);

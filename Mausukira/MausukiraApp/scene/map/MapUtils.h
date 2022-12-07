@@ -45,8 +45,8 @@ static std::vector<CollisionBox*> getSurroundingCollisionBoxes(sf::Vector2f play
                 collisions.push_back(&tile.mCollisionBox);
             }
         }
-        //        }
     }
+    //    }
     return collisions;
 }
 }// namespace map_utils
