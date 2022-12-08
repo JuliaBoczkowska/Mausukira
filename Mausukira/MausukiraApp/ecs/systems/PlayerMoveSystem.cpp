@@ -44,18 +44,18 @@ void PlayerMoveSystem::handleInput(sf::Event& event)
             movableComponent.mDirection = direction;
         });
 }
-#include <iostream>
+
 void PlayerMoveSystem::update(const sf::Time& dt)
 {
     mRegistry.view<MovableComponent, ColliderComponent, TransformComponent>().each(
         [&](MovableComponent& movableComponent, ColliderComponent& colliderComponent,
             TransformComponent& transformComponent)
         {
-            auto dupchan = dt.asSeconds();
-            auto dupiarz = transformComponent.mVelocity * dupchan;
-            transformComponent.moveBy(dupiarz);
+
+            transformComponent.moveBy(transformComponent.mVelocity * dt.asSeconds());
         });
 }
+
 sf::Vector2f& PlayerMoveSystem::preventHigherSpeedOnDiagonalMov(sf::Vector2f& velocity) const
 {
     if (velocity.x != 0.f && velocity.y != 0.f)

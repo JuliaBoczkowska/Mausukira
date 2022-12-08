@@ -22,8 +22,7 @@ void Game::run()
         {
             mStateHandler.closeGameWhenNoStatesLeft();
             elapsedSinceUpdate -= deltaTime;// we subtract the desired length of this frame delta
-            mWindow.handlePolledEvents(event);
-            mStateHandler.states().begin()->get()->handleInput(event);
+            mWindow.handlePolledEvents(event, mStateHandler);
             update(deltaTime);
         }
         render();
@@ -33,12 +32,12 @@ void Game::run()
 void Game::update(const sf::Time& deltaTime)
 {
     // TODO convert sf::Time value to float type. (deltaTime.asSeconds)
-    mStateHandler.states().begin()->get()->update(deltaTime);
+    mStateHandler.currentState().update(deltaTime);
 }
 
 void Game::render()
 {
     mWindow().clear();
-    mStateHandler.states().begin()->get()->draw();
+    mStateHandler.currentState().draw();
     mWindow().display();
 }

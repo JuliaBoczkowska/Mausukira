@@ -1,24 +1,27 @@
 #include "Window.h"
+#include "SFML/Window/Event.hpp"
+#include "SFML/Window/Keyboard.hpp"
+#include "states_stack/StateHandler.h"
+#include <iostream>
 
 Window::Window(sf::VideoMode videoMode)
     : mRenderWindow(videoMode, "Mausukira")
 {
 }
 
-void Window::handlePolledEvents(sf::Event& event)
+void Window::handlePolledEvents(sf::Event& event, StateHandler& mStateHandler)
 {
     sf::View view = mRenderWindow.getView();
     while (mRenderWindow.pollEvent(event))
     {
+        mStateHandler.currentState().handleInput(event);
         if (event.type == sf::Event::LostFocus)
         {
             isFocused = false;
-            mEventManager.setFocus(false);
         }
         else if (event.type == sf::Event::GainedFocus)
         {
             isFocused = true;
-            mEventManager.setFocus(true);
         }
         else if (event.type == sf::Event::Closed)
         {
@@ -30,14 +33,24 @@ void Window::handlePolledEvents(sf::Event& event)
             view.setSize(
                 {static_cast<float>(event.size.width), static_cast<float>(event.size.height)});
             mRenderWindow.setView(view);
-            // and align shape
         }
-        mEventManager.handleEvent(event);
     }
-    mEventManager.update();
+}
+sf::FloatRect Window::getViewSpace()
+{
+    sf::Vector2f viewCenter = mRenderWindow.getView().getCenter();
+    sf::Vector2f viewSize = mRenderWindow.getView().getSize();
+    sf::Vector2f viewSizeHalf(viewSize.x / 4, viewSize.y / 4);
+    sf::FloatRect viewSpace(viewCenter - viewSizeHalf, viewSize);
+    return viewSpace;
 }
 
-EventManager& Window::getEventManager()
+sf::RenderWindow& Window::operator()()
 {
-    return mEventManager;
+    return mRenderWindow;
+}
+
+const sf::RenderWindow& Window::operator()() const
+{
+    return mRenderWindow;
 }

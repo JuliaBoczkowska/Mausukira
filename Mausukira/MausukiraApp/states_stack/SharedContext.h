@@ -17,6 +17,7 @@ struct SharedContext
 
     Window& window;
     TextureManager& textureManager;
+    sf::Sprite background;
 };
 
 #endif// SHAREDCONTEXT_H

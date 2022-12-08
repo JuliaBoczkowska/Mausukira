@@ -51,3 +51,27 @@ const sf::Texture& TextureManager::get(const std::string& name)
 
     return *foundTexture->second;
 }
+
+void TextureManager::load(const std::string& name, std::unique_ptr<sf::Texture> texture)
+{
+    /** Checking if the textures was double loaded */
+    if (textures.find(name) == textures.cend())
+    {
+        try
+        {
+            const auto inserted = textures.insert(std::make_pair(name, std::move(texture)));
+            if (inserted.second == false)
+            {
+                throw std::logic_error("ERR: TextureManager::insert - Failed to insert");
+            }
+        }
+        catch (std::runtime_error& e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+        catch (std::logic_error& e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+    }
+}

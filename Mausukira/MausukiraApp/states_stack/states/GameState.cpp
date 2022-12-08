@@ -5,10 +5,11 @@
 GameState::GameState(StateHandler& stateManager, StateType type, sf::View view)
     : State(stateManager, type, view)
     , mMap(stateManager.context(), mMapContext)
-    , mScene(stateManager.context().textureManager, mMapContext)
+    , mScene(stateManager.context(), mMapContext)
 {
     mScene.buildScene();
 }
+
 
 void GameState::handleInput(sf::Event& event)
 {
@@ -23,6 +24,6 @@ void GameState::update(const sf::Time& dt)
 
 void GameState::draw()
 {
-    mMap.draw(context().window.mRenderWindow);
-    mScene.draw(context().window.mRenderWindow);
+    mMap.draw(context().window());
+    mScene.draw(context().window());
 }

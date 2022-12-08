@@ -13,8 +13,17 @@ Map::Map(SharedContext& sharedCtx, MapContext& mapContext)
     , mDungeonGenerator(mMapContext)
 {
     loadTiles();
+    setBackground();
     mDungeonGenerator.procedurallyGenerateMap();
     tileMap();
+}
+
+void Map::setBackground() const
+{
+    mSharedCtx.textureManager.load("BACKGROUND", "resources/tiles/background.png");
+    sf::Texture& texture = const_cast<sf::Texture&>(mSharedCtx.textureManager.get("BACKGROUND"));
+    texture.setRepeated(true);
+    mSharedCtx.background.setTexture(texture);
 }
 
 void Map::tileMap()
@@ -147,6 +156,7 @@ void Map::update(const sf::Time& deltaTime)
 
 void Map::draw(sf::RenderWindow& window)
 {
+    window.draw(mSharedCtx.background);
     drawTiles(window);
     mDungeonGenerator.drawDebugLines(window);
 }

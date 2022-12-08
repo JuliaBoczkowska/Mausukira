@@ -21,7 +21,7 @@ void StateHandler::switchTo(const StateType& stateType)
     }
 
     auto state = std::unique_ptr<State>(newState->second());
-    mSharedCtx.window.mRenderWindow.setView(state->GetView());
+    mSharedCtx.window().setView(state->GetView());
 
     mStates.emplace_back(std::move(state));
 }
@@ -30,6 +30,19 @@ void StateHandler::closeGameWhenNoStatesLeft()
 {
     if (mStates.empty())
     {
-        mSharedCtx.window.mRenderWindow.close();
+        mSharedCtx.window().close();
     }
+}
+SharedContext& StateHandler::context()
+{
+    return mSharedCtx;
+}
+StateHandler::States& StateHandler::states()
+{
+    return mStates;
+}
+
+State& StateHandler::currentState()
+{
+    return *states().begin()->get();
 }

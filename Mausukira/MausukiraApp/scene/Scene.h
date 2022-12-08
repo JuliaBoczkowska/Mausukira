@@ -1,19 +1,21 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "../ecs/systems/SystemQueue.h"
-#include "../utils/TextureManager.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/System/Time.hpp"
 #include "SFML/Window/Event.hpp"
+#include "ecs/systems/SystemQueue.h"
 #include "map/MapContext.h"
+#include "utils/TextureManager.h"
 #include <entt/entt.hpp>
+
 class Entity;
+class SharedContext;
 
 class Scene
 {
 public:
-    Scene(TextureManager& textureManager, MapContext& mapContext);
+    Scene(SharedContext& sharedContext, MapContext& mapContext);
     ~Scene();
 
     void buildScene();
@@ -29,7 +31,7 @@ private:
      * ID's*/
     entt::registry mRegistry;
     SystemQueue mSystemQueue;
-    TextureManager& mTextureManager;
+    SharedContext& mSharedContext;
     MapContext& mMapContext;
 };
 

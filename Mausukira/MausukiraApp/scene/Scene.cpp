@@ -3,14 +3,16 @@
 #include "ecs/components/ColliderComponent.h"
 #include "ecs/components/Components.h"
 #include "ecs/components/SpriteComponent.h"
+#include "ecs/systems/CameraSystem.h"
 #include "ecs/systems/CollisionSystem.h"
 #include "ecs/systems/PlayerMoveSystem.h"
 #include "ecs/systems/RenderingSystem.h"
 #include "scene/CollisionBox.h"
+#include "states_stack/SharedContext.h"
 
-Scene::Scene(TextureManager& textureManager, MapContext& mapContext)
+Scene::Scene(SharedContext& sharedContext, MapContext& mapContext)
     : mSystemQueue(mRegistry)
-    , mTextureManager(textureManager)
+    , mSharedContext(sharedContext)
     , mMapContext(mapContext)
 {
 }
@@ -24,6 +26,7 @@ void Scene::createSystems()
 {
     mSystemQueue.addSystem<CollisionSystem>(mMapContext);
     mSystemQueue.addSystem<PlayerMoveSystem>();
+    mSystemQueue.addSystem<CameraSystem>(mSharedContext);
     mSystemQueue.addSystem<RenderingSystem>(mMapContext);
 }
 
@@ -52,9 +55,9 @@ void Scene::createPlayer()
     int TILE_SIZE = 32;            ///< Tiles are 16 px wide and 16 px tall
     unsigned SHEET_SIZE = 128u;    ///< One row consists of 8 tiles
 
-    mTextureManager.load("PLAYER", "resources/tiles/characters.png");
+    mSharedContext.textureManager.load("PLAYER", "resources/tiles/characters.png");
     sf::Sprite mSprite;
-    mSprite.setTexture(mTextureManager.get("PLAYER"));
+    mSprite.setTexture(mSharedContext.textureManager.get("PLAYER"));
 
     sf::IntRect tileBoundaries(0 % (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
                                0 / (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,

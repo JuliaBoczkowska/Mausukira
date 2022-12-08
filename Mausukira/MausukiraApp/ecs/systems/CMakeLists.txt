@@ -4,4 +4,5 @@ target_sources(MausukiraApp PRIVATE
         SystemQueue.cpp
         RenderingSystem.cpp
         CollisionSystem.cpp
+        CameraSystem.cpp
         )

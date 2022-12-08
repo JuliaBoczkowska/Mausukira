@@ -16,6 +16,8 @@ public:
      */
     void load(const std::string& name, const std::string& path);
 
+    void load(const std::string& name, std::unique_ptr<sf::Texture> texture);
+
     /**
      * \brief Function that finds and returns  a texture in the map by pre-registered name.
      * \param name Alias for an texture, which is then used as the key to the map.

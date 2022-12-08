@@ -21,6 +21,7 @@ public:
     MapContext mMapContext;
     Scene mScene;
     Map mMap;
+    void setBackground();
 };
 
 #endif// GAMESTATE_H

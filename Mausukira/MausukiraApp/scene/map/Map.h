@@ -59,6 +59,7 @@ private:
 
         {88, "WALL_5_0"},  {26, "WALL_5_1"},  {30, "WALL_5_2"},  {126, "WALL_5_3"},
         {219, "WALL_5_4"}, {123, "WALL_5_5"}, {95, "WALL_5_6"}};
+    void setBackground() const;
 };
 
 #endif// MAP_H
