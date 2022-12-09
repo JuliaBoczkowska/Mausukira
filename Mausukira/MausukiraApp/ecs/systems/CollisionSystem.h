@@ -14,11 +14,12 @@ public:
     void update(const sf::Time& dt);
     void draw(sf::RenderWindow& window) override;
 
-    MapContext& mMapContext;
+private:
     bool checkIfAllowsToUpdatePosition(ColliderComponent& colliderComponent,
                                        const sf::Vector2f& futurePositionToCheck) const;
 
-    sf::CircleShape shape;
+private:
+    MapContext& mMapContext;
 };
 
 

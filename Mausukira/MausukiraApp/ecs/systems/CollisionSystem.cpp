@@ -7,8 +7,6 @@ CollisionSystem::CollisionSystem(entt::registry& registry, MapContext& mapContex
     : System(registry)
     , mMapContext(mapContext)
 {
-    shape.setRadius(4);
-    shape.setFillColor(sf::Color::Red);
 }
 
 void CollisionSystem::handleInput(sf::Event& event)
@@ -39,7 +37,6 @@ void CollisionSystem::update(const sf::Time& dt)
             auto futurePositionToCheck =
                 transformComponent() + transformComponent.mVelocity * dt.asSeconds();
             transformComponent.mColliderComponent.setPosition(futurePositionToCheck);
-            shape.setPosition(futurePositionToCheck);
             if (checkIfAllowsToUpdatePosition(colliderComponent, futurePositionToCheck))
             {
                 transformComponent.mVelocity = sf::Vector2f{0.f, 0.f};
@@ -48,5 +45,4 @@ void CollisionSystem::update(const sf::Time& dt)
 }
 void CollisionSystem::draw(sf::RenderWindow& window)
 {
-    window.draw(shape);
 }

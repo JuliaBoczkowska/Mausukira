@@ -2,12 +2,21 @@
 #include "ecs/components/TransformComponent.h"
 #include "states_stack/SharedContext.h"
 
-CameraSystem::CameraSystem(entt::registry& registry, SharedContext& sharedContext)
+CameraSystem::CameraSystem(entt::registry& registry, SharedContext& sharedContext,
+                           MapContext& mapContext)
     : System(registry)
     , mSharedContext(sharedContext)
     , mWindow(sharedContext.window.mRenderWindow)
 {
+    setInitialPlayerPosition(mapContext);
+}
+
+void CameraSystem::setInitialPlayerPosition(const MapContext& mapContext)
+{
+    mCameraView.setCenter(mapContext.centerOfTheFirstRoom);
     mCameraView.zoom(0.6);
+    mWindow.setView(mCameraView);
+    updateBackground();
 }
 
 void CameraSystem::update(const sf::Time& dt)
@@ -30,6 +39,7 @@ void CameraSystem::updateCamera()
             });
     }
 }
+
 void CameraSystem::updateBackground()
 {
     mSharedContext.background.setTextureRect(

@@ -4,13 +4,14 @@
 #include "System.h"
 #include "Window.h"
 #include "ecs/components/TransformComponent.h"
+#include "scene/map/MapContext.h"
 
 class SharedContext;
 
 class CameraSystem : public System
 {
 public:
-    CameraSystem(entt::registry& registry, SharedContext& sharedContext);
+    CameraSystem(entt::registry& registry, SharedContext& sharedContext, MapContext& mapContext);
 
     void handleInput(sf::Event& event) override;
     void update(const sf::Time& dt) override;
@@ -28,13 +29,14 @@ private:
     void zoomIn(const float currentZoom, const float minZoom);
     void zoomOut(const float currentZoom, const float maxZoom);
     void moveViewWithMiddleMouseButton();
+    void moveViewRelativeToMouseCoords(const sf::Vector2i& oldCoordsOfMouse,
+                                       const sf::Vector2i& newCoordsOfMouse);
 
 private:
     sf::View mCameraView;
     sf::RenderWindow& mWindow;
     SharedContext& mSharedContext;
-    void moveViewRelativeToMouseCoords(const sf::Vector2i& oldCoordsOfMouse,
-                                       const sf::Vector2i& newCoordsOfMouse);
+    void setInitialPlayerPosition(const MapContext& mapContext);
 };
 
 

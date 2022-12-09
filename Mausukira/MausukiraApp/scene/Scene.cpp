@@ -26,7 +26,7 @@ void Scene::createSystems()
 {
     mSystemQueue.addSystem<CollisionSystem>(mMapContext);
     mSystemQueue.addSystem<PlayerMoveSystem>();
-    mSystemQueue.addSystem<CameraSystem>(mSharedContext);
+    mSystemQueue.addSystem<CameraSystem>(mSharedContext, mMapContext);
     mSystemQueue.addSystem<RenderingSystem>(mMapContext);
 }
 
