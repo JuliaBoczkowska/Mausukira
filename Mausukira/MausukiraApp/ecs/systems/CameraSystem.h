@@ -27,12 +27,14 @@ private:
     sf::Vector2f getCursorCoordinates(const sf::Event& event) const;
     void zoomIn(const float currentZoom, const float minZoom);
     void zoomOut(const float currentZoom, const float maxZoom);
+    void moveViewWithMiddleMouseButton();
 
 private:
     sf::View mCameraView;
     sf::RenderWindow& mWindow;
     SharedContext& mSharedContext;
-    bool mHandlesZoom{false};
+    void moveViewRelativeToMouseCoords(const sf::Vector2i& oldCoordsOfMouse,
+                                       const sf::Vector2i& newCoordsOfMouse);
 };
 
 

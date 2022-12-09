@@ -12,12 +12,15 @@ CameraSystem::CameraSystem(entt::registry& registry, SharedContext& sharedContex
 
 void CameraSystem::update(const sf::Time& dt)
 {
+    moveViewWithMiddleMouseButton();
     updateCamera();
 }
 
 void CameraSystem::updateCamera()
 {
-    if (!mHandlesZoom)
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
+        sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
+        sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
         mRegistry.view<TransformComponent>().each(
             [&](TransformComponent& transformComponent)
@@ -46,12 +49,31 @@ void CameraSystem::cameraSetView()
     mWindow.setView(mCameraView);
 }
 
+void CameraSystem::moveViewWithMiddleMouseButton()
+{
+    static auto oldCoordsOfMouse = sf::Mouse::getPosition();
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+    {
+        const auto newCoordsOfMouse = sf::Mouse::getPosition();
+        moveViewRelativeToMouseCoords(oldCoordsOfMouse, newCoordsOfMouse);
+        updateBackground();
+    }
+    oldCoordsOfMouse = sf::Mouse::getPosition();
+}
+
+void CameraSystem::moveViewRelativeToMouseCoords(const sf::Vector2i& oldCoordsOfMouse,
+                                                 const sf::Vector2i& newCoordsOfMouse)
+{
+    mCameraView.move(mWindow.mapPixelToCoords(oldCoordsOfMouse) -
+                     mWindow.mapPixelToCoords(newCoordsOfMouse));
+    mWindow.setView(mCameraView);
+}
+
 void CameraSystem::handleInput(sf::Event& event)
 {
     if (event.type == sf::Event::MouseWheelScrolled)
     {
-        mHandlesZoom = true;
-
         const auto oldCoordsOfMouse{getCursorCoordinates(event)};
         zoomInAndOut(event);
         cameraSetView();
@@ -60,7 +82,6 @@ void CameraSystem::handleInput(sf::Event& event)
         zoomIntoMouseCursor(oldCoordsOfMouse, newCoordsOfMouse);
         updateBackground();
     }
-    mHandlesZoom = false;
 }
 
 sf::Vector2f CameraSystem::getCursorCoordinates(const sf::Event& event) const
