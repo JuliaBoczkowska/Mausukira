@@ -25,8 +25,15 @@ FetchContent_Declare(
         GIT_TAG 81612cb108b54c14c695808f494f432990b279fd
 )
 
+FetchContent_Declare(
+        tgui
+        GIT_REPOSITORY https://github.com/texus/TGUI
+        GIT_TAG v0.9.5
+)
+
 
 add_subdirectory(sfml)
 add_subdirectory(entt)
 add_subdirectory(jsoncpp)
 add_subdirectory(poly2tri)
+add_subdirectory(tgui)

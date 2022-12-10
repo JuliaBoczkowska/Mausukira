@@ -16,6 +16,7 @@ target_link_libraries(MausukiraApp
         EnTT::EnTT
         jsoncpp_lib
         poly2tri
+        tgui
         )
 
 if (WIN32)

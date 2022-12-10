@@ -13,7 +13,7 @@
 struct Tile;
 
 using TileModels = std::unordered_map<std::string, std::unique_ptr<TileModel>>;
-using TileMap = std::array<std::unique_ptr<Tile>, 1024>;
+using TileMap = std::array<std::unique_ptr<Tile>, MAP_SIZE>;
 
 class Map
 {

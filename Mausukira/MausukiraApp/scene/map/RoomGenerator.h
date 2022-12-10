@@ -1,5 +1,6 @@
 #ifndef ROOMGENERATOR_H
 #define ROOMGENERATOR_H
+#include "Constants.h"
 #include "Room.h"
 #include <array>
 #include <list>
@@ -9,13 +10,13 @@ using RoomGrid = std::vector<std::vector<int>>;
 class RoomGenerator
 {
 public:
-    RoomGenerator(std::array<std::array<int, 32>, 32>& map);
+    RoomGenerator(std::array<std::array<int, MAP_SIZE_X>, MAP_SIZE_Y>& map);
 
     enum RoomTypes
     {
         CELLULAR_AUTOMATA = 0,
-        RECTANGLE,
-        CIRCLE
+        RECTANGLE = 1,
+        CIRCLE = 2
     };
 
     /**
@@ -28,13 +29,12 @@ private:
     RoomGrid getMultiDimGrid(int width, int height, int value = 1);
     RoomGrid generateRoom();
     std::vector<std::vector<int>> generateRoomRectangle();
-    void generateRoomCA();
-    void generateRoomCircle();
+    std::vector<std::vector<int>> generateRoomCircle();
     bool placeRoomOnMap(std::vector<std::vector<int>> roomOutline);
 
 private:
     int roomCounter{0};
-    std::array<std::array<int, 32>, 32>& mMap;
+    std::array<std::array<int, MAP_SIZE_X>, MAP_SIZE_Y>& mMap;
     std::list<Room> mRooms;
 };
 

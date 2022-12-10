@@ -29,7 +29,8 @@ void CameraSystem::updateCamera()
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
         sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
+        sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
         mRegistry.view<TransformComponent>().each(
             [&](TransformComponent& transformComponent)

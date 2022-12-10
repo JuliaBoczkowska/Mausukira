@@ -2,7 +2,6 @@
 #include "../../utils/RandomNumberGenerator.h"
 #include "../Debug.h"
 #include "../algorithms/astar/AStar.h"
-#include "SFML/Graphics/CircleShape.hpp"
 #include "scene/map/Tile/TileHelper.h"
 
 DungeonGenerator::DungeonGenerator(MapContext& mapContext)

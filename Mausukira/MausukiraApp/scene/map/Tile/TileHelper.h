@@ -3,6 +3,7 @@
 
 #include "SFML/System/Vector2.hpp"
 #include "Tile.h"
+#include "scene/map/Constants.h"
 
 namespace tile_helper
 {
@@ -25,7 +26,8 @@ namespace tile_helper
 
 static bool isInBorders(const sf::Vector2i& tileCoords)
 {
-    return tileCoords.x >= 0 && tileCoords.y >= 0 && tileCoords.x < 32 && tileCoords.y < 32;
+    return tileCoords.x >= 0 && tileCoords.y >= 0 && tileCoords.x < MAP_SIZE_X &&
+           tileCoords.y < MAP_SIZE_Y;
 }
 
 template<typename T>

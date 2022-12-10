@@ -2,11 +2,12 @@
 #define ASTAR_H
 
 #include "AStarHelper.h"
+#include "scene/map/Constants.h"
 #include <map>
 #include <unordered_map>
 
 enum CellType;
-using GeneratedMap = std::array<std::array<int, 32>, 32>;
+using GeneratedMap = std::array<std::array<int, MAP_SIZE_X>, MAP_SIZE_Y>;
 
 class AStar
 {

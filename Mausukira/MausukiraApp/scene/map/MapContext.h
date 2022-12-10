@@ -1,13 +1,10 @@
 #ifndef MAPCONTEXT_H
 #define MAPCONTEXT_H
 
+#include "Constants.h"
 #include "scene/map/Tile/Tile.h"
 #include <array>
 #include <iostream>
-
-#define MAP_SIZE_X 32
-#define MAP_SIZE_Y 32
-#define MAP_SIZE 1024
 
 struct MapContext
 {
