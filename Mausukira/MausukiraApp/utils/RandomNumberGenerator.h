@@ -20,7 +20,7 @@ static float generateIntNumberInRange(const float& minSize, const float& maxSize
     return generateNum(engine);
 }
 
-static sf::Vector2i generateTwoNumbersInRange(const auto& minSize, const auto& maxSize)
+static sf::Vector2i generateTwoIntNumbersInRange(const auto& minSize, const auto& maxSize)
 {
     const std::uniform_int_distribution<int> generatePosHeight(minSize, maxSize);
     const std::uniform_int_distribution<int> generatePosWidth(minSize, maxSize);

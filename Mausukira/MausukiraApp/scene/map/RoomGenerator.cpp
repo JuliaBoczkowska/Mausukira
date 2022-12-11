@@ -86,7 +86,7 @@ std::vector<std::vector<int>> RoomGenerator::generateRoomCircle()
 
 std::vector<std::vector<int>> RoomGenerator::generateRoomRectangle()
 {
-    const auto& [width, height] = generateTwoNumbersInRange(3, 14);
+    const auto& [width, height] = generateTwoIntNumbersInRange(3, 14);
     auto grid = getMultiDimGrid(width, height);
 
     return grid;
@@ -109,7 +109,7 @@ bool RoomGenerator::placeRoomOnMap(std::vector<std::vector<int>> roomOutline)
         {
             return false;
         }
-        sf::Vector2i tileLocation = generateTwoNumbersInRange(1, MAP_SIZE_X);
+        sf::Vector2i tileLocation = generateTwoIntNumbersInRange(1, MAP_SIZE_X);
         roomRow = roomOutline.size();
         roomCol = roomOutline.at(0).size();
 

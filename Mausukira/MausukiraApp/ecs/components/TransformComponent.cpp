@@ -1,6 +1,8 @@
 #include "TransformComponent.h"
 #include "ColliderComponent.h"
 #include "SpriteComponent.h"
+#include "HealthComponent.h"
+
 
 const sf::Vector2f& TransformComponent::operator()()
 {
@@ -13,30 +15,35 @@ const sf::Vector2f& TransformComponent::operator()() const
 }
 
 TransformComponent::TransformComponent(ColliderComponent& colliderComponent,
-                                       SpriteComponent& spriteComponent, sf::Vector2f position)
+                                       SpriteComponent& spriteComponent,
+                                       HealthComponent& healthComponent, sf::Vector2f position)
     : mColliderComponent(colliderComponent)
     , mSpriteComponent(spriteComponent)
+    , mHealthComponent(healthComponent)
     , mPosition(position)
 {
     mColliderComponent.setPosition(position);
     mSpriteComponent.setPosition(position);
+    mHealthComponent.setPosition(position);
 }
 
 TransformComponent::TransformComponent(const TransformComponent& c)
     : mColliderComponent(c.mColliderComponent)
     , mSpriteComponent(c.mSpriteComponent)
+    , mHealthComponent(c.mHealthComponent)
     , mPosition(c.mPosition)
 {
 }
 
 TransformComponent::TransformComponent(TransformComponent&& c) noexcept
-    : TransformComponent(c.mColliderComponent, c.mSpriteComponent, c.mPosition)
+    : TransformComponent(c.mColliderComponent, c.mSpriteComponent, c.mHealthComponent, c.mPosition)
 {
 }
 
 TransformComponent& TransformComponent::operator=(TransformComponent&& other)
 {
     mColliderComponent = std::move(other.mColliderComponent);
+    mSpriteComponent = std::move(other.mSpriteComponent);
     mPosition = std::move(other.mPosition);
     return *this;
 }
@@ -53,4 +60,6 @@ void TransformComponent::moveBy(const sf::Vector2f& mov)
     mPosition += mov;
     mColliderComponent.moveBy(mov);
     mSpriteComponent.moveBy(mov);
+    mHealthComponent.moveBy(mov);
+
 }

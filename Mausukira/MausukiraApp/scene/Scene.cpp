@@ -2,6 +2,7 @@
 #include "ecs/Entity.h"
 #include "ecs/components/ColliderComponent.h"
 #include "ecs/components/Components.h"
+#include "ecs/components/HealthComponent.h"
 #include "ecs/components/SpriteComponent.h"
 #include "ecs/systems/CameraSystem.h"
 #include "ecs/systems/CollisionSystem.h"
@@ -65,14 +66,16 @@ void Scene::createPlayer()
 
     mSprite.setTextureRect(tileBoundaries);
     mSprite.setScale({2, 2});
+    float health = 100;
 
     Entity player = {mRegistry.create(), this};
     player.AddComponent<ColliderComponent>(
         "PLAYER", CollisionBox{mSprite.getGlobalBounds(), CollisionBox::COLLISION_TYPE::FOOT});
     player.AddComponent<MovableComponent>();
+    player.AddComponent<HealthComponent>(health);
     player.AddComponent<SpriteComponent>(mSprite);
-    player.AddComponent<TransformComponent>(player.GetComponent<ColliderComponent>(),
-                                            player.GetComponent<SpriteComponent>(),
-                                            mMapContext.centerOfTheFirstRoom);
+    player.AddComponent<TransformComponent>(
+        player.GetComponent<ColliderComponent>(), player.GetComponent<SpriteComponent>(),
+        player.GetComponent<HealthComponent>(), mMapContext.centerOfTheFirstRoom);
     player.AddComponent<EntityComponent>();
 }
