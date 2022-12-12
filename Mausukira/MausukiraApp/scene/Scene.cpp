@@ -6,6 +6,7 @@
 #include "ecs/components/SpriteComponent.h"
 #include "ecs/systems/CameraSystem.h"
 #include "ecs/systems/CollisionSystem.h"
+#include "ecs/systems/DebugSystem.h"
 #include "ecs/systems/PlayerMoveSystem.h"
 #include "ecs/systems/RenderingSystem.h"
 #include "scene/CollisionBox.h"
@@ -17,10 +18,13 @@ Scene::Scene(SharedContext& sharedContext, MapContext& mapContext)
     , mMapContext(mapContext)
 {
 }
+
 void Scene::buildScene()
 {
     createSystems();
     createPlayer();
+    EnemyParser::loadEnemies(mEnemySpawner);
+    createEnemy();
 }
 
 void Scene::createSystems()
@@ -29,6 +33,7 @@ void Scene::createSystems()
     mSystemQueue.addSystem<PlayerMoveSystem>();
     mSystemQueue.addSystem<CameraSystem>(mSharedContext, mMapContext);
     mSystemQueue.addSystem<RenderingSystem>(mMapContext);
+    mSystemQueue.addSystem<DebugSystem>();
 }
 
 Scene::~Scene()
@@ -50,6 +55,29 @@ void Scene::draw(sf::RenderWindow& window)
     mSystemQueue.draw(window);
 }
 
+void Scene::createEnemy()
+{
+    for (int i = 0; i < 5; i++)
+    {
+        unsigned SPRITE_TILE_SIZE = 16;///< Tiles are 16 px wide and 16 px tall
+        int TILE_SIZE = 32;            ///< Tiles are 16 px wide and 16 px tall
+        unsigned SHEET_SIZE = 128u;    ///< One row consists of 8 tiles
+
+        mSharedContext.textureManager.load("PLAYER", "resources/tiles/characters.png");
+        sf::Sprite mSprite;
+        mSprite.setTexture(mSharedContext.textureManager.get("PLAYER"));
+
+        sf::IntRect tileBoundaries(1 % (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
+                                   1 / (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
+                                   SPRITE_TILE_SIZE, SPRITE_TILE_SIZE);
+
+        mSprite.setTextureRect(tileBoundaries);
+        mSprite.setScale({2, 2});
+
+        mEnemySpawner.createEnemy(this, mSprite);
+    }
+}
+
 void Scene::createPlayer()
 {
     unsigned SPRITE_TILE_SIZE = 16;///< Tiles are 16 px wide and 16 px tall
@@ -60,8 +88,8 @@ void Scene::createPlayer()
     sf::Sprite mSprite;
     mSprite.setTexture(mSharedContext.textureManager.get("PLAYER"));
 
-    sf::IntRect tileBoundaries(0 % (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
-                               0 / (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
+    sf::IntRect tileBoundaries(8 % (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
+                               8 / (SHEET_SIZE / SPRITE_TILE_SIZE) * SPRITE_TILE_SIZE,
                                SPRITE_TILE_SIZE, SPRITE_TILE_SIZE);
 
     mSprite.setTextureRect(tileBoundaries);
@@ -77,5 +105,4 @@ void Scene::createPlayer()
     player.AddComponent<TransformComponent>(
         player.GetComponent<ColliderComponent>(), player.GetComponent<SpriteComponent>(),
         player.GetComponent<HealthComponent>(), mMapContext.centerOfTheFirstRoom);
-    player.AddComponent<EntityComponent>();
 }

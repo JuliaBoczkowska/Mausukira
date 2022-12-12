@@ -1,247 +1,247 @@
 [
-        {
-            "name" : "WALL_0_0",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_0_1",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_0_2",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_0_3",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_0_4",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_0_5",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_0_6",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_0_7",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_1_0",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_1_1",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_1_2",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_1_3",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_1_4",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_1_5",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_1_6",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_1_7",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_2_0",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_2_1",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_2_2",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_2_3",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_2_4",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_2_5",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_2_6",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_2_7",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_3_0",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_3_1",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_3_2",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_3_3",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_3_4",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_3_5",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_3_6",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_3_7",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_4_0",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_4_1",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_4_2",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_4_3",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_4_4",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_4_5",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_4_6",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_4_7",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_5_0",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_5_1",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_5_2",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_5_3",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_5_4",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_5_5",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "WALL_5_6",
-            "isDeadly": false,
-            "isTraversable": false
-        },
-        {
-            "name" : "FLOOR",
-            "isDeadly": true,
-            "isTraversable": true
-        },
-        {
-            "name" : "LAVA",
-            "isDeadly": false,
-            "isTraversable": true
-        }
-    ]
+    {
+        "name" : "WALL_0_0",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_0_1",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_0_2",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_0_3",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_0_4",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_0_5",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_0_6",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_0_7",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_1_0",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_1_1",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_1_2",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_1_3",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_1_4",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_1_5",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_1_6",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_1_7",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_2_0",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_2_1",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_2_2",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_2_3",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_2_4",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_2_5",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_2_6",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_2_7",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_3_0",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_3_1",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_3_2",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_3_3",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_3_4",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_3_5",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_3_6",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_3_7",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_4_0",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_4_1",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_4_2",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_4_3",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_4_4",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_4_5",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_4_6",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_4_7",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_5_0",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_5_1",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_5_2",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_5_3",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_5_4",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_5_5",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "WALL_5_6",
+        "isDeadly": false,
+        "isTraversable": false
+    },
+    {
+        "name" : "FLOOR",
+        "isDeadly": true,
+        "isTraversable": true
+    },
+    {
+        "name" : "LAVA",
+        "isDeadly": false,
+        "isTraversable": true
+    }
+]

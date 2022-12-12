@@ -1,37 +1,33 @@
 #ifndef ENTITYCOMPONENT_H
 #define ENTITYCOMPONENT_H
+#include "SFML/System/Vector2.hpp"
+#include "ecs/components/enemy/AttackType.h"
 #include <functional>
 #include <string>
+//
+// enum class EntityState
+//{
+//    Idle,
+//    Walking,
+//    Jumping,
+//    Attacking,
+//    Hurt,
+//    Dying
+//};
 
-enum class EntityState
+struct EntityStatistic
 {
-    Idle,
-    Walking,
-    Jumping,
-    Attacking,
-    Hurt,
-    Dying
-};
+    std::string mNameTag{};
+    AttackType mAttackType{};
+    float mAttackDamage{};
+    float mAttackSpeed{};
+    float mMovementSpeed{};
+    int mHealth{};
+    float mReactionTime{};
 
-/** Just to differentiate between entities */
-struct Player
-{
-};
-
-struct Attack
-{
-    int minDamage;
-    int maxDamage;
     std::function<void()> hit;
-};
 
-class EntityComponent
-{
-    std::string name;
-    int maxHealth;
-    int minHealth;
-
-    Attack attack;
+    int mDefense;
 };
 
 #endif// ENTITYCOMPONENT_H

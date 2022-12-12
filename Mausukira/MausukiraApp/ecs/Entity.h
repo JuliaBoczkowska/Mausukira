@@ -1,8 +1,8 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "../scene/Scene.h"
 #include "entt/entt.hpp"
+#include "scene/Scene.h"
 
 class Entity
 {

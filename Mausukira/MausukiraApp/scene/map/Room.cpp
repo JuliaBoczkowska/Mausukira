@@ -23,6 +23,7 @@ void Room::setCenter(sf::Vector2f center)
 {
     centerOfAllPoints = center;
 }
+
 void Room::draw(sf::RenderWindow& window)
 {
     window.draw(shape);

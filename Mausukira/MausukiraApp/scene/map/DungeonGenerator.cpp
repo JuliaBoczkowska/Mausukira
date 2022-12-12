@@ -1,8 +1,8 @@
 #include "DungeonGenerator.h"
-#include "../../utils/RandomNumberGenerator.h"
-#include "../Debug.h"
-#include "../algorithms/astar/AStar.h"
+#include "scene/Debug.h"
+#include "scene/algorithms/astar/AStar.h"
 #include "scene/map/Tile/TileHelper.h"
+#include "utils/RandomNumberGenerator.h"
 
 DungeonGenerator::DungeonGenerator(MapContext& mapContext)
     : mMapContext(mapContext)

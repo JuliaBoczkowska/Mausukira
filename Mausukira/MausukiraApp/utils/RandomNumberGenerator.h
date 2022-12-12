@@ -4,9 +4,10 @@
 #include "SFML/System/Vector2.hpp"
 #include <random>
 
-static std::random_device dev;///< It produces high quality unsigned integer random numbers. (engine
-                              ///< based on Mersenne Twister algorithm)
-static std::mt19937 engine(dev());///< A random number generator. It is used to seed engine.
+/** Used seed, produces high quality unsigned integer random numbers. */
+static std::random_device seed;
+/** Random number generator. */
+static std::mt19937 engine(seed());
 
 static float generateFloatNumberInRange(const float& minSize, const float& maxSize)
 {
@@ -17,6 +18,18 @@ static float generateFloatNumberInRange(const float& minSize, const float& maxSi
 static float generateIntNumberInRange(const float& minSize, const float& maxSize)
 {
     std::uniform_int_distribution<int> generateNum(minSize, maxSize);
+    return generateNum(engine);
+}
+
+static float generateIntNumberInRange(const sf::Vector2i& range)
+{
+    std::uniform_int_distribution<int> generateNum(range.x, range.y);
+    return generateNum(engine);
+}
+
+static float generateFloatNumberInRange(const sf::Vector2f& range)
+{
+    std::uniform_real_distribution<float> generateNum(range.x, range.y);
     return generateNum(engine);
 }
 

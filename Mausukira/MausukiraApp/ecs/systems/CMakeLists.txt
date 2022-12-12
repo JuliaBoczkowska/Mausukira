@@ -5,4 +5,5 @@ target_sources(MausukiraApp PRIVATE
         RenderingSystem.cpp
         CollisionSystem.cpp
         CameraSystem.cpp
+        DebugSystem.cpp
         )

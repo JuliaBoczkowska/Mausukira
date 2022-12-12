@@ -13,7 +13,6 @@
 struct Tile;
 
 using TileModels = std::unordered_map<std::string, std::unique_ptr<TileModel>>;
-using TileMap = std::array<std::unique_ptr<Tile>, MAP_SIZE>;
 
 class Map
 {
@@ -34,6 +33,7 @@ private:
     void isWallTile(const sf::Vector2i& currentTile);
     void isNotWallTile(const sf::Vector2i& currentTile, const int& currentTileType);
     void setWallTile(const sf::Vector2i& currentTile, int wallValue);
+    void setBackground() const;
 
 private:
     TileModels mTileModels;
@@ -45,7 +45,7 @@ private:
         {255, "WALL_0_0"}, {0, "WALL_0_1"},   {80, "WALL_0_2"},  {8, "WALL_0_3"},
         {2, "WALL_0_4"},   {64, "WALL_0_5"},  {72, "WALL_0_6"},  {16, "WALL_0_7"},
 
-        {18, "WALL_1_0"},  {24, "WALL_1_1"},  {66, "WALL_1_2"},  {218, "WALL_1_3"},
+        {18, "WALL_3_2"},  {24, "WALL_1_1"},  {66, "WALL_1_2"},  {218, "WALL_1_3"},
         {23, "WALL_1_4"},  {11, "WALL_1_5"},  {104, "WALL_1_6"}, {248, "WALL_1_7"},
 
         {208, "WALL_2_0"}, {214, "WALL_2_1"}, {107, "WALL_2_2"}, {127, "WALL_2_3"},
@@ -57,9 +57,8 @@ private:
         {120, "WALL_4_0"}, {250, "WALL_4_1"}, {106, "WALL_4_2"}, {75, "WALL_4_3"},
         {82, "WALL_4_4"},  {222, "WALL_4_5"}, {74, "WALL_4_6"},  {74, "WALL_4_7"},
 
-        {88, "WALL_5_0"},  {26, "WALL_5_1"},  {30, "WALL_5_2"},  {126, "WALL_5_3"},
+        {88, "WALL_5_0"},  {26, "WALL_3_2"},  {30, "WALL_5_2"},  {126, "WALL_5_3"},
         {219, "WALL_5_4"}, {123, "WALL_5_5"}, {95, "WALL_5_6"}};
-    void setBackground() const;
 };
 
 #endif// MAP_H

@@ -11,7 +11,7 @@ RenderingSystem::RenderingSystem(entt::registry& registry, MapContext& mapContex
 
 void RenderingSystem::handleInput(sf::Event& event)
 {
-    sortSprites();
+    //    sortSprites();
 }
 
 void RenderingSystem::sortSprites()
@@ -45,18 +45,4 @@ void RenderingSystem::draw(sf::RenderWindow& window)
             colliderComponent.draw(window);
             healthComponent.draw(window);
         });
-
-    // sf::FloatRect Window::GetViewSpace(){
-    //  sf::Vector2f viewCenter = m_window.getView().getCenter();
-    //  sf::Vector2f viewSize = m_window.getView().getSize();
-    //  sf::Vector2f viewSizeHalf(viewSize.x / 2, viewSize.y / 2);
-    //  sf::FloatRect viewSpace(viewCenter - viewSizeHalf, viewSize);
-    //  return viewSpace;
-    // }
-
-    //            if (!window.GetViewSpace().intersects(
-    //                    spriteComponent.mCurrentSprite.getGlobalBounds()))
-    //            {
-    //                return;
-    //            }
 }

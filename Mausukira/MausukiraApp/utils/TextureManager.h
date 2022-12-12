@@ -15,7 +15,6 @@ public:
      * path File path of the texture
      */
     void load(const std::string& name, const std::string& path);
-
     void load(const std::string& name, std::unique_ptr<sf::Texture> texture);
 
     /**

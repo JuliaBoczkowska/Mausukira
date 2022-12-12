@@ -69,7 +69,6 @@ public:
             closedSet.emplace(Vertex(selectedEdge.mVertexA));
             closedSet.emplace(Vertex(selectedEdge.mVertexB));
         }
-        populateMSTVertexArray();
         return mstEdges;
     }
 
@@ -104,6 +103,7 @@ public:
     void setMstEdges(std::vector<Edge> mFinalEdges)
     {
         mstEdges = mFinalEdges;
+        populateMSTVertexArray();
     }
 
 private:

@@ -1,6 +1,6 @@
 #include "HealthComponent.h"
 
-HealthComponent::HealthComponent(float& health)
+HealthComponent::HealthComponent(float health)
     : mCurrentHealth(health)
     , mHealthMax(health)
 {
@@ -8,9 +8,9 @@ HealthComponent::HealthComponent(float& health)
     mHealthBarRect.setSize(sf::Vector2f(mHpBarWidth, 2.f));
 
     mHealthBarOutline.setSize(sf::Vector2f(mHpBarWidth, 2.f));
+    mHealthBarOutline.setFillColor(sf::Color::Transparent);
     mHealthBarOutline.setOutlineColor(sf::Color::Black);
     mHealthBarOutline.setOutlineThickness(1);
-    updateHealth(10);
 }
 
 void HealthComponent::updateHealth(const float& damage)

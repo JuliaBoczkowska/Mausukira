@@ -29,8 +29,7 @@ void CameraSystem::updateCamera()
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
         sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
         mRegistry.view<TransformComponent>().each(
             [&](TransformComponent& transformComponent)
@@ -111,7 +110,7 @@ void CameraSystem::zoomIntoMouseCursor(const sf::Vector2f& oldCoordsOfMouse,
 void CameraSystem::zoomInAndOut(const sf::Event& event)
 {
     const auto currentZoom = mCameraView.getSize().x;
-    const auto maxZoom = mWindow.getDefaultView().getSize().x;
+    const auto maxZoom = mWindow.getDefaultView().getSize().x * 3.f;
     const auto minZoom = mWindow.getDefaultView().getSize().x / 3.f;
 
     if (event.mouseWheelScroll.delta > 0)

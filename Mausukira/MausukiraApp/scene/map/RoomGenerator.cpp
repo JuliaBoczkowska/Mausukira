@@ -73,20 +73,20 @@ std::vector<std::vector<int>> RoomGenerator::generateRoomCircle()
         }
     }
 
-    for (int y = 0; y < size; y++)
-    {
-        for (int x = 0; x < size; x++)
-        {
-            std::cout << squareGrid[x][y];
-        }
-        std::cout << std::endl;
-    }
+    //    for (int y = 0; y < size; y++)
+    //    {
+    //        for (int x = 0; x < size; x++)
+    //        {
+    //            std::cout << squareGrid[x][y];
+    //        }
+    //        std::cout << std::endl;
+    //    }
     return squareGrid;
 }
 
 std::vector<std::vector<int>> RoomGenerator::generateRoomRectangle()
 {
-    const auto& [width, height] = generateTwoIntNumbersInRange(3, 14);
+    const auto& [width, height] = generateTwoIntNumbersInRange(5, 14);
     auto grid = getMultiDimGrid(width, height);
 
     return grid;
