@@ -6,6 +6,10 @@ ColliderComponent::ColliderComponent(const std::string& nameTag, CollisionBox bo
 {
 }
 
+ColliderComponent::ColliderComponent(const std::string& nameTag)
+{
+}
+
 void ColliderComponent::moveBy(sf::Vector2f position)
 {
     mCollisionBox.moveCollisionBox(position);

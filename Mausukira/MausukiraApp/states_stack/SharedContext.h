@@ -13,8 +13,6 @@ struct SharedContext
     {
     }
 
-    SharedContext() = default;
-
     Window& window;
     TextureManager& textureManager;
     sf::Sprite background;

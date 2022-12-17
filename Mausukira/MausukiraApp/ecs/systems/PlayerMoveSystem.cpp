@@ -1,6 +1,7 @@
 #include "PlayerMoveSystem.h"
 #include "ecs/components/ColliderComponent.h"
 #include "ecs/components/MovableComponent.h"
+#include "ecs/components/PlayerComponent.h"
 #include "ecs/components/TransformComponent.h"
 
 PlayerMoveSystem::PlayerMoveSystem(entt::registry& registry)
@@ -14,6 +15,24 @@ void PlayerMoveSystem::handleInput(sf::Event& event)
     float speed = 100.f;
     Direction direction;
 
+    handlePlayerBasicMovement(speed, velocity, direction);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+    {
+
+    }
+
+    velocity = preventHigherSpeedOnDiagonalMov(velocity);
+    mRegistry.view<MovableComponent, ColliderComponent, TransformComponent, PlayerComponent>().each(
+        [&](MovableComponent& movableComponent, ColliderComponent& colliderComponent,
+            TransformComponent& transformComponent, PlayerComponent& playerComponent)
+        {
+            transformComponent.mVelocity = velocity;
+            movableComponent.mDirection = direction;
+        });
+}
+void PlayerMoveSystem::handlePlayerBasicMovement(float speed, sf::Vector2f& velocity,
+                                                 Direction& direction) const
+{
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
         velocity.x -= speed;
@@ -34,15 +53,6 @@ void PlayerMoveSystem::handleInput(sf::Event& event)
         velocity.y += speed;
         direction = Direction::DOWN;
     }
-
-    velocity = preventHigherSpeedOnDiagonalMov(velocity);
-    mRegistry.view<MovableComponent, ColliderComponent, TransformComponent>().each(
-        [&](MovableComponent& movableComponent, ColliderComponent& colliderComponent,
-            TransformComponent& transformComponent)
-        {
-            transformComponent.mVelocity = velocity;
-            movableComponent.mDirection = direction;
-        });
 }
 
 void PlayerMoveSystem::update(const sf::Time& dt)
@@ -51,7 +61,6 @@ void PlayerMoveSystem::update(const sf::Time& dt)
         [&](MovableComponent& movableComponent, ColliderComponent& colliderComponent,
             TransformComponent& transformComponent)
         {
-
             transformComponent.moveBy(transformComponent.mVelocity * dt.asSeconds());
         });
 }
@@ -60,9 +69,8 @@ sf::Vector2f& PlayerMoveSystem::preventHigherSpeedOnDiagonalMov(sf::Vector2f& ve
 {
     if (velocity.x != 0.f && velocity.y != 0.f)
     {
-        /** When you're moving diagonally you need
-         * to think in triangles and of the Pythagoras theorem
-         * - you'll want to compensate by dividing both directions by root 2. */
+        /** When player is moving diagonally it will move faster,
+         * thus I need to divide both directions by root 2. */
         velocity /= sqrt(2.f);
     }
     return velocity;

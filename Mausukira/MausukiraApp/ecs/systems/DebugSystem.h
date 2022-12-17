@@ -9,7 +9,7 @@ public:
     explicit DebugSystem(entt::registry& registry);
     void update(const sf::Time& dt) override;
 
-    bool doOnce{true};
+    bool doOnce{false};
 };
 
 

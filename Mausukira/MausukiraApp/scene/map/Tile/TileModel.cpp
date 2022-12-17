@@ -10,7 +10,6 @@ TileModel::TileModel(TextureManager& textureManager, const TileProperties& prope
 {
     mSprite.setTexture(mTextureManager.get("TILES"));
 
-
     mTextureManager.load(name, std::move(std::make_unique<sf::Texture>(*SpriteSheetHandler::extractTileFromTileSheet(mID, mSprite).getTexture())));
     mSprite.setScale({2, 2});
 }

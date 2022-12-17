@@ -43,6 +43,7 @@ void CollisionSystem::update(const sf::Time& dt)
             }
         });
 }
+
 void CollisionSystem::draw(sf::RenderWindow& window)
 {
 }

@@ -11,7 +11,7 @@ class SpriteSheetHandler
 public:
     SpriteSheetHandler() = default;
     static sf::Sprite extractTileFromTileSheet(int tilePosition, sf::Sprite& tileSheet);
+    static sf::Sprite extractSpriteFromTileSheet(int tilePosition, const sf::Texture& tileSheet);
 };
-
 
 #endif// SPRITESHEETHANDLER_H

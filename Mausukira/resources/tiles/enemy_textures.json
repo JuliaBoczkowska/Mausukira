@@ -1,0 +1,14 @@
+[
+    {
+        "name" : "HELMET",
+        "id": 8
+    },
+    {
+        "name" : "TORSO",
+        "id": 9
+    },
+    {
+        "name" : "BOOTS",
+        "id": 10
+    }
+]

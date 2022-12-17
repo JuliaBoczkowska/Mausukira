@@ -15,8 +15,9 @@ void DungeonGenerator::procedurallyGenerateMap()
     triangulation();
     minSpanningTree();
     createHallways();
-
-    updateCenterOfTheFirstRoom();
+    mMapContext.mRooms = mRooms;
+    mMapContext.centerOfTheFirstRoom = mRooms.front().mCenter;
+    //    updateCenterOfTheFirstRoom();
 }
 
 void DungeonGenerator::generateRooms()
@@ -112,7 +113,8 @@ void DungeonGenerator::storeUniqueEdges(UniqueEdges& addedEdges)
         addedEdges.emplace(edge);
     }
 }
-void DungeonGenerator::updateCenterOfTheFirstRoom()
-{
-    mMapContext.centerOfTheFirstRoom = mRooms.front().mCenter;
-}
+
+// void DungeonGenerator::updateCenterOfTheFirstRoom()
+//{
+//     mMapContext.centerOfTheFirstRoom = mRooms.front().mCenter;
+// }

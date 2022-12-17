@@ -1,6 +1,7 @@
 #include "Room.h"
 
-Room::Room(sf::Vector2i location, sf::Vector2i size, Room::RoomGrid grid, sf::Vector2f center)
+Room::Room(sf::Vector2i location, sf::Vector2i size, std::vector<std::vector<int>> grid,
+           sf::Vector2f center)
     : mLocation(location)
     , mSize(size)
     , mGrid(grid)

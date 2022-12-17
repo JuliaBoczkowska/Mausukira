@@ -8,11 +8,18 @@
 
 class Room
 {
+public:
+    enum class RoomGridType
+    {
+        NONE = 0,
+        ROOM = 1,
+        ENEMY = 2
+    };
     using RoomGrid = std::vector<std::vector<int>>;
 
-public:
     Room() = default;
-    explicit Room(sf::Vector2i location, sf::Vector2i size, RoomGrid grid, sf::Vector2f center);
+    explicit Room(sf::Vector2i location, sf::Vector2i size, std::vector<std::vector<int>> grid,
+                  sf::Vector2f center);
 
     void draw(sf::RenderWindow& window);
     static void setCenter(sf::Vector2f center);

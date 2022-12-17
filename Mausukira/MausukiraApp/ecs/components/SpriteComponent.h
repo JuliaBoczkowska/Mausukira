@@ -9,10 +9,11 @@
 struct SpriteComponent
 {
     SpriteComponent(sf::Sprite& sprite);
+    SpriteComponent() = default;
 
-    void draw(sf::RenderWindow& window);
-    void setPosition(const sf::Vector2f& position);
-    void moveBy(const sf::Vector2f& mov);
+    virtual void draw(sf::RenderWindow& window);
+    virtual void setPosition(const sf::Vector2f& position);
+    virtual void moveBy(const sf::Vector2f& mov);
 
     sf::Sprite mCurrentSprite;
     sf::Color mColor{1, 1, 1};

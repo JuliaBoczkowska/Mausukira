@@ -8,7 +8,7 @@ RoomGenerator::RoomGenerator(std::array<std::array<int, MAP_SIZE_X>, MAP_SIZE_Y>
 }
 
 
-RoomGrid RoomGenerator::getMultiDimGrid(int width, int height, int value)
+Room::RoomGrid RoomGenerator::getMultiDimGrid(int width, int height, int value)
 {
     std::vector<int> row(height, value);
     std::vector<std::vector<int>> grid(width, row);
@@ -31,7 +31,7 @@ std::list<Room> RoomGenerator::allocateRooms()
     return mRooms;
 }
 
-RoomGrid RoomGenerator::generateRoom()
+Room::RoomGrid RoomGenerator::generateRoom()
 {
     auto roomType = RECTANGLE;
     auto chanceCircleRoom = 20.f;
@@ -47,7 +47,6 @@ RoomGrid RoomGenerator::generateRoom()
     }
 }
 
-#include <iostream>
 std::vector<std::vector<int>> RoomGenerator::generateRoomCircle()
 {
     int radius = generateIntNumberInRange(4, 7);
@@ -72,15 +71,6 @@ std::vector<std::vector<int>> RoomGenerator::generateRoomCircle()
             }
         }
     }
-
-    //    for (int y = 0; y < size; y++)
-    //    {
-    //        for (int x = 0; x < size; x++)
-    //        {
-    //            std::cout << squareGrid[x][y];
-    //        }
-    //        std::cout << std::endl;
-    //    }
     return squareGrid;
 }
 
@@ -138,7 +128,6 @@ bool RoomGenerator::placeRoomOnMap(std::vector<std::vector<int>> roomOutline)
 
     mRooms.push_back(roomToBeAdded);
 
-    int index = 0;
     int temp_row = 0, temp_col = 0;
 
     for (int i = roomToBeAdded.mLocation.x;
@@ -156,16 +145,14 @@ bool RoomGenerator::placeRoomOnMap(std::vector<std::vector<int>> roomOutline)
             {
                 break;
             }
-            if (roomToBeAdded.mGrid[temp_row][temp_col] == 0)
+            if (static_cast<Room::RoomGridType>(roomToBeAdded.mGrid[temp_row][temp_col]) ==
+                Room::RoomGridType::NONE)
             {
                 temp_row++;
                 continue;
             }
             temp_row++;
-
-            // mMap[temp_row][temp_col] = 1;
             mMap[i][j] = 1;
-            //            index++;
         }
     }
     return true;

@@ -3,6 +3,7 @@
 
 #include "../algorithms/mst/MinSpanningTree.h"
 #include "../algorithms/triangulation/DelaunayTriangulation.h"
+#include "CellType.h"
 #include "MapContext.h"
 #include "Room.h"
 #include "RoomGenerator.h"
@@ -11,12 +12,6 @@
 #include <functional>
 
 class Map;
-enum CellType
-{
-    NONE = 0,
-    ROOM = 1,
-    HALL = 2,
-};
 
 class DungeonGenerator
 {
@@ -30,7 +25,7 @@ public:
 
     void procedurallyGenerateMap();
     void drawDebugLines(sf::RenderWindow& window);
-    void updateCenterOfTheFirstRoom();
+    //    void updateCenterOfTheFirstRoom();
 
 private:
     /**

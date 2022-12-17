@@ -1,9 +1,9 @@
 #include "EnemySpawner.h"
+#include "RndSpriteComponent.h"
 #include "ecs/Entity.h"
 #include "ecs/components/ColliderComponent.h"
 #include "ecs/components/HealthComponent.h"
 #include "ecs/components/MovableComponent.h"
-#include "ecs/components/SpriteComponent.h"
 #include "ecs/components/TransformComponent.h"
 #include "ecs/components/enemy/EnemyTypes.h"
 #include "scene/Scene.h"
@@ -21,22 +21,58 @@ void EnemySpawner::addEnemyInfo(std::string name, EnemyModelInfo enemyInfo)
     }
 }
 
-void EnemySpawner::createEnemy(Scene* scene, sf::Sprite sprite)
+void EnemySpawner::createEnemy(Scene* scene)
 {
-    static float i = 32;
-    EntityStatistic enemyStats = generateStats();
+    /** First room is reserved for hero character, so iterator++ */
+    std::list<Room>::iterator it;
+    for (it = scene->mMapContext.mRooms.begin(), ++it; it != scene->mMapContext.mRooms.end(); ++it)
+    {
+        int numberOfEnemies = generateIntNumberInRange(1, 4);
+        for (int i = 0; i < numberOfEnemies; ++i)
+        {
+            sf::Vector2i enemyLocation = getEnemyMapLocation(it->mGrid, it->mSize);
+            generateEnemyEntity(scene, it->mLocation + enemyLocation);
+        }
+    }
+}
 
+sf::Vector2i EnemySpawner::getEnemyMapLocation(Room::RoomGrid& mGrid, const sf::Vector2i& size)
+{
+    auto [generatedXPos, generatedYPos] = this->genEnemyPosWithinRoom(size);
+
+    if (static_cast<Room::RoomGridType>(mGrid[generatedXPos][generatedYPos]) ==
+        Room::RoomGridType::ROOM)
+    {
+        mGrid[generatedXPos][generatedYPos] = static_cast<int>(Room::RoomGridType::ENEMY);
+        return sf::Vector2i(generatedXPos, generatedYPos);
+    }
+    else
+    {
+        getEnemyMapLocation(mGrid, size);
+    }
+}
+
+std::pair<int, int> EnemySpawner::genEnemyPosWithinRoom(const sf::Vector2i& size) const
+{
+    return std::pair<int, int>(generateIntNumberInRange(0, size.x - 1),
+                               generateIntNumberInRange(0, size.y - 1));
+}
+
+void EnemySpawner::generateEnemyEntity(Scene* scene, sf::Vector2i position)
+{
+    EntityStatistic enemyStats = generateStats();
     Entity enemy = {scene->mRegistry.create(), scene};
+    enemy.AddComponent<RndSpriteComponent>(mTextureCreator);
     enemy.AddComponent<ColliderComponent>(
-        "Enemy", CollisionBox{sprite.getGlobalBounds(), CollisionBox::COLLISION_TYPE::FOOT});
+        "Enemy", enemy.GetComponent<RndSpriteComponent>().mCurrentSprite.getGlobalBounds());
     enemy.AddComponent<MovableComponent>();
     enemy.AddComponent<HealthComponent>(static_cast<float>(enemyStats.mHealth));
-    enemy.AddComponent<SpriteComponent>(sprite);
     enemy.AddComponent<TransformComponent>(
-        enemy.GetComponent<ColliderComponent>(), enemy.GetComponent<SpriteComponent>(),
-        enemy.GetComponent<HealthComponent>(), sf::Vector2f{i, 0});
+        enemy.GetComponent<ColliderComponent>(), enemy.GetComponent<RndSpriteComponent>(),
+        enemy.GetComponent<HealthComponent>(),
+        sf::Vector2f{static_cast<float>(position.x * TILE_SIZE),
+                     static_cast<float>(position.y * TILE_SIZE)});
     enemy.AddComponent<EntityStatistic>(enemyStats);
-    i += 32;
 }
 
 EntityStatistic EnemySpawner::generateStats()
@@ -56,7 +92,6 @@ EntityStatistic EnemySpawner::generateStats()
     {
         std::cout << "HIT" << std::endl;
     };
-
     return statsToBeFilled;
 }
 
@@ -92,4 +127,9 @@ float EnemySpawner::rndGenerateAttackSpeed(EnemyModelInfo& generationConfig)
 float EnemySpawner::rndGenerateMovementSpeed(EnemyModelInfo& generationConfig)
 {
     return generateFloatNumberInRange(generationConfig.movementSpeedMinMax);
+}
+
+EnemySpawner::EnemySpawner(TextureManager& textureManager)
+    : mTextureCreator(textureManager)
+{
 }

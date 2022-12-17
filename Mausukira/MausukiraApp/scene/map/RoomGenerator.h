@@ -5,8 +5,6 @@
 #include <array>
 #include <list>
 
-using RoomGrid = std::vector<std::vector<int>>;
-
 class RoomGenerator
 {
 public:
@@ -26,8 +24,8 @@ public:
 
 private:
     bool isRoomColliding(Room& temp);
-    RoomGrid getMultiDimGrid(int width, int height, int value = 1);
-    RoomGrid generateRoom();
+    Room::RoomGrid getMultiDimGrid(int width, int height, int value = 1);
+    Room::RoomGrid generateRoom();
     std::vector<std::vector<int>> generateRoomRectangle();
     std::vector<std::vector<int>> generateRoomCircle();
     bool placeRoomOnMap(std::vector<std::vector<int>> roomOutline);

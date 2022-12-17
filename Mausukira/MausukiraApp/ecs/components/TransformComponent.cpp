@@ -1,7 +1,7 @@
 #include "TransformComponent.h"
 #include "ColliderComponent.h"
-#include "SpriteComponent.h"
 #include "HealthComponent.h"
+#include "SpriteComponent.h"
 
 
 const sf::Vector2f& TransformComponent::operator()()
@@ -61,5 +61,4 @@ void TransformComponent::moveBy(const sf::Vector2f& mov)
     mColliderComponent.moveBy(mov);
     mSpriteComponent.moveBy(mov);
     mHealthComponent.moveBy(mov);
-
 }

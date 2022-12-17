@@ -7,6 +7,7 @@
 struct ColliderComponent
 {
     ColliderComponent(const std::string& nameTag, CollisionBox box);
+    explicit ColliderComponent(const std::string& nameTag);
 
     void moveBy(sf::Vector2f position);
     void setPosition(sf::Vector2f position);
