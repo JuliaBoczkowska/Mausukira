@@ -26,7 +26,7 @@ float AttackSystem::calculateVectorLength() const
 void AttackSystem::update(const sf::Time& dt)
 {
     calcDirectionalNormalizedVector();
-    updateProjectilesPosition(dt);
+    updateProjectiles(dt);
     shootNewProjectile();
 }
 
@@ -41,7 +41,7 @@ void AttackSystem::shootNewProjectile()
             });
     }
 }
-void AttackSystem::updateProjectilesPosition(const sf::Time& dt)
+void AttackSystem::updateProjectiles(const sf::Time& dt)
 {
     mRegistry.view<Weapon>().each(
         [&](Weapon& weapon)

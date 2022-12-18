@@ -1,6 +1,7 @@
 #include "CollisionSystem.h"
 #include "ecs/components/ColliderComponent.h"
 #include "ecs/components/TransformComponent.h"
+#include "ecs/components/weapon/Weapon.h"
 #include "scene/map/MapUtils.h"
 
 CollisionSystem::CollisionSystem(entt::registry& registry, MapContext& mapContext)

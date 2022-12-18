@@ -15,21 +15,12 @@ void Window::handlePolledEvents(sf::Event& event, StateHandler& mStateHandler)
     while (mRenderWindow.pollEvent(event))
     {
         mStateHandler.currentState().handleInput(event);
-        if (event.type == sf::Event::LostFocus)
-        {
-            isFocused = false;
-        }
-        else if (event.type == sf::Event::GainedFocus)
-        {
-            isFocused = true;
-        }
-        else if (event.type == sf::Event::Closed)
+        if (event.type == sf::Event::Closed)
         {
             mRenderWindow.close();
         }
-        if (event.type == sf::Event::Resized)
+        else if (event.type == sf::Event::Resized)
         {
-            // resize my view
             view.setSize(
                 {static_cast<float>(event.size.width), static_cast<float>(event.size.height)});
             mRenderWindow.setView(view);

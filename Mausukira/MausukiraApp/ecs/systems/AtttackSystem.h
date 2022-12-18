@@ -15,7 +15,7 @@ private:
     float calculateVectorLength() const;
     void normalizeDirectionalVector();
     void calcDirectionalNormalizedVector();
-    void updateProjectilesPosition(const sf::Time& dt);
+    void updateProjectiles(const sf::Time& dt);
     void shootNewProjectile();
 
 private:

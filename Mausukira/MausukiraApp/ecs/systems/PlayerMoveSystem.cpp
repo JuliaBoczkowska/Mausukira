@@ -9,6 +9,7 @@ PlayerMoveSystem::PlayerMoveSystem(entt::registry& registry)
 {
 }
 
+#include <iostream>
 void PlayerMoveSystem::handleInput(sf::Event& event)
 {
     sf::Vector2f velocity{0.f, 0.f};
@@ -16,12 +17,9 @@ void PlayerMoveSystem::handleInput(sf::Event& event)
     Direction direction;
 
     handlePlayerBasicMovement(speed, velocity, direction);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-    {
-
-    }
-
+    handlePlayerDash(event);
     velocity = preventHigherSpeedOnDiagonalMov(velocity);
+
     mRegistry.view<MovableComponent, ColliderComponent, TransformComponent, PlayerComponent>().each(
         [&](MovableComponent& movableComponent, ColliderComponent& colliderComponent,
             TransformComponent& transformComponent, PlayerComponent& playerComponent)
@@ -30,6 +28,18 @@ void PlayerMoveSystem::handleInput(sf::Event& event)
             movableComponent.mDirection = direction;
         });
 }
+
+void PlayerMoveSystem::handlePlayerDash(const sf::Event& event)
+{
+    if (event.type == sf::Event::KeyPressed)
+    {
+        if (event.key.code == sf::Keyboard::LShift)
+        {
+            mDashSpeed = 20.f;
+        }
+    }
+}
+
 void PlayerMoveSystem::handlePlayerBasicMovement(float speed, sf::Vector2f& velocity,
                                                  Direction& direction) const
 {
@@ -61,8 +71,9 @@ void PlayerMoveSystem::update(const sf::Time& dt)
         [&](MovableComponent& movableComponent, ColliderComponent& colliderComponent,
             TransformComponent& transformComponent)
         {
-            transformComponent.moveBy(transformComponent.mVelocity * dt.asSeconds());
+            transformComponent.moveBy(transformComponent.mVelocity * mDashSpeed * dt.asSeconds());
         });
+    mDashSpeed = 1.f;
 }
 
 sf::Vector2f& PlayerMoveSystem::preventHigherSpeedOnDiagonalMov(sf::Vector2f& velocity) const

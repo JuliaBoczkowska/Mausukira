@@ -20,5 +20,7 @@ public:
 private:
     sf::RenderWindow& mRenderWindow;
     std::vector<std::unique_ptr<Projectile>> mProjectiles;
+    void deleteProjectilesOutsideWindow();
+    void updateProjectilesPosition();
 };
 #endif// WEAPON_H

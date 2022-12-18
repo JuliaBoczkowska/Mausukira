@@ -1,7 +1,8 @@
 #include "Projectile.h"
 
-Projectile::Projectile(const sf::Vector2f& playerCenter)
+Projectile::Projectile(const sf::Vector2f& playerCenter, const sf::Vector2f& aimDirectionNormalized)
 {
+    mCurrVelocity = aimDirectionNormalized * mMaxSpeed;
     mProjectile.setRadius(2);
     mProjectile.setFillColor(sf::Color::Cyan);
     mProjectile.setPosition(playerCenter);

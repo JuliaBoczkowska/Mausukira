@@ -17,7 +17,6 @@ public:
 
 public:
     sf::RenderWindow mRenderWindow;
-    bool isFocused{true};
 };
 
 #endif// WINDOW_H

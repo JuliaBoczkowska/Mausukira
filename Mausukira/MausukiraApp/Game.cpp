@@ -12,6 +12,7 @@ void Game::run()
     sf::Clock clock;
     auto elapsedSinceUpdate = sf::Time::Zero;
     sf::Event event;
+    mWindow().setKeyRepeatEnabled(false);
 
     while (mWindow().isOpen())
     {

@@ -9,15 +9,16 @@
 class Projectile
 {
 public:
-    Projectile(const sf::Vector2f& playerCenter);
+    Projectile(const sf::Vector2f& playerCenter, const sf::Vector2f& aimDirectionNormalized);
 
     void update();
     void draw(sf::RenderWindow& window) const;
 
-private:
+    float mMaxSpeed{10.f};
+
+public:
     sf::CircleShape mProjectile;
     sf::Vector2f mCurrVelocity{};
-    float mMaxSpeed{10.f};
 };
 
 

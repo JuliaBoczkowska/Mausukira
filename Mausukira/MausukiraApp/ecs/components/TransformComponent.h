@@ -22,8 +22,7 @@ struct TransformComponent
 
     sf::Vector2f mPosition{0.f, 0.f};
     sf::Vector2f mVelocity{0.f, 0.f};
-    float mScale{2.f};
-    
+
     ColliderComponent& mColliderComponent;
     SpriteComponent& mSpriteComponent;
     HealthComponent& mHealthComponent;
