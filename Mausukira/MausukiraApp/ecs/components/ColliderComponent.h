@@ -15,5 +15,8 @@ struct ColliderComponent
 
     CollisionBox mCollisionBox;
     std::string mNameTag;
+
+    bool isCollidingWithBullet{false};
+    bool isCollidingWithTile{false};
 };
 #endif// COLLIDERCOMPONENT_H

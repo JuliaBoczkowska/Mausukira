@@ -25,7 +25,7 @@ struct EntityStatistic
     int mHealth{};
     float mReactionTime{};
 
-    std::function<void()> hit;
+    std::function<void(const int& damage)> hit;
 
     int mDefense;
 };

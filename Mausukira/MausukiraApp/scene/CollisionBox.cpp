@@ -5,15 +5,15 @@ CollisionBox::CollisionBox(sf::FloatRect rect)
     setupCollider(rect);
 }
 
-CollisionBox::CollisionBox(sf::FloatRect rect, COLLISION_TYPE type)
+CollisionBox::CollisionBox(sf::FloatRect rect, CollisionType collisionType)
 
 {
-    setupCollider(rect, type);
+    setupCollider(rect, collisionType);
 }
 
-void CollisionBox::setupCollider(sf::FloatRect& rect, const COLLISION_TYPE& type)
+void CollisionBox::setupCollider(sf::FloatRect& rect, const CollisionType& type)
 {
-    if (type == COLLISION_TYPE::FOOT)
+    if (type == CollisionType::FOOT)
     {
         setupColliderForFoot(rect);
     }

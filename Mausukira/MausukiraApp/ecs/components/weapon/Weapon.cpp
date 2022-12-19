@@ -1,20 +1,30 @@
 #include "Weapon.h"
 
-Weapon::Weapon(sf::RenderWindow& renderWindow)
+Weapon::Weapon(sf::RenderWindow* renderWindow)
     : mRenderWindow(renderWindow)
 {
+    clock.restart();
 }
 
-Weapon::Weapon(const Weapon& c)
-    : mRenderWindow(c.mRenderWindow)
-{
-}
 
 Weapon::Weapon(Weapon&& c) noexcept
     : Weapon(c.mRenderWindow)
 {
+    mProjectiles = std::move(c.mProjectiles);
 }
 
+Weapon::Weapon(const Weapon& c)
+    : Weapon(c.mRenderWindow)
+{
+    mProjectiles = std::move(c.mProjectiles);
+}
+
+Weapon& Weapon::operator=(Weapon&& other)
+{
+    mRenderWindow = other.mRenderWindow;
+    mProjectiles = std::move(other.mProjectiles);
+    return *this;
+}
 
 void Weapon::draw(sf::RenderWindow& window)
 {
@@ -27,7 +37,6 @@ void Weapon::draw(sf::RenderWindow& window)
 void Weapon::update(const sf::Time& deltaTime)
 {
     updateProjectilesPosition();
-    deleteProjectilesOutsideWindow();
 }
 
 void Weapon::updateProjectilesPosition()
@@ -38,28 +47,12 @@ void Weapon::updateProjectilesPosition()
     }
 }
 
-
-void Weapon::deleteProjectilesOutsideWindow()
-{
-    for (int i = 0; i < mProjectiles.size(); i++)
-    {
-        auto projectile = mProjectiles[i]->mProjectile.getPosition();
-        const auto& viewSize = mRenderWindow.getDefaultView().getSize();
-        if (projectile.x < 0 || projectile.x > viewSize.x || projectile.y > viewSize.y ||
-            projectile.y < 0)
-        {
-            mProjectiles.erase(mProjectiles.begin() + i);
-        }
-    }
-}
-
-Weapon& Weapon::operator=(Weapon&& other)
-{
-    return *this;
-}
-
 void Weapon::shoot(const sf::Vector2f& playerCenter, const sf::Vector2f& mAimDirectionNormalized)
 {
-    auto projectile = std::make_unique<Projectile>(playerCenter, mAimDirectionNormalized);
-    mProjectiles.emplace_back(std::move(projectile));
+    if (clock.getElapsedTime().asMilliseconds() > 300)
+    {
+        clock.restart();
+        auto projectile = new Projectile(playerCenter, mAimDirectionNormalized);
+        mProjectiles.emplace_back(std::move(projectile));
+    }
 }

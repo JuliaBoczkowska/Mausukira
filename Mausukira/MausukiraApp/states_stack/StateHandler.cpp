@@ -8,7 +8,7 @@ StateHandler::StateHandler(SharedContext& sharedCtx)
     registerState<MenuState>(StateType::MENU_STATE);
     registerState<GameState>(StateType::GAME_STATE);
 
-    std::unique_ptr<State> firstState = mStateFactory.find(StateType::GAME_STATE)->second();
+    std::unique_ptr<State> firstState = mStateFactory.find(StateType::MENU_STATE)->second();
     mStates.push_back(std::move(firstState));
 }
 

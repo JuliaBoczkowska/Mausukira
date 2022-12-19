@@ -7,10 +7,11 @@ class HealthComponent
 {
 public:
     HealthComponent(float health);
-    void updateHealth(const float& damage);
+    void damageHealth(const float& damage);
     void setPosition(const sf::Vector2f& position);
     void draw(sf::RenderWindow& window);
     void moveBy(const sf::Vector2f& mov);
+    bool isDead();
 
 private:
     float mCurrentHealth{0};

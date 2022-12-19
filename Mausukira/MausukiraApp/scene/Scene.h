@@ -13,6 +13,7 @@
 
 class Entity;
 class SharedContext;
+class Player;
 
 class Scene
 {
@@ -30,6 +31,7 @@ public:
 
 private:
     friend Entity;
+    friend Player;
     friend EnemySpawner;
     /** Registry is container for all components and registries. Contains component data and entity
      * ID's*/

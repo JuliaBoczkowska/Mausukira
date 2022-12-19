@@ -1,5 +1,5 @@
-#ifndef ATTTACKSYSTEM_H
-#define ATTTACKSYSTEM_H
+#ifndef ATTACKSYSTEM_H
+#define ATTACKSYSTEM_H
 #include "System.h"
 #include "states_stack/SharedContext.h"
 
@@ -28,4 +28,4 @@ private:
 };
 
 
-#endif// ATTTACKSYSTEM_H
+#endif// ATTACKSYSTEM_H

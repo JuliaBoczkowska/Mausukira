@@ -1,5 +1,6 @@
 #include "DebugSystem.h"
 #include "ecs/components/EntityComponent.h"
+#include "ecs/components/weapon/Weapon.h"
 #include <iostream>
 
 DebugSystem::DebugSystem(entt::registry& registry)

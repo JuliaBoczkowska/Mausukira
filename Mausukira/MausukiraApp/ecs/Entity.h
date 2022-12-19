@@ -11,30 +11,18 @@ public:
 
     Entity(entt::entity handle, Scene* scene);
 
-
+public:
     template<typename T, typename... Args>
-    T& AddComponent(Args&&... args)
+    T& addComponent(Args&&... args)
     {
         T& component = mScene->mRegistry.emplace<T>(mEntity, std::forward<Args>(args)...);
         return component;
     }
 
     template<typename T>
-    T& GetComponent()
+    T& getComponent()
     {
         return mScene->mRegistry.get<T>(mEntity);
-    }
-
-    template<typename T>
-    bool HasAllComponents()
-    {
-        return mScene->mRegistry.all_of<T>(mEntity);
-    }
-
-    template<typename T>
-    void RemoveComponent()
-    {
-        mScene->mRegistry.remove<T>(mEntity);
     }
 
 private:

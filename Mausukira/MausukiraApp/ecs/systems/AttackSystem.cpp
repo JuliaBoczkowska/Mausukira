@@ -1,4 +1,4 @@
-#include "AtttackSystem.h"
+#include "AttackSystem.h"
 #include "ecs/components/PlayerComponent.h"
 #include "ecs/components/TransformComponent.h"
 #include "ecs/components/weapon/Weapon.h"
@@ -49,6 +49,7 @@ void AttackSystem::updateProjectiles(const sf::Time& dt)
             weapon.update(dt);
         });
 }
+
 void AttackSystem::calcDirectionalNormalizedVector()
 {
     mRegistry.view<TransformComponent, PlayerComponent>().each(

@@ -21,7 +21,7 @@ void EnemySpawner::addEnemyInfo(std::string name, EnemyModelInfo enemyInfo)
     }
 }
 
-void EnemySpawner::createEnemy(Scene* scene)
+void EnemySpawner::addEnemyEntity(Scene* scene)
 {
     /** First room is reserved for hero character, so iterator++ */
     std::list<Room>::iterator it;
@@ -62,17 +62,24 @@ void EnemySpawner::generateEnemyEntity(Scene* scene, sf::Vector2i position)
 {
     EntityStatistic enemyStats = generateStats();
     Entity enemy = {scene->mRegistry.create(), scene};
-    enemy.AddComponent<RndSpriteComponent>(mTextureCreator);
-    enemy.AddComponent<ColliderComponent>(
-        "Enemy", enemy.GetComponent<RndSpriteComponent>().mCurrentSprite.getGlobalBounds());
-    enemy.AddComponent<MovableComponent>();
-    enemy.AddComponent<HealthComponent>(static_cast<float>(enemyStats.mHealth));
-    enemy.AddComponent<TransformComponent>(
-        enemy.GetComponent<ColliderComponent>(), enemy.GetComponent<RndSpriteComponent>(),
-        enemy.GetComponent<HealthComponent>(),
+    enemy.addComponent<RndSpriteComponent>(mTextureCreator);
+    enemy.addComponent<ColliderComponent>(
+        "Enemy",
+        CollisionBox(enemy.getComponent<RndSpriteComponent>().mCurrentSprite.getGlobalBounds()));
+    enemy.addComponent<MovableComponent>();
+    enemy.addComponent<HealthComponent>(static_cast<float>(enemyStats.mHealth));
+
+    auto& healthComponent = enemy.getComponent<HealthComponent>();
+    enemy.addComponent<TransformComponent>(
+        enemy.getComponent<ColliderComponent>(), enemy.getComponent<RndSpriteComponent>(),
+        healthComponent,
         sf::Vector2f{static_cast<float>(position.x * TILE_SIZE),
                      static_cast<float>(position.y * TILE_SIZE)});
-    enemy.AddComponent<EntityStatistic>(enemyStats);
+    enemyStats.hit = [&healthComponent](const int& damage)
+    {
+        healthComponent.damageHealth(damage);
+    };
+    enemy.addComponent<EntityStatistic>(enemyStats);
 }
 
 EntityStatistic EnemySpawner::generateStats()
@@ -88,10 +95,6 @@ EntityStatistic EnemySpawner::generateStats()
     statsToBeFilled.mAttackDamage = rndGenerateAttackDamage(generationConfig);
     statsToBeFilled.mAttackSpeed = rndGenerateAttackSpeed(generationConfig);
     statsToBeFilled.mMovementSpeed = rndGenerateMovementSpeed(generationConfig);
-    statsToBeFilled.hit = []()
-    {
-        std::cout << "HIT" << std::endl;
-    };
     return statsToBeFilled;
 }
 

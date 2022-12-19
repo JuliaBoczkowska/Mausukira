@@ -23,7 +23,7 @@ public:
     EnemySpawner(TextureManager& textureManager);
 
     void addEnemyInfo(std::string name, EnemyModelInfo enemyInfo);
-    void createEnemy(Scene* scene);
+    void addEnemyEntity(Scene* scene);
 
 private:
     EntityStatistic generateStats();

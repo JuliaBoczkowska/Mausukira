@@ -20,20 +20,13 @@ static Tile& getTile(TileMap& mTileMap, const unsigned int& x, const unsigned in
     return *tile;
 }
 
-static std::vector<CollisionBox*> getSurroundingCollisionBoxes(sf::Vector2f playerPosition,
+static std::vector<CollisionBox*> getSurroundingCollisionBoxes(sf::Vector2f futurePosition,
                                                                TileMap& mTileMap)
 {
     sf::Vector2i playerTileCoordinates = static_cast<sf::Vector2i>(
-        tile_helper::worldCoordinateToTileCoordinate(playerPosition.x, playerPosition.y));
+        tile_helper::worldCoordinateToTileCoordinate(futurePosition.x, futurePosition.y));
 
     std::vector<CollisionBox*> collisions;
-    //    for (int neighbourIndex = 0; neighbourIndex < 8; ++neighbourIndex)
-    //    {
-    //        if (const auto neighbouringTile =
-    //                playerTileCoordinates +
-    //                tile_helper::neighbouringEightTiles[neighbourIndex];
-    //            tile_helper::isInBorders(neighbouringTile))
-    //        {
     for (int x = 0; x < MAP_SIZE_X; ++x)
     {
         for (int y = 0; y < MAP_SIZE_Y; ++y)

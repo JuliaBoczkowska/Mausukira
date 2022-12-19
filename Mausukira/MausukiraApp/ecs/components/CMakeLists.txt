@@ -3,7 +3,7 @@ target_sources(MausukiraApp PRIVATE
         TransformComponent.cpp
         ColliderComponent.cpp
         HealthComponent.cpp
-        EntityComponent.h
+        ScoreComponent.cpp
         )
 
 add_subdirectory(enemy)

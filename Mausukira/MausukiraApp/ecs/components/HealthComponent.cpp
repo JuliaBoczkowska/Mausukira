@@ -13,11 +13,14 @@ HealthComponent::HealthComponent(float health)
     mHealthBarOutline.setOutlineThickness(1);
 }
 
-void HealthComponent::updateHealth(const float& damage)
+void HealthComponent::damageHealth(const float& damage)
 {
-    mCurrentHealth = mCurrentHealth - damage;
-    float percent = mCurrentHealth / mHealthMax;
-    mHealthBarRect.setSize(sf::Vector2f{mHpBarWidth * percent, mHealthBarRect.getSize().y});
+    if (mCurrentHealth > 0)
+    {
+        mCurrentHealth = mCurrentHealth - damage;
+        float percent = mCurrentHealth / mHealthMax;
+        mHealthBarRect.setSize(sf::Vector2f{mHpBarWidth * percent, mHealthBarRect.getSize().y});
+    }
 }
 
 void HealthComponent::draw(sf::RenderWindow& window)
@@ -37,4 +40,9 @@ void HealthComponent::moveBy(const sf::Vector2f& mov)
 {
     mHealthBarOutline.move(mov);
     mHealthBarRect.move(mov);
+}
+
+bool HealthComponent::isDead()
+{
+    return mCurrentHealth <= 0;
 }

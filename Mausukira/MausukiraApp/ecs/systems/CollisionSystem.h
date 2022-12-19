@@ -20,6 +20,11 @@ private:
 
 private:
     MapContext& mMapContext;
+    void eraseProjectilesThatCollide();
+    void playerAndWallCollision(const sf::Time& dt);
+
+    void enemyAndProjectileCollision(std::vector<CollisionBox*>& projectileCollisionBoxes);
+    void projectileAndWall(std::vector<CollisionBox*>& projectileCollisionBoxes);
 };
 
 
