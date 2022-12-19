@@ -15,7 +15,7 @@ void CameraSystem::setInitialPlayerPosition(const MapContext& mapContext)
 {
     mCameraView.setCenter(mapContext.centerOfTheFirstRoom);
     mCameraView.zoom(0.6);
-    mWindow.setView(mCameraView);
+    cameraSetView();
     updateBackground();
 }
 
@@ -110,8 +110,8 @@ void CameraSystem::zoomIntoMouseCursor(const sf::Vector2f& oldCoordsOfMouse,
 void CameraSystem::zoomInAndOut(const sf::Event& event)
 {
     const auto currentZoom = mCameraView.getSize().x;
-    const auto maxZoom = mWindow.getDefaultView().getSize().x * 3.f;
-    const auto minZoom = mWindow.getDefaultView().getSize().x / 3.f;
+    const auto maxZoom = mWindow.getDefaultView().getSize().x * 2.f;
+    const auto minZoom = mWindow.getDefaultView().getSize().x / 2.f;
 
     if (event.mouseWheelScroll.delta > 0)
     {

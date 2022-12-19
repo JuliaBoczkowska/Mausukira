@@ -38,9 +38,7 @@ private:
      * @brief Render every drawable object to the window.
      */
     void render();
-
-    //    void MoveSprite(std::unique_ptr<EventDetails> details);
-
+    void handlePolledEvents(sf::Event& event);
 
 private:
     const sf::Time deltaTime = sf::seconds(1.f / 60.f);
@@ -48,6 +46,7 @@ private:
     TextureManager mTextureManager;
     SharedContext mContext;
     StateHandler mStateHandler;
+    void lateUpdate();
 };
 
 #endif// GAME_H

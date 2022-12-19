@@ -3,7 +3,6 @@ add_executable(MausukiraApp main.cpp Game.cpp Window.cpp ecs/systems/CollisionSy
 
 add_subdirectory(ecs)
 add_subdirectory(event)
-add_subdirectory(gui)
 add_subdirectory(scene)
 add_subdirectory(states_stack)
 add_subdirectory(utils)

@@ -8,6 +8,12 @@
 
 class StateHandler
 {
+    enum class ActionType
+    {
+        POP,
+        PUSH,
+    };
+
 public:
     using StateFactory = std::unordered_map<StateType, std::function<std::unique_ptr<State>(void)>>;
     using States = std::vector<std::unique_ptr<State>>;
@@ -15,24 +21,32 @@ public:
     StateHandler(SharedContext& sharedCtx);
     ~StateHandler() = default;
 
-    State& currentState();
-    void switchTo(const StateType& stateType);
-    void closeGameWhenNoStatesLeft();
-    SharedContext& context();
-    States& states();
+    void handleInput(sf::Event& event);
+    void update(const sf::Time& dt);
+    void draw();
 
-    template<class State>
-    void registerState(const StateType& type)
+    void processQueue();
+    void switchTo(const StateType& stateType);
+    void removeState(const StateType& stateType);
+    SharedContext& context();
+
+    template<class State, typename... Args>
+    void registerState(const StateType& type, Args&&... args)
     {
-        mStateFactory[type] = [this, type]() -> std::unique_ptr<State>
+        mStateFactory[type] = [args..., this, type]() -> std::unique_ptr<State>
         {
-            return std::make_unique<State>((*this), type, mSharedCtx.window().getDefaultView());
+            return std::make_unique<State>((*this), type, mSharedCtx.window().getDefaultView(),
+                                           args...);
         };
     }
 
 private:
+    void closeGameWhenNoStatesLeft();
+
+private:
     StateFactory mStateFactory;
     States mStates;
+    std::vector<std::pair<StateType, ActionType>> mToBeProcessedQueue;
     SharedContext& mSharedCtx;
 };
 

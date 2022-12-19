@@ -11,7 +11,6 @@ class SharedContext;
 
 enum class StateType
 {
-    INTRO_STATE,
     MENU_STATE,
     GAME_STATE,
     GAME_OVER_STATE,
@@ -21,7 +20,8 @@ enum class StateType
 class State
 {
 public:
-    explicit State(StateHandler& stateHandler, StateType type, sf::View view);
+    explicit State(StateHandler& stateHandler, StateType type, sf::View view,
+                   bool isTransparent = false);
     virtual ~State() = default;
 
     virtual void handleInput(sf::Event& event) = 0;
@@ -31,9 +31,11 @@ public:
     SharedContext& context();
     sf::View& GetView();
 
+    bool mIsTransparent;
+    StateType mStateType;
+
 protected:
     StateHandler& mStateHandler;
-    StateType mStateType;
     sf::View mView;
 };
 

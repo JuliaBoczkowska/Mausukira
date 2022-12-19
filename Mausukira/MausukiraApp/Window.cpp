@@ -7,6 +7,7 @@
 Window::Window(sf::VideoMode videoMode)
     : mRenderWindow(videoMode, "Mausukira")
 {
+    mRenderWindow.setKeyRepeatEnabled(false);
 }
 
 void Window::handlePolledEvents(sf::Event& event, StateHandler& mStateHandler)
@@ -14,7 +15,7 @@ void Window::handlePolledEvents(sf::Event& event, StateHandler& mStateHandler)
     sf::View view = mRenderWindow.getView();
     while (mRenderWindow.pollEvent(event))
     {
-        mStateHandler.currentState().handleInput(event);
+        mStateHandler.handleInput(event);
         if (event.type == sf::Event::Closed)
         {
             mRenderWindow.close();
@@ -27,6 +28,7 @@ void Window::handlePolledEvents(sf::Event& event, StateHandler& mStateHandler)
         }
     }
 }
+
 sf::FloatRect Window::getViewSpace()
 {
     sf::Vector2f viewCenter = mRenderWindow.getView().getCenter();

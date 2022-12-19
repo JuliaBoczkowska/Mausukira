@@ -21,6 +21,7 @@ public:
     MapContext mMapContext;
     Scene mScene;
     Map mMap;
+    void checkIfPauseState(const sf::Event& event);
 };
 
 #endif// GAMESTATE_H

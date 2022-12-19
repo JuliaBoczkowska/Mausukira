@@ -12,33 +12,41 @@ void Game::run()
     sf::Clock clock;
     auto elapsedSinceUpdate = sf::Time::Zero;
     sf::Event event;
-    mWindow().setKeyRepeatEnabled(false);
 
     while (mWindow().isOpen())
     {
-        elapsedSinceUpdate +=
-            clock.restart();// Returns the elapsed time since its start also restarts the clock.
-
+        /** Returns the elapsed time since its start and restarts the clock. */
+        elapsedSinceUpdate += clock.restart();
         while (elapsedSinceUpdate > deltaTime)
         {
-            mStateHandler.closeGameWhenNoStatesLeft();
-            elapsedSinceUpdate -= deltaTime;// we subtract the desired length of this frame delta
-            mWindow.handlePolledEvents(event, mStateHandler);
+            /** Subtract the desired length of this frame delta */
+            elapsedSinceUpdate -= deltaTime;
+
+            handlePolledEvents(event);
             update(deltaTime);
         }
         render();
+        lateUpdate();
     }
+}
+void Game::lateUpdate()
+{
+    mStateHandler.processQueue();
+}
+
+void Game::handlePolledEvents(sf::Event& event)
+{
+    mWindow.handlePolledEvents(event, mStateHandler);
 }
 
 void Game::update(const sf::Time& deltaTime)
 {
-    // TODO convert sf::Time value to float type. (deltaTime.asSeconds)
-    mStateHandler.currentState().update(deltaTime);
+    mStateHandler.update(deltaTime);
 }
 
 void Game::render()
 {
     mWindow().clear();
-    mStateHandler.currentState().draw();
+    mStateHandler.draw();
     mWindow().display();
 }

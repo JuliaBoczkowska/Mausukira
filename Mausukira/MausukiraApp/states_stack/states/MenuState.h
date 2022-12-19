@@ -1,8 +1,10 @@
 #ifndef MENUSTATE_H
 #define MENUSTATE_H
 
-#include "../../gui/GuiComponents.h"
+#include "SFML/Graphics/Text.hpp"
 #include "State.h"
+#include "TGUI/Backends/SFML/GuiSFML.hpp"
+#include "TGUI/Widgets/Button.hpp"
 
 class MenuState : public State
 {
@@ -16,7 +18,15 @@ public:
     void draw() override;
 
 private:
-    GuiComponents mGuiComponents;
+    void setupBackground();
+    void setupStartButton();
+    void setupQuitButton();
+    void setupText();
+
+private:
+    tgui::GuiSFML gui;
+    sf::Font font;
+    sf::Text mGameTitle;
 };
 
 #endif// MENUSTATE_H
