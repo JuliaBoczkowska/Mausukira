@@ -8,15 +8,14 @@
 
 struct SpriteComponent
 {
-    SpriteComponent(sf::Sprite& sprite);
-    SpriteComponent() = default;
+    SpriteComponent(const sf::Sprite& sprite);
 
-    virtual void draw(sf::RenderWindow& window);
-    virtual void setPosition(const sf::Vector2f& position);
-    virtual void moveBy(const sf::Vector2f& mov);
+    SpriteComponent(const std::vector<sf::Sprite>& sprites);
 
-    sf::Sprite mCurrentSprite;
-    sf::Color mColor{1, 1, 1};
-    unsigned mLayer{0};
+    unsigned mScale{ 2 };
+    std::vector<sf::Sprite> mSprites;
+    sf::Color mColor{ 1, 1, 1 };
+    unsigned mLayer{ 0 };
 };
+
 #endif// SPRITECOMPONENT_H

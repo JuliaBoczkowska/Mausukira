@@ -3,9 +3,6 @@
 
 struct PlayerComponent
 {
-public:
-    PlayerComponent() = default;
-
     float mPlayerCenter;
 };
 #endif// PLAYERCOMPONENT_H

@@ -1,7 +1,8 @@
 #ifndef ENTITYCOMPONENT_H
 #define ENTITYCOMPONENT_H
+
 #include "SFML/System/Vector2.hpp"
-#include "ecs/components/enemy/AttackType.h"
+#include "AttackType.h"
 #include <functional>
 #include <string>
 //

@@ -1,12 +1,12 @@
 #include "DebugSystem.h"
 #include "ecs/components/EntityComponent.h"
-#include "ecs/components/weapon/Weapon.h"
 #include <iostream>
 
 DebugSystem::DebugSystem(entt::registry& registry)
     : System(registry)
 {
 }
+
 void DebugSystem::update(const sf::Time& dt)
 {
     if (doOnce)

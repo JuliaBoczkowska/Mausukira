@@ -2,7 +2,7 @@
 #define SHAREDCONTEXT_H
 
 #include "../Window.h"
-#include "../scene/Scene.h"
+#include "ecs/Scene.h"
 #include "../utils/TextureManager.h"
 
 struct SharedContext

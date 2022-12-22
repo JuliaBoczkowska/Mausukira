@@ -17,9 +17,15 @@ public:
     virtual void handleInput(sf::Event& event)
     {
     }
+
     virtual void update(const sf::Time& dt)
     {
     }
+
+    virtual void postUpdate()
+    {
+    }
+
     virtual void draw(sf::RenderWindow& window)
     {
     }

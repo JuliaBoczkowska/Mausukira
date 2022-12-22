@@ -1,8 +1,8 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-#include "../../scene/map/Map.h"
-#include "../SharedContext.h"
+#include "dungeon/map/Map.h"
+#include "states_stack/SharedContext.h"
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "State.h"
 
@@ -14,14 +14,19 @@ public:
     ~GameState() = default;
 
     void handleInput(sf::Event& event) override;
+
     void update(const sf::Time& dt) override;
+
     void draw() override;
 
+private:
+    void checkIfPauseState(const sf::Event& event);
+
+private:
     entt::registry registry;
     MapContext mMapContext;
     Scene mScene;
     Map mMap;
-    void checkIfPauseState(const sf::Event& event);
 };
 
 #endif// GAMESTATE_H

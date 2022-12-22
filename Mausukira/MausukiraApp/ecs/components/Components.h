@@ -8,6 +8,7 @@
 #include "PlayerComponent.h"
 #include "ScoreComponent.h"
 #include "SpriteComponent.h"
-#include "TransformComponent.h"
+#include "PositionComponent.h"
+#include "VelocityComponent.h"
 
 #endif// COMPONENTS_H

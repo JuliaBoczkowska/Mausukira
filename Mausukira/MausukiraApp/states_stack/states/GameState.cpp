@@ -1,5 +1,5 @@
 #include "GameState.h"
-#include "ecs/Entity.h"
+#include "ecs/entities/Entity.h"
 #include "states_stack/StateHandler.h"
 
 GameState::GameState(StateHandler& stateManager, StateType type, sf::View view)

@@ -5,6 +5,3 @@ target_sources(MausukiraApp PRIVATE
         HealthComponent.cpp
         ScoreComponent.cpp
         )
-
-add_subdirectory(enemy)
-add_subdirectory(weapon)

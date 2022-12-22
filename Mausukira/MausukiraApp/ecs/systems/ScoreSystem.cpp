@@ -13,6 +13,7 @@ void ScoreSystem::handleInput(sf::Event& event)
 }
 
 #include <iostream>
+
 void ScoreSystem::update(const sf::Time& dt)
 {
     int tempScore = 0;
@@ -36,8 +37,4 @@ void ScoreSystem::update(const sf::Time& dt)
                 std::cout << scoreComponent.score << std::endl;
             });
     }
-}
-
-void ScoreSystem::draw(sf::RenderWindow& window)
-{
 }

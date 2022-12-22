@@ -1,7 +1,7 @@
 #include "AttackSystem.h"
 #include "ecs/components/PlayerComponent.h"
 #include "ecs/components/TransformComponent.h"
-#include "ecs/components/weapon/Weapon.h"
+#include "ecs/components/PositionComponent.h"
 
 AttackSystem::AttackSystem(entt::registry& registry, SharedContext& sharedContext)
     : System(registry)
@@ -32,30 +32,31 @@ void AttackSystem::update(const sf::Time& dt)
 
 void AttackSystem::shootNewProjectile()
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-    {
-        mRegistry.view<Weapon>().each(
-            [&](Weapon& weapon)
-            {
-                weapon.shoot(mPlayerCenter, mAimDirectionNormalized);
-            });
-    }
+//    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+//    {
+//        mRegistry.view<Weapon>().each(
+//            [&](Weapon& weapon)
+//            {
+//                weapon.shoot(mPlayerCenter, mAimDirectionNormalized);
+//            });
+//    }
 }
+
 void AttackSystem::updateProjectiles(const sf::Time& dt)
 {
-    mRegistry.view<Weapon>().each(
-        [&](Weapon& weapon)
-        {
-            weapon.update(dt);
-        });
+//    mRegistry.view<Weapon>().each(
+//        [&](Weapon& weapon)
+//        {
+//            weapon.update(dt);
+//        });
 }
 
 void AttackSystem::calcDirectionalNormalizedVector()
 {
-    mRegistry.view<TransformComponent, PlayerComponent>().each(
-        [&](TransformComponent& transformComponent, PlayerComponent& playerComponent)
+    mRegistry.view<PositionComponent, PlayerComponent>().each(
+        [&](PositionComponent& positionComponent, PlayerComponent& playerComponent)
         {
-            mPlayerCenter = transformComponent();
+            mPlayerCenter = positionComponent.mPosition;
         });
 
     mMouseCoordinates = mRenderWindow.mapPixelToCoords((sf::Mouse::getPosition(mRenderWindow)));
@@ -65,9 +66,9 @@ void AttackSystem::calcDirectionalNormalizedVector()
 
 void AttackSystem::draw(sf::RenderWindow& window)
 {
-    mRegistry.view<Weapon>().each(
-        [&](Weapon& weapon)
-        {
-            weapon.draw(window);
-        });
+//    mRegistry.view<Weapon>().each(
+//        [&](Weapon& weapon)
+//        {
+//            weapon.draw(window);
+//        });
 }

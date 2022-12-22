@@ -1,0 +1,32 @@
+#ifndef COLLISIONSYSTEM_H
+#define COLLISIONSYSTEM_H
+
+#include "SFML/Graphics/CircleShape.hpp"
+#include "ecs/systems/System.h"
+#include "ecs/components/ColliderComponent.h"
+#include "ecs/components/TransformComponent.h"
+#include "dungeon/map/MapContext.h"
+#include "CollisionKinematic.h"
+#include "CollisionStatic.h"
+
+class CollisionBox;
+
+class CollisionSystem : public System
+{
+public:
+    CollisionSystem(entt::registry& registry, MapContext& mapContext);
+
+    void update(const sf::Time& dt);
+
+private:
+    bool checkIfAllowsToUpdatePosition(ColliderComponent& colliderComponent,
+        const sf::Vector2f& futurePositionToCheck) const;
+
+private:
+    CollisionKinematic mCollisionKinematic;
+    CollisionStatic mCollisionStatic;
+    MapContext& mMapContext;
+};
+
+
+#endif// COLLISIONSYSTEM_H

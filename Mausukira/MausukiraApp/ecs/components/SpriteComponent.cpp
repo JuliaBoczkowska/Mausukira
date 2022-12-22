@@ -1,21 +1,17 @@
 #include "SpriteComponent.h"
 
-SpriteComponent::SpriteComponent(sf::Sprite& sprite)
-    : mCurrentSprite(sprite)
+SpriteComponent::SpriteComponent(const sf::Sprite& sprite)
 {
+    mSprites.push_back(sprite);
+    mSprites[0].setScale(mScale, mScale);
+
 }
 
-void SpriteComponent::draw(sf::RenderWindow& window)
+SpriteComponent::SpriteComponent(const std::vector<sf::Sprite>& sprites)
 {
-    window.draw(mCurrentSprite);
-}
-
-void SpriteComponent::setPosition(const sf::Vector2f& position)
-{
-    mCurrentSprite.setPosition(position);
-}
-
-void SpriteComponent::moveBy(const sf::Vector2f& mov)
-{
-    mCurrentSprite.move(mov);
+    mSprites = sprites;
+    for (auto& sprite: mSprites)
+    {
+        sprite.setScale(mScale, mScale);
+    }
 }

@@ -1,9 +1,8 @@
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-add_executable(MausukiraApp main.cpp Game.cpp Window.cpp ecs/systems/CollisionSystem.cpp ecs/systems/CollisionSystem.h scene/algorithms/Coordinate.h scene/algorithms/AlgorithmsHelper.h ecs/components/EntityComponent.h)
+add_executable(MausukiraApp main.cpp Game.cpp Window.cpp ecs/systems/CollisionSystem/CollisionSystem.cpp ecs/systems/CollisionSystem/CollisionSystem.h dungeon/algorithms/Coordinate.h dungeon/algorithms/AlgorithmsHelper.h ecs/components/EntityComponent.h)
 
 add_subdirectory(ecs)
-add_subdirectory(event)
-add_subdirectory(scene)
+add_subdirectory(dungeon)
 add_subdirectory(states_stack)
 add_subdirectory(utils)
 
