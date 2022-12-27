@@ -38,6 +38,7 @@ void EnemyTextureGenerator::createPartialSprite(std::vector<sf::Sprite>& sprites
     auto face = generateFace();
     if (face)
     {
+        face->setScale({ 2.f, 2.f });
         spritesPartsToDraw.emplace_back(*face);
     }
     auto helmet = generateHelmet();
@@ -116,5 +117,5 @@ std::optional<sf::Sprite> EnemyTextureGenerator::generateHelmet()
 std::optional<sf::Sprite> EnemyTextureGenerator::generateFace()
 {
     return SpriteSheetHandler::extractSpriteFromTileSheet(generateIntNumberInRange(0, 6),
-                                                          mTextureSheet);
+        mTextureSheet);
 }

@@ -1,7 +1,7 @@
 #include "Entity.h"
 
-Entity::Entity(entt::entity entity, Scene* scene)
+Entity::Entity(entt::entity entity, entt::registry* registry)
     : mEntity(entity)
-    , mScene(scene)
+    , mRegistry(*registry)
 {
 }

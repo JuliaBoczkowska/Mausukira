@@ -1,5 +1,4 @@
 #include "CameraSystem.h"
-#include "ecs/components/TransformComponent.h"
 #include "states_stack/SharedContext.h"
 
 CameraSystem::CameraSystem(entt::registry& registry, SharedContext& sharedContext,

@@ -16,37 +16,13 @@ void CollisionSystem::update(const sf::Time& dt)
 {
     mCollisionStatic.update(dt);
     mCollisionKinematic.update(dt);
-//    playerAndWallCollision(dt);
-//
+
 //    std::vector<CollisionBox*> projectileCollisionBoxes;
 //    projectileAndWall(projectileCollisionBoxes);
 //    enemyAndProjectileCollision(projectileCollisionBoxes);
 //    eraseProjectilesThatCollide();
 }
 
-//void CollisionSystem::projectileAndWall(std::vector<CollisionBox*>& projectileCollisionBoxes)
-//{
-//    mRegistry.view<Weapon>().each(
-//        [&](Weapon& weapon)
-//        {
-//            for (auto it = weapon.mProjectiles.begin(); it != weapon.mProjectiles.end(); it++)
-//            {
-//                auto projectile = *it;
-//                projectileCollisionBoxes.emplace_back(&projectile->CollisionBox);
-//                auto futurePositionToCheck =
-//                    projectile->mProjectile.getPosition() + projectile->mCurrVelocity;
-//                auto colliders = map_utils::getSurroundingCollisionBoxes(futurePositionToCheck,
-//                                                                         mMapContext.mTileMap);
-//                for (auto& collider: colliders)
-//                {
-//                    if (collider->isColliding(projectile->CollisionBox))
-//                    {
-//                        projectile->CollisionBox.mIsColliding = true;
-//                    }
-//                }
-//            }
-//        });
-//}
 //
 //void CollisionSystem::enemyAndProjectileCollision(
 //    std::vector<CollisionBox*>& projectileCollisionBoxes)

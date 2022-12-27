@@ -10,5 +10,6 @@
 #include "SpriteComponent.h"
 #include "PositionComponent.h"
 #include "VelocityComponent.h"
+#include "AttachmentPoint.h"
 
 #endif// COMPONENTS_H

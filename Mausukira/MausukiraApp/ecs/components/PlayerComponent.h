@@ -3,6 +3,6 @@
 
 struct PlayerComponent
 {
-    float mPlayerCenter;
+    int empty = 0;
 };
 #endif// PLAYERCOMPONENT_H

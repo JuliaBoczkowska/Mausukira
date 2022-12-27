@@ -38,8 +38,6 @@ private:
 
     float rndGenerateMovementSpeed(EnemyModelInfo& generationConfig);
 
-    void generateEnemyEntity(Scene* scene, sf::Vector2i position);
-
     sf::Vector2i getEnemyMapLocation(Room::RoomGrid& mGrid, const sf::Vector2i& size);
 
     std::pair<int, int> genEnemyPosWithinRoom(const sf::Vector2i& size) const;

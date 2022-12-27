@@ -8,6 +8,7 @@
 struct ColliderComponent
 {
     sf::RectangleShape mRectangle;
+    CollisionBox::CollisionType mCollisionType;
 };
 
 #endif// COLLIDERCOMPONENT_H

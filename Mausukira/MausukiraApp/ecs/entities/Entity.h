@@ -7,27 +7,38 @@
 class Entity
 {
 public:
-    Entity() = default;
-
-    Entity(entt::entity handle, Scene* scene);
+    Entity(entt::entity handle, entt::registry* registry);
 
 public:
     template<typename T, typename... Args>
     T& addComponent(Args&& ... args)
     {
-        T& component = mScene->mRegistry.emplace<T>(mEntity, std::forward<Args>(args)...);
+        T& component = mRegistry.emplace<T>(mEntity, std::forward<Args>(args)...);
         return component;
     }
 
     template<typename T>
     T& getComponent()
     {
-        return mScene->mRegistry.get<T>(mEntity);
+        T& component = mRegistry.get<T>(mEntity);
+        return component;
+    }
+
+
+    template<typename T>
+    void assignComponent()
+    {
+        mRegistry.emplace<T>(mEntity);
+    }
+
+    entt::entity& getEntity()
+    {
+        return mEntity;
     }
 
 private:
     entt::entity mEntity{ entt::null };
-    Scene* mScene = nullptr;
+    entt::registry& mRegistry;
 };
 
 #endif// ENTITY_H

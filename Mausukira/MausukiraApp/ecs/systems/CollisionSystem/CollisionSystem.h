@@ -4,7 +4,6 @@
 #include "SFML/Graphics/CircleShape.hpp"
 #include "ecs/systems/System.h"
 #include "ecs/components/ColliderComponent.h"
-#include "ecs/components/TransformComponent.h"
 #include "dungeon/map/MapContext.h"
 #include "CollisionKinematic.h"
 #include "CollisionStatic.h"

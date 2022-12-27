@@ -53,8 +53,8 @@ void AttackSystem::updateProjectiles(const sf::Time& dt)
 
 void AttackSystem::calcDirectionalNormalizedVector()
 {
-    mRegistry.view<PositionComponent, PlayerComponent>().each(
-        [&](PositionComponent& positionComponent, PlayerComponent& playerComponent)
+    mRegistry.view<PlayerComponent, PositionComponent>().each(
+        [&](PlayerComponent& playerComponent, auto& positionComponent)
         {
             mPlayerCenter = positionComponent.mPosition;
         });

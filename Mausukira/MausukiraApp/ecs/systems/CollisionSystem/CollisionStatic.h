@@ -20,6 +20,8 @@ public:
         const sf::Vector2f& futurePositionToCheck) const;
 
     MapContext& mMapContext;
+
+    void bulletAndWallCollision(const sf::Time& time);
 };
 
 

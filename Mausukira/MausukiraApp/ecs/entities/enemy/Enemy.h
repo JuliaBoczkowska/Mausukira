@@ -24,12 +24,15 @@ struct EnemyModelInfo
 
 class Scene;
 
+class Entity;
+
 class Enemy
 {
 public:
     Enemy(Scene* scene, const EntityStatistic& enemyStats, const sf::Vector2i& position,
         const std::vector<sf::Sprite>& sprites);
 
+    void prepareColliders(Scene* scene, const std::vector<sf::Sprite>& sprites, Entity& enemy) const;
 };
 
 #endif// ENEMY_H
