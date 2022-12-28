@@ -22,6 +22,11 @@ struct EnemyModelInfo
     float reactionTime{};
 };
 
+struct EnemyCollider
+{
+    int id;
+};
+
 class Scene;
 
 class Entity;

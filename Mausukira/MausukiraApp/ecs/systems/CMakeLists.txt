@@ -7,8 +7,8 @@ target_sources(MausukiraApp PRIVATE
         PhysicsSystem/ProjectileShootSystem.cpp
         CameraSystem.cpp
         DebugSystem.cpp
-        AttackSystem.cpp
         ScoreSystem.cpp
         MoveSystem/PlayerMoveSystem.cpp
         MoveSystem/MoveSystem.cpp
+        SpatialHashing/SpatialHash.cpp
         )

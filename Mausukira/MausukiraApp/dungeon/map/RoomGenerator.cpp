@@ -46,6 +46,9 @@ Room::RoomGrid RoomGenerator::generateRoom()
             break;
         case CIRCLE: return generateRoomCircle();
             break;
+        default:
+        RECTANGLE:
+            return generateRoomRectangle();
     }
 }
 

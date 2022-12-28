@@ -6,7 +6,7 @@
 CollisionSystem::CollisionSystem(entt::registry& registry, MapContext& mapContext)
     : System(registry)
     , mMapContext(mapContext)
-    , mCollisionKinematic(registry)
+    , mCollisionKinematic(registry, mapContext)
     , mCollisionStatic(registry, mapContext)
 {
 }

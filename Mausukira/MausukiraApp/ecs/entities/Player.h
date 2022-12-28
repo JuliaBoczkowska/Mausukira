@@ -10,6 +10,7 @@ class Player
 public:
     Player(Scene* scene);
 
+private:
     void setupColliderRelationship(Entity& player, Entity& colliderFoot, Entity& colliderBody) const;
 
     void setupColliders(const sf::Sprite& sprite, Scene*& scene, Entity& colliderFoot, Entity& colliderBody) const;
@@ -18,6 +19,5 @@ public:
 
     void setupWeapon(Scene* scene, Entity& player) const;
 };
-
 
 #endif// PLAYER_H

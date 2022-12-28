@@ -18,10 +18,6 @@ public:
     void update(const sf::Time& dt);
 
 private:
-    bool checkIfAllowsToUpdatePosition(ColliderComponent& colliderComponent,
-        const sf::Vector2f& futurePositionToCheck) const;
-
-private:
     CollisionKinematic mCollisionKinematic;
     CollisionStatic mCollisionStatic;
     MapContext& mMapContext;

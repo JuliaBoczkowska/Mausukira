@@ -40,7 +40,7 @@ void CollisionStatic::playerAndWallCollision(const sf::Time& dt)
 
                 collider.mRectangle.setPosition(futurePositionToCheck);
 
-                if (checkIfAllowsToUpdatePosition(collider, futurePositionToCheck))
+                if (checkIfIntersects(collider, futurePositionToCheck))
                 {
                     velocity = sf::Vector2f{ 0.f, 0.f };
                 }
@@ -50,11 +50,11 @@ void CollisionStatic::playerAndWallCollision(const sf::Time& dt)
     }
 }
 
-bool CollisionStatic::checkIfAllowsToUpdatePosition(ColliderComponent& colliderComponent,
+bool CollisionStatic::checkIfIntersects(ColliderComponent& colliderComponent,
     const sf::Vector2f& futurePositionToCheck) const
 {
     auto colliders =
-        map_utils::getSurroundingCollisionBoxes(futurePositionToCheck, mMapContext.mTileMap);
+        map_utils::getSurroundingTileCollisionBoxes(futurePositionToCheck, mMapContext.mTileMap);
     for (auto& collider: colliders)
     {
         sf::FloatRect colliderRect{ collider->getGlobalBounds() };
@@ -80,7 +80,7 @@ void CollisionStatic::bulletAndWallCollision(const sf::Time& dt)
         auto futurePositionToCheck = position + velocity * dt.asSeconds();
         collider.mRectangle.setPosition(futurePositionToCheck);
 
-        if (checkIfAllowsToUpdatePosition(collider, futurePositionToCheck))
+        if (checkIfIntersects(collider, futurePositionToCheck))
         {
             mRegistry.destroy(parent);
             mRegistry.destroy(entity);

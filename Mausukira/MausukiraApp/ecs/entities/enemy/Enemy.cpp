@@ -27,10 +27,12 @@ void Enemy::prepareColliders(Scene* scene, const std::vector<sf::Sprite>& sprite
         CollisionBox::setupCollider(sprites[0].getGlobalBounds(), CollisionBox::CollisionType::FOOT));
     colliderFoot.addComponent<AttachmentPoint>(enemy.getEntity(), sf::Vector2f{ 20, 20 });
     colliderFoot.addComponent<ColliderComponent>(rect, CollisionBox::CollisionType::FOOT);
+    colliderFoot.addComponent<EnemyCollider>();
 
     Entity colliderBody = { scene->mRegistry.create(), &scene->mRegistry };
     rect = CollisionBox::setupCollider(sprites[0].getGlobalBounds());
     colliderBody.addComponent<ColliderComponent>(rect, CollisionBox::CollisionType::BODY);
     colliderBody.addComponent<AttachmentPoint>(enemy.getEntity(), sf::Vector2f{ 20, 20 });
+    colliderBody.addComponent<EnemyCollider>();
 }
 
