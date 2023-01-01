@@ -10,6 +10,7 @@
 #include "utils/TextureManager.h"
 #include "entt/entt.hpp"
 #include "dungeon/map/MapContext.h"
+#include "ecs/systems/SpatialHashing/SpatialHash.h"
 
 class Entity;
 
@@ -49,6 +50,7 @@ private:
     SharedContext& mSharedContext;
     MapContext& mMapContext;
     EnemySpawner mEnemySpawner;
+    SpatialHash mSpatialGrid;
 };
 
 

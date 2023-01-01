@@ -16,7 +16,6 @@ void AStar::checkTilesAround(const sf::Vector2i& cell, const PathCost& costOfTil
     {
         if (const auto closeNode = cell + tile_helper::neighbouringFourTiles[neighbourIndex];
             tile_helper::isInBorders(closeNode))
-            // && getCellType(closeNode) != Type::HALL)
         {
             if (closeNode == mFinalPoint)
             {

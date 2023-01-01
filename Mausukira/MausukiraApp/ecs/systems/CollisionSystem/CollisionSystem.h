@@ -13,14 +13,17 @@ class CollisionBox;
 class CollisionSystem : public System
 {
 public:
-    CollisionSystem(entt::registry& registry, MapContext& mapContext);
+    CollisionSystem(entt::registry& registry, MapContext& mapContext, SpatialHash& spatialGrid);
 
     void update(const sf::Time& dt);
+
+    void postUpdate() override;
 
 private:
     CollisionKinematic mCollisionKinematic;
     CollisionStatic mCollisionStatic;
     MapContext& mMapContext;
+    SpatialHash& mSpatialGrid;
 };
 
 

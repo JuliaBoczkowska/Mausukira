@@ -16,6 +16,14 @@ public:
 
     std::vector<Edge> processMST(std::vector<Edge>& edges)
     {
+        for (auto edge: edges)
+        {
+            if (edge.mVertexA.x < 0 || edge.mVertexA.y < 0 || edge.mVertexB.y < 0, edge.mVertexB.x < 0)
+            {
+                std::cout << "bad news";
+            }
+        }
+
         std::set<Vertex> openSet;
         std::set<Vertex> closedSet;
 
@@ -90,8 +98,7 @@ public:
             mstLines[arrayIndex] = sf::Vertex(
                 sf::Vector2f(mstEdges[vertexIndex].mVertexA.x, mstEdges[vertexIndex].mVertexA.y));
             mstLines[++arrayIndex] = sf::Vertex(
-                sf::Vector2f(mstEdges[vertexIndex].mVertexB.x, mstEdges[vertexIndex].mVertexB.y));
-            ;
+                sf::Vector2f(mstEdges[vertexIndex].mVertexB.x, mstEdges[vertexIndex].mVertexB.y));;
         }
 
         for (int vertexIndex = 0; vertexIndex < mstLines.getVertexCount(); ++vertexIndex)

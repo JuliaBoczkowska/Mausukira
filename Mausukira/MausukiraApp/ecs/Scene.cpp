@@ -23,8 +23,8 @@ void Scene::buildScene()
 void Scene::createSystems()
 {
     mSystemQueue.addSystem<RenderingSystem>(mMapContext);
-    mSystemQueue.addSystem<CollisionSystem>(mMapContext);
-    mSystemQueue.addSystem<ProjectileShootSystem>(mSharedContext);
+    mSystemQueue.addSystem<ProjectileShootSystem>(mSharedContext, mSpatialGrid);
+    mSystemQueue.addSystem<CollisionSystem>(mMapContext, mSpatialGrid);
     mSystemQueue.addSystem<MoveSystem>();
     mSystemQueue.addSystem<ScoreSystem>();
     mSystemQueue.addSystem<CameraSystem>(mSharedContext, mMapContext);

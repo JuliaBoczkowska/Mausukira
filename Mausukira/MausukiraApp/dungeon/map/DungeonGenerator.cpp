@@ -41,22 +41,27 @@ void DungeonGenerator::minSpanningTree()
 void DungeonGenerator::createHallways()
 {
     AStar pathFinder(mMapContext.mMap);
+
     for (auto& edge: mFinalEdges)
     {
-
-        pathFinder.generateHallway(
-            tile_helper::worldCoordinateToTileCoordinate<int>(edge.mVertexA.x, edge.mVertexA.y),
-            tile_helper::worldCoordinateToTileCoordinate<int>(edge.mVertexB.x, edge.mVertexB.y));
-    }
-#if DEBUG_ROOM_GENERATION
-    for (auto point: mMapContext.mMap)
-    {
-        for (auto point2: point)
+        if (edge.mVertexA.x < 0 || edge.mVertexA.y < 0 || edge.mVertexB.y < 0, edge.mVertexB.x < 0)
         {
-            std::cout << point2 << " ";
+            std::cout << "bad news";
         }
-        std::cout << std::endl;
+        pathFinder.generateHallway(
+            tile_helper::worldCoordinateToTileCoordinate(edge.mVertexA.x, edge.mVertexA.y),
+            tile_helper::worldCoordinateToTileCoordinate(edge.mVertexB.x, edge.mVertexB.y));
     }
+
+#if DEBUG_ROOM_GENERATION
+    //    for (auto point: mMapContext.mMap)
+    //    {
+    //        for (auto point2: point)
+    //        {
+    //            std::cout << point2 << " ";
+    //        }
+    //        std::cout << std::endl;
+    //    }
 #endif
 }
 

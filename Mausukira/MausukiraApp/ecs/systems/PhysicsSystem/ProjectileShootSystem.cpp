@@ -6,10 +6,13 @@
 #include "ecs/components/AttachmentPoint.h"
 #include "ecs/components/ColliderComponent.h"
 #include "poly2tri/common/utils.h"
+#include "ecs/systems/SpatialHashing/SpatialHash.h"
 
-ProjectileShootSystem::ProjectileShootSystem(entt::registry& registry, SharedContext& sharedContext)
+ProjectileShootSystem::ProjectileShootSystem(entt::registry& registry, SharedContext& sharedContext,
+    SpatialHash& spatialGrid)
     : System(registry)
     , mRenderWindow(sharedContext.window())
+    , mSpatialGrid(spatialGrid)
 {
 
 }
@@ -32,7 +35,7 @@ void ProjectileShootSystem::update(const sf::Time& dt)
         mRegistry.view<WeaponComponent>().each(
             [&](WeaponComponent& weaponComponent)
             {
-                if (weaponComponent.clock.getElapsedTime().asMilliseconds() > 200)
+                if (weaponComponent.clock.getElapsedTime().asMilliseconds() > 10)
                 {
                     shootProjectile(dt);
                     weaponComponent.clock.restart();
@@ -79,7 +82,7 @@ void ProjectileShootSystem::setupProjectile(const sf::Time& dt, auto weaponEntit
     Entity projectile{ mRegistry.create(), &mRegistry };
     projectile.addComponent<PositionComponent>(
         mRegistry.get<PositionComponent>(weaponEntity).mPosition);
-    projectile.addComponent<VelocityComponent>(mAimDirectionNormalized * 7000.f * dt.asSeconds());
+    projectile.addComponent<VelocityComponent>(mAimDirectionNormalized * 5000.f * dt.asSeconds());
     projectile.addComponent<ProjectileBody>();
 
     setupProjectileCollider(projectile);
@@ -90,8 +93,8 @@ void ProjectileShootSystem::setupProjectileCollider(Entity& projectile)
     Entity colliderProjectile{ mRegistry.create(), &mRegistry };
     sf::RectangleShape rect(CollisionBox::setupCollider(
         projectile.getComponent<ProjectileBody>().mProjectile.getGlobalBounds(),
-        CollisionBox::CollisionType::BODY));
-    colliderProjectile.addComponent<ColliderComponent>(rect, CollisionBox::CollisionType::BODY);
+        CollisionBox::CollisionType::PROJECTILE));
+    colliderProjectile.addComponent<ColliderComponent>(rect, CollisionBox::CollisionType::PROJECTILE);
     colliderProjectile.addComponent<AttachmentPoint>(projectile.getEntity());
     colliderProjectile.addComponent<ProjectileCollider>();
 }

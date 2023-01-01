@@ -3,27 +3,28 @@
 
 #include <unordered_map>
 #include <unordered_set>
+#include <set>
 #include "ecs/components/ColliderComponent.h"
-#include "HashFn.h"
 
 class SpatialHash
 {
-public:
-    SpatialHash();
 
-    void addCollider(ColliderComponent& collider);
+public:
+    SpatialHash() = default;
+
+    void clearSpatialGridMap();
 
     void update(ColliderComponent& collider);
 
-    void removeCollider(ColliderComponent& collider);
+    void addCollider(ColliderComponent& collider, int key);
 
     std::set<ColliderComponent*> getCollidersInTheSameCell(ColliderComponent& collider);
 
+private:
+    int getArrayCoordinates(const ColliderComponent& collider, int i) const;
 
 private:
-    std::unordered_map<sf::Vector2i, std::set<ColliderComponent*>, HashFn> mSpatialHashGrid{};
-
-    sf::Vector2i getKey(const ColliderComponent& collider, int i) const;
+    std::unordered_map<int, std::unordered_set<ColliderComponent*>> mSpatialHashGrid{};
 };
 
 

@@ -3,14 +3,16 @@
 
 #include <SFML/Graphics/Rect.hpp>
 #include <string>
-#include <set>
+#include <array>
 #include "dungeon/CollisionBox.h"
+#include <iostream>
 
 struct ColliderComponent
 {
     sf::RectangleShape mRectangle;
     CollisionBox::CollisionType mCollisionType;
-    std::set<std::pair<int, int>> uniqueCellIndex;
+    std::array<int, 4> coordOfForEveryCorner{};
+    bool isHit{ false };
 };
 
 #endif// COLLIDERCOMPONENT_H

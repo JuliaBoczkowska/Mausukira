@@ -1,56 +1,47 @@
 #include "SpatialHash.h"
 #include "dungeon/map/MapUtils.h"
 
-void SpatialHash::addCollider(ColliderComponent& collider)
+int SpatialHash::getArrayCoordinates(const ColliderComponent& collider, int i) const
 {
-    for (int i = 0; i < 4; ++i)
-    {
-        sf::Vector2i key = getKey(collider, i);
-        collider.uniqueCellIndex.insert(std::make_pair(key.x, key.y));
-        mSpatialHashGrid[key].insert(&collider);
-    }
-}
-
-sf::Vector2i SpatialHash::getKey(const ColliderComponent& collider, int i) const
-{
-    auto [x, y] = collider.mRectangle.getPoint(i);
-    sf::Vector2f tileCoord = tile_helper::worldCoordinateToTileCoordinate(x, y);
-    return sf::Vector2i{ static_cast<int>(tileCoord.x), static_cast<int>(tileCoord.y) };
-}
-
-SpatialHash::SpatialHash()
-{
+    const sf::Transform& matrix = collider.mRectangle.getTransform();
+    const auto& [x, y] = matrix.transformPoint(collider.mRectangle.getPoint(i));
+    auto [tileX, tileY] = tile_helper::worldCoordinateToTileCoordinate(x, y);
+    return tileX + tileY * MAP_SIZE_Y;
 }
 
 void SpatialHash::update(ColliderComponent& collider)
 {
-    removeCollider(collider);
-    addCollider(collider);
+    for (int i = 0; i < 4; ++i)
+    {
+        auto key = getArrayCoordinates(collider, i);
+        collider.coordOfForEveryCorner[i] = key;
+        addCollider(collider, key);
+    }
 }
 
-void SpatialHash::removeCollider(ColliderComponent& collider)
+void SpatialHash::addCollider(ColliderComponent& collider, int key)
 {
-    for (auto key: collider.uniqueCellIndex)
-    {
-        mSpatialHashGrid.at(sf::Vector2i{ key.first, key.second }).erase(&collider);
-    }
+    mSpatialHashGrid[key].emplace(&collider);
 }
 
 std::set<ColliderComponent*> SpatialHash::getCollidersInTheSameCell(ColliderComponent& collider)
 {
     std::set<ColliderComponent*> result;
-    std::set<std::pair<int, int>> uniqueCellIndex;
-    for (int i = 0; i < 4; ++i)
+    for (auto& key: collider.coordOfForEveryCorner)
     {
-        auto [x, y] = getKey(collider, i);
-        std::pair<int, int> pair{ x, y };
-        uniqueCellIndex.insert(pair);
-    }
-
-    for (auto& elem: uniqueCellIndex)
-    {
-        auto temp = mSpatialHashGrid.find(sf::Vector2i(elem.first, elem.second));
-        result.insert(temp->second.begin(), temp->second.end());
+        auto setOfUniqueColliders = mSpatialHashGrid.find(key);
+        if (setOfUniqueColliders != mSpatialHashGrid.end())
+        {
+            for (auto collider: setOfUniqueColliders->second)
+            {
+                result.insert(collider);
+            }
+        }
     }
     return result;
+}
+
+void SpatialHash::clearSpatialGridMap()
+{
+    mSpatialHashGrid.clear();
 }

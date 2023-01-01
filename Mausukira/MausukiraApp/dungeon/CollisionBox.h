@@ -11,7 +11,10 @@ public:
     enum class CollisionType
     {
         FOOT,
-        BODY
+        BODY,
+        PROJECTILE,
+        ENEMY,
+        HERO
     };
 
     static constexpr int FOOT_ORIGIN_X = -12;

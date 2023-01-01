@@ -5,10 +5,12 @@
 #include "states_stack/SharedContext.h"
 #include "ecs/components/ShootingComponents.h"
 
+class SpatialHash;
+
 class ProjectileShootSystem : public System
 {
 public:
-    ProjectileShootSystem(entt::registry& registry, SharedContext& sharedContext);
+    ProjectileShootSystem(entt::registry& registry, SharedContext& sharedContext, SpatialHash& spatialGrid);
 
     void update(const sf::Time& dt) override;
 
@@ -32,8 +34,7 @@ private:
     sf::Vector2f mAimDirectionNormalized{};
     sf::Vector2f mWeaponCenter{};
     sf::RenderWindow& mRenderWindow;
-
-
+    SpatialHash& mSpatialGrid;
 };
 
 #endif //PROJECTILESHOOTSYSTEM_H
