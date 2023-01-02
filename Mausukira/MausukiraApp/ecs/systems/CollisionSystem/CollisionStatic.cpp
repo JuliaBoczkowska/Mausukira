@@ -7,7 +7,7 @@
 #include "ecs/components/AttachmentPoint.h"
 #include "ecs/components/PlayerComponent.h"
 #include "ecs/components/ShootingComponents.h"
-#include "ecs/systems/SpatialHashing/SpatialHash.h"
+#include "ecs/systems/CollisionSystem/SpatialHashing/SpatialHash.h"
 
 CollisionStatic::CollisionStatic(entt::registry& registry, MapContext& mapContext, SpatialHash& spatialGrid)
     : System(registry)

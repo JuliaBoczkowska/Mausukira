@@ -2,7 +2,6 @@
 #define TILEHELPER_H
 
 #include "SFML/System/Vector2.hpp"
-#include "Tile.h"
 #include "dungeon/map/Constants.h"
 
 
@@ -44,14 +43,14 @@ namespace tile_helper
     template<typename T>
     static sf::Vector2<T> tileToWorldCoordinate(T tileX, T tileY)
     {
-        return sf::Vector2<T>{ (tileX * Tile::TILE_SIZE), (tileY * Tile::TILE_SIZE) };
+        return sf::Vector2<T>{ (tileX * TILE_SIZE), (tileY * TILE_SIZE) };
     }
 
     static sf::Vector2<int>
     worldCoordinateToTileCoordinate(const float& worldCoordinatesX, const float& worldCoordinatesY)
     {
-        return sf::Vector2<int>{ static_cast<int>((worldCoordinatesX / Tile::TILE_SIZE)),
-                                 static_cast<int>((worldCoordinatesY / Tile::TILE_SIZE)) };
+        return sf::Vector2<int>{ static_cast<int>((worldCoordinatesX / TILE_SIZE)),
+                                 static_cast<int>((worldCoordinatesY / TILE_SIZE)) };
     }
 }// namespace tile_helper
 

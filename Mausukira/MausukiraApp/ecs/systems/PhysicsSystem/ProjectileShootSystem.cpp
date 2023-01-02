@@ -6,13 +6,12 @@
 #include "ecs/components/AttachmentPoint.h"
 #include "ecs/components/ColliderComponent.h"
 #include "poly2tri/common/utils.h"
-#include "ecs/systems/SpatialHashing/SpatialHash.h"
+#include "ecs/systems/CollisionSystem/SpatialHashing/SpatialHash.h"
 
 ProjectileShootSystem::ProjectileShootSystem(entt::registry& registry, SharedContext& sharedContext,
     SpatialHash& spatialGrid)
     : System(registry)
     , mRenderWindow(sharedContext.window())
-    , mSpatialGrid(spatialGrid)
 {
 
 }

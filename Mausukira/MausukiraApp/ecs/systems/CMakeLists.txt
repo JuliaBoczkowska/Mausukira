@@ -10,5 +10,5 @@ target_sources(MausukiraApp PRIVATE
         ScoreSystem.cpp
         MoveSystem/PlayerMoveSystem.cpp
         MoveSystem/MoveSystem.cpp
-        SpatialHashing/SpatialHash.cpp
+        CollisionSystem/SpatialHashing/SpatialHash.cpp
         )

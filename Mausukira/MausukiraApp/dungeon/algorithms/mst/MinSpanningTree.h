@@ -16,14 +16,6 @@ public:
 
     std::vector<Edge> processMST(std::vector<Edge>& edges)
     {
-        for (auto edge: edges)
-        {
-            if (edge.mVertexA.x < 0 || edge.mVertexA.y < 0 || edge.mVertexB.y < 0, edge.mVertexB.x < 0)
-            {
-                std::cout << "bad news";
-            }
-        }
-
         std::set<Vertex> openSet;
         std::set<Vertex> closedSet;
 

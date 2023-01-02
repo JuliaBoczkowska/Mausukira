@@ -12,8 +12,8 @@ CameraSystem::CameraSystem(entt::registry& registry, SharedContext& sharedContex
 
 void CameraSystem::setInitialPlayerPosition(const MapContext& mapContext)
 {
-    mCameraView.setCenter(mapContext.centerOfTheFirstRoom);
-    mCameraView.zoom(0.6);
+    mCameraView.setCenter(mapContext.centerOfTheFirstRoom.x, mapContext.centerOfTheFirstRoom.y);
+    mCameraView.zoom(2);
     cameraSetView();
     updateBackground();
 }

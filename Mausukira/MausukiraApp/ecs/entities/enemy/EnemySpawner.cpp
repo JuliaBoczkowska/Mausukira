@@ -1,21 +1,16 @@
 #include "EnemySpawner.h"
 #include "ecs/entities/Entity.h"
-#include "ecs/components/ColliderComponent.h"
-#include "ecs/components/HealthComponent.h"
 #include "ecs/components/MovableComponent.h"
-#include "ecs/components/PositionComponent.h"
 #include "EnemyTypes.h"
 #include "ecs/Scene.h"
 #include "utils/RandomNumberGenerator.h"
-#include "ecs/components/VelocityComponent.h"
-#include "ecs/components/SpriteComponent.h"
 
 EnemySpawner::EnemySpawner(TextureManager& textureManager)
     : mTextureCreator(textureManager)
 {
 }
 
-void EnemySpawner::addEnemyInfo(std::string name, EnemyModelInfo enemyInfo)
+void EnemySpawner::addEnemyInfo(const std::string& name, EnemyModelInfo enemyInfo)
 {
     if (name == "Walking_Zombie")
     {
@@ -46,24 +41,21 @@ void EnemySpawner::addEnemyEntity(Scene* scene)
 
 sf::Vector2i EnemySpawner::getEnemyMapLocation(Room::RoomGrid& mGrid, const sf::Vector2i& size)
 {
-    auto [generatedXPos, generatedYPos] = this->genEnemyPosWithinRoom(size);
+    auto [generatedXPos, generatedYPos] = genEnemyPosWithinRoom(size);
 
     if (static_cast<Room::RoomGridType>(mGrid[generatedXPos][generatedYPos]) ==
         Room::RoomGridType::ROOM)
     {
         mGrid[generatedXPos][generatedYPos] = static_cast<int>(Room::RoomGridType::ENEMY);
-        return sf::Vector2i(generatedXPos, generatedYPos);
+        return { generatedXPos, generatedYPos };
     }
-    else
-    {
-        getEnemyMapLocation(mGrid, size);
-    }
+    return getEnemyMapLocation(mGrid, size);
 }
 
-std::pair<int, int> EnemySpawner::genEnemyPosWithinRoom(const sf::Vector2i& size) const
+std::pair<int, int> EnemySpawner::genEnemyPosWithinRoom(const sf::Vector2i& size)
 {
-    return std::pair<int, int>(generateIntNumberInRange(0, size.x - 1),
-        generateIntNumberInRange(0, size.y - 1));
+    return { generateIntNumberInRange(0, size.x - 1),
+             generateIntNumberInRange(0, size.y - 1) };
 }
 
 EntityStatistic EnemySpawner::generateStats()
@@ -86,13 +78,11 @@ std::pair<std::string, EnemyModelInfo> EnemySpawner::chooseEnemyModelType()
 {
     if (generateIntNumberInRange(1, 3) == 1)
     {
-        return std::pair<std::string, EnemyModelInfo>(
-            "Shooting_Zombie", mEnemyTypes.find(EnemyType::Shooting_Zombie)->second);
+        return { "Shooting_Zombie", mEnemyTypes.find(EnemyType::Shooting_Zombie)->second };
     }
     else
     {
-        return std::pair<std::string, EnemyModelInfo>(
-            "Walking_Zombie", mEnemyTypes.find(EnemyType::Walking_Zombie)->second);
+        return { "Walking_Zombie", mEnemyTypes.find(EnemyType::Walking_Zombie)->second };
     }
 }
 

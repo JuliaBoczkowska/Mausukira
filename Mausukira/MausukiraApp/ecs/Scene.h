@@ -10,7 +10,7 @@
 #include "utils/TextureManager.h"
 #include "entt/entt.hpp"
 #include "dungeon/map/MapContext.h"
-#include "ecs/systems/SpatialHashing/SpatialHash.h"
+#include "ecs/systems/CollisionSystem/SpatialHashing/SpatialHash.h"
 
 class Entity;
 
@@ -23,7 +23,7 @@ class Scene
 public:
     Scene(SharedContext& sharedContext, MapContext& mapContext);
 
-    ~Scene();
+    ~Scene() = default;
 
     void buildScene();
 
@@ -39,15 +39,15 @@ public:
 
     void createSystems();
 
-/** Registry is container for all components and registries. Contains component data and entity
- * ID's*/
+    /** Registry is container for all components and registries. Contains component data and entity
+     * ID's*/
     entt::registry mRegistry;
-private:
     friend Entity;
     friend Player;
     friend EnemySpawner;
-    SystemQueue mSystemQueue;
+private:
     SharedContext& mSharedContext;
+    SystemQueue mSystemQueue;
     MapContext& mMapContext;
     EnemySpawner mEnemySpawner;
     SpatialHash mSpatialGrid;

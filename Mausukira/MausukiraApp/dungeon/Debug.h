@@ -1,3 +1,3 @@
 #include <iostream>
 
-#define DEBUG_ROOM_GENERATION 0
+#define DEBUG_ROOM_GENERATION 1

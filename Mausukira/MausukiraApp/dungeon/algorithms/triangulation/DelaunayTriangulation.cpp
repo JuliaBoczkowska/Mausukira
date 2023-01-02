@@ -1,40 +1,39 @@
 #include "DelaunayTriangulation.h"
 #include "../../Debug.h"
 #include "SFML/Graphics/ConvexShape.hpp"
+#include "dungeon/map/Constants.h"
 
 static constexpr auto PI = 3.141592653589793238463;
-
 
 std::set<Edge>& DelaunayTriangulation::triangulation(std::list<Room>& rooms)
 {
     delaunayEdges.setPrimitiveType(sf::Triangles);
     triangleLines.setPrimitiveType(sf::Lines);
-
     sortRoomsCoordinatesClockwiseOrder(rooms);
 
-    shape.setFillColor(sf::Color{ 20, 0, 0, 90 });
-
-
-    int counter = 0;
-    shape.setPointCount(rooms.size());
     for (auto it = rooms.begin(); it != rooms.end(); ++it)
     {
-        shape.setPoint(counter, sf::Vector2f{ it->mCenter.x, it->mCenter.y });
-        counter++;
-        std::cout << it->mCenter.x << "," << it->mCenter.y << std::endl;
         polyline.push_back(new p2t::Point(it->mCenter.x, it->mCenter.y));
     }
 
     p2t::CDT cdt(polyline);
     cdt.Triangulate();
-    const auto triangulatedFigure = cdt.GetTriangles();
+    const auto triangulatedMap = cdt.GetTriangles();
 
-    delaunayEdges.resize(triangulatedFigure.size() * 3);
-    triangleLines.resize(triangulatedFigure.size() * 3 * 3);
-
-    populateTrianglesVertexArray(triangulatedFigure);
+    delaunayEdges.resize(triangulatedMap.size() * 3);
+    triangleLines.resize(triangulatedMap.size() * 3 * 3);
+    populateTrianglesVertexArray(triangulatedMap);
     populateLinesVertexArray();
+    ifNoEdgesTryAgain(rooms);
     return mTriangleEdges;
+}
+
+void DelaunayTriangulation::ifNoEdgesTryAgain(std::list<Room>& rooms)
+{
+    if (mTriangleEdges.size() == 0)
+    {
+        triangulation(rooms);
+    }
 }
 
 sf::Vector2f DelaunayTriangulation::getAveragedRoomCenter(std::list<Room>& rooms)
@@ -65,9 +64,6 @@ void DelaunayTriangulation::sortRoomsCoordinatesClockwiseOrder(std::list<Room>& 
 
 bool DelaunayTriangulation::cartesianToPolarCoordinates(const Room& a, const Room& b) const
 {
-//    auto a1 = (static_cast<int>(calculateArcTan(first) * (180.0 / PI)) + 360) % 360;
-//    auto a2 = (static_cast<int>(calculateArcTan(second) * (180.0 / PI)) + 360) % 360;
-//    return a1 < a2;
     auto center = Room::centerOfAllPoints;
 
     if (a.mCenter.x >= 0 and b.mCenter.x < 0)
@@ -95,15 +91,9 @@ bool DelaunayTriangulation::cartesianToPolarCoordinates(const Room& a, const Roo
     return d1 > d2;
 }
 
-float DelaunayTriangulation::calculateArcTan(const Room& second) const
-{
-    return atan2(second.mCenter.x - Room::centerOfAllPoints.x,
-        second.mCenter.y - Room::centerOfAllPoints.y);
-}
-
 bool DelaunayTriangulation::isValid(sf::Vector2i point)
 {
-    if (point.x < 0 or point.y < 0)
+    if (point.x<0 or point.y<0 or point.x>MAP_SIZE_X_WORLD_COORD or point.y>MAP_SIZE_Y_WORLD_COORD)
     {
         return false;
     }
@@ -126,7 +116,6 @@ void DelaunayTriangulation::populateLinesVertexArray()
             sf::Vector2f(delaunayEdges[second].position.x, delaunayEdges[second].position.y));
 
         // 1 -> 3 triangle edge
-
         triangleLines[++arrayIndex] = sf::Vertex(
             sf::Vector2f(delaunayEdges[first].position.x, delaunayEdges[first].position.y));
         triangleLines[++arrayIndex] = sf::Vertex(
@@ -134,13 +123,11 @@ void DelaunayTriangulation::populateLinesVertexArray()
 
 
         // 2 -> 3 triangle edge
-
         triangleLines[++arrayIndex] = sf::Vertex(
             sf::Vector2f(delaunayEdges[second].position.x, delaunayEdges[second].position.y));
         triangleLines[++arrayIndex] = sf::Vertex(
             sf::Vector2f(delaunayEdges[third].position.x, delaunayEdges[third].position.y));
         ++arrayIndex;
-
     }
 
     for (int arrayIndex = 0; arrayIndex < triangleLines.getVertexCount(); ++arrayIndex)
@@ -155,48 +142,25 @@ void DelaunayTriangulation::populateTrianglesVertexArray(
 
     for (auto* triangulatedTriangle: triangulatedFigure)
     {
-        if (isValid(sf::Vector2i(triangulatedTriangle->GetPoint(0)->x,
-            triangulatedTriangle->GetPoint(0)->y)) and isValid(sf::Vector2i(triangulatedTriangle->GetPoint(1)->x,
-            triangulatedTriangle->GetPoint(1)->y)))
+        Edge first{ sf::Vector2i(triangulatedTriangle->GetPoint(0)->x,
+            triangulatedTriangle->GetPoint(0)->y),
+                    sf::Vector2i(triangulatedTriangle->GetPoint(1)->x,
+                        triangulatedTriangle->GetPoint(1)->y) };
+        Edge second{ sf::Vector2i(triangulatedTriangle->GetPoint(1)->x,
+            triangulatedTriangle->GetPoint(1)->y),
+                     sf::Vector2i(triangulatedTriangle->GetPoint(2)->x,
+                         triangulatedTriangle->GetPoint(2)->y) };
+        Edge third{ sf::Vector2i(triangulatedTriangle->GetPoint(0)->x,
+            triangulatedTriangle->GetPoint(0)->y),
+                    sf::Vector2i(triangulatedTriangle->GetPoint(2)->x,
+                        triangulatedTriangle->GetPoint(2)->y) };
+        if (areEdgesValid(first, second, third))
         {
-            mTriangleEdges.emplace(Edge(sf::Vector2i(triangulatedTriangle->GetPoint(0)->x,
-                    triangulatedTriangle->GetPoint(0)->y),
-                sf::Vector2i(triangulatedTriangle->GetPoint(1)->x,
-                    triangulatedTriangle->GetPoint(1)->y)));
-        }
-        if (isValid(sf::Vector2i(triangulatedTriangle->GetPoint(1)->x,
-            triangulatedTriangle->GetPoint(1)->y)) and
-            isValid(sf::Vector2i(triangulatedTriangle->GetPoint(2)->x,
-                triangulatedTriangle->GetPoint(2)->y)))
-        {
-
-            mTriangleEdges.emplace(Edge(sf::Vector2i(triangulatedTriangle->GetPoint(1)->x,
-                    triangulatedTriangle->GetPoint(1)->y),
-                sf::Vector2i(triangulatedTriangle->GetPoint(2)->x,
-                    triangulatedTriangle->GetPoint(2)->y)));
-        }
-        if (isValid(sf::Vector2i(triangulatedTriangle->GetPoint(0)->x,
-            triangulatedTriangle->GetPoint(0)->y)) and isValid(sf::Vector2i(triangulatedTriangle->GetPoint(2)->x,
-            triangulatedTriangle->GetPoint(2)->y)))
-        {
-
-            mTriangleEdges.emplace(Edge(sf::Vector2i(triangulatedTriangle->GetPoint(0)->x,
-                    triangulatedTriangle->GetPoint(0)->y),
-                sf::Vector2i(triangulatedTriangle->GetPoint(2)->x,
-                    triangulatedTriangle->GetPoint(2)->y)));
-        }
-
-
-    }
-
-    for (auto& edge: mTriangleEdges)
-    {
-        if (edge.mVertexA.x < 0 || edge.mVertexA.y < 0 || edge.mVertexB.y < 0, edge.mVertexB.x < 0)
-        {
-            std::cout << "bad news";
+            mTriangleEdges.emplace(first);
+            mTriangleEdges.emplace(second);
+            mTriangleEdges.emplace(third);
         }
     }
-
     size_t arrayIndex = 0;
     for (auto* triangulatedTriangle: triangulatedFigure)
     {
@@ -210,10 +174,18 @@ void DelaunayTriangulation::populateTrianglesVertexArray(
     }
 }
 
+bool DelaunayTriangulation::areEdgesValid(Edge& first, Edge& second, Edge& third)
+{
+    bool isValidFirst = isValid(first.mVertexA) and isValid(first.mVertexB);
+    bool isValidSecond = isValid(second.mVertexA) and isValid(second.mVertexB);
+    bool isValidThird = isValid(third.mVertexA) and isValid(third.mVertexB);
+
+    return isValidFirst and isValidSecond and isValidThird;
+}
+
 void DelaunayTriangulation::draw(sf::RenderWindow& window)
 {
 #if DEBUG_ROOM_GENERATION
-    window.draw(shape);
     window.draw(triangleLines);
 #endif
 }

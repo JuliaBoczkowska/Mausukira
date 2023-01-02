@@ -2,11 +2,9 @@
 #include "ecs/components/ColliderComponent.h"
 #include "ecs/components/HealthComponent.h"
 #include "dungeon/map/MapUtils.h"
-#include "ecs/components/ShootingComponents.h"
 #include "ecs/components/AttachmentPoint.h"
-#include "ecs/systems/SpatialHashing/SpatialHash.h"
+#include "ecs/systems/CollisionSystem/SpatialHashing/SpatialHash.h"
 #include "ecs/components/PositionComponent.h"
-#include "ecs/components/AttackType.h"
 
 CollisionSystem::CollisionSystem(entt::registry& registry, MapContext& mapContext, SpatialHash& spatialGrid)
     : System(registry)
@@ -25,15 +23,6 @@ CollisionSystem::CollisionSystem(entt::registry& registry, MapContext& mapContex
 
         colliderC.mRectangle.setPosition(position);
     }
-//
-//    mRegistry.view<ColliderComponent>().each(
-//        [&](ColliderComponent& colliderComponent)
-//        {
-//            if (colliderComponent.mCollisionType == CollisionBox::CollisionType::ENEMY)
-//            {
-//                mSpatialGrid.addColliders(colliderComponent);
-//            }
-//        });
 }
 
 

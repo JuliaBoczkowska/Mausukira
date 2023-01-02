@@ -11,8 +11,8 @@ Enemy::Enemy(Scene* scene, const EntityStatistic& enemyStats, const sf::Vector2i
     enemy.addComponent<MovableComponent>();
     enemy.addComponent<HealthComponent>(static_cast<float>(enemyStats.mHealth));
     enemy.addComponent<PositionComponent>(
-        sf::Vector2f{ static_cast<float>(position.x * 32),
-                      static_cast<float>(position.y * 32) });
+        sf::Vector2f{ static_cast<float>(position.x * TILE_SIZE),
+                      static_cast<float>(position.y * TILE_SIZE) });
 
     enemy.addComponent<EntityStatistic>(enemyStats);
     enemy.addComponent<VelocityComponent>();

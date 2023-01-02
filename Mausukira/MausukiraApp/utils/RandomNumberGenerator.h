@@ -15,13 +15,13 @@ static float generateFloatNumberInRange(const float& minSize, const float& maxSi
     return generateNum(engine);
 }
 
-static float generateIntNumberInRange(const float& minSize, const float& maxSize)
+static int generateIntNumberInRange(const int& minSize, const int& maxSize)
 {
     std::uniform_int_distribution<int> generateNum(minSize, maxSize);
     return generateNum(engine);
 }
 
-static float generateIntNumberInRange(const sf::Vector2i& range)
+static int generateIntNumberInRange(const sf::Vector2i& range)
 {
     std::uniform_int_distribution<int> generateNum(range.x, range.y);
     return generateNum(engine);
@@ -38,7 +38,7 @@ static sf::Vector2i generateTwoIntNumbersInRange(const auto& minSize, const auto
     const std::uniform_int_distribution<int> generatePosHeight(minSize, maxSize);
     const std::uniform_int_distribution<int> generatePosWidth(minSize, maxSize);
 
-    return sf::Vector2i{generatePosWidth(engine), generatePosHeight(engine)};
+    return sf::Vector2i{ generatePosWidth(engine), generatePosHeight(engine) };
 }
 
 #endif// RANDOMNUMBERGENERATOR_H

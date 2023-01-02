@@ -8,7 +8,7 @@
 #include "SFML/System/Vector2.hpp"
 #include "ecs/components/EntityComponent.h"
 #include "utils/TextureManager.h"
-#include "dungeon/map/Room.h"
+#include "dungeon/map/room/Room.h"
 #include <functional>
 #include <iostream>
 #include <map>
@@ -18,29 +18,27 @@ class Scene;
 
 class EnemySpawner
 {
-    const int TILE_SIZE = 32;
-
 public:
     EnemySpawner(TextureManager& textureManager);
 
-    void addEnemyInfo(std::string name, EnemyModelInfo enemyInfo);
+    void addEnemyInfo(const std::string& name, EnemyModelInfo enemyInfo);
 
     void addEnemyEntity(Scene* scene);
 
 private:
     EntityStatistic generateStats();
 
-    int rndGenerateHealth(EnemyModelInfo& generationConfig);
+    static int rndGenerateHealth(EnemyModelInfo& generationConfig);
 
-    float rndGenerateAttackDamage(EnemyModelInfo& generationConfig);
+    static float rndGenerateAttackDamage(EnemyModelInfo& generationConfig);
 
-    float rndGenerateAttackSpeed(EnemyModelInfo& generationConfig);
+    static float rndGenerateAttackSpeed(EnemyModelInfo& generationConfig);
 
-    float rndGenerateMovementSpeed(EnemyModelInfo& generationConfig);
+    static float rndGenerateMovementSpeed(EnemyModelInfo& generationConfig);
 
     sf::Vector2i getEnemyMapLocation(Room::RoomGrid& mGrid, const sf::Vector2i& size);
 
-    std::pair<int, int> genEnemyPosWithinRoom(const sf::Vector2i& size) const;
+    static std::pair<int, int> genEnemyPosWithinRoom(const sf::Vector2i& size);
 
     std::pair<std::string, EnemyModelInfo> chooseEnemyModelType();
 

@@ -18,11 +18,14 @@ public:
     using RoomGrid = std::vector<std::vector<int>>;
 
     Room() = default;
+
     explicit Room(sf::Vector2i location, sf::Vector2i size, std::vector<std::vector<int>> grid,
-                  sf::Vector2f center);
+        sf::Vector2f center);
 
     void draw(sf::RenderWindow& window);
+
     static void setCenter(sf::Vector2f center);
+
     bool collide(Room& otherRom);
 
 public:
@@ -30,7 +33,7 @@ public:
     sf::Vector2i mLocation;
     sf::Vector2i mSize;
     RoomGrid mGrid;
-    sf::Vector2f mCenter{0, 0};
+    sf::Vector2i mCenter{ 0, 0 };
 
 private:
     sf::IntRect bounding;

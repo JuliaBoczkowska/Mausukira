@@ -2,7 +2,7 @@
 #define MAP_H
 
 #include "../../states_stack/SharedContext.h"
-#include "DungeonGenerator.h"
+#include "dungeon/DungeonGenerator.h"
 #include "dungeon/map/MapContext.h"
 #include "SFML/System/Time.hpp"
 #include "dungeon/map/Tile/TileHelper.h"

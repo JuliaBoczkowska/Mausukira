@@ -17,7 +17,6 @@ void DungeonGenerator::procedurallyGenerateMap()
     createHallways();
     mMapContext.mRooms = mRooms;
     mMapContext.centerOfTheFirstRoom = mRooms.front().mCenter;
-    //    updateCenterOfTheFirstRoom();
 }
 
 void DungeonGenerator::generateRooms()
@@ -44,25 +43,10 @@ void DungeonGenerator::createHallways()
 
     for (auto& edge: mFinalEdges)
     {
-        if (edge.mVertexA.x < 0 || edge.mVertexA.y < 0 || edge.mVertexB.y < 0, edge.mVertexB.x < 0)
-        {
-            std::cout << "bad news";
-        }
         pathFinder.generateHallway(
             tile_helper::worldCoordinateToTileCoordinate(edge.mVertexA.x, edge.mVertexA.y),
             tile_helper::worldCoordinateToTileCoordinate(edge.mVertexB.x, edge.mVertexB.y));
     }
-
-#if DEBUG_ROOM_GENERATION
-    //    for (auto point: mMapContext.mMap)
-    //    {
-    //        for (auto point2: point)
-    //        {
-    //            std::cout << point2 << " ";
-    //        }
-    //        std::cout << std::endl;
-    //    }
-#endif
 }
 
 void DungeonGenerator::drawDebugLines(sf::RenderWindow& window)
@@ -118,8 +102,3 @@ void DungeonGenerator::storeUniqueEdges(UniqueEdges& addedEdges)
         addedEdges.emplace(edge);
     }
 }
-
-// void DungeonGenerator::updateCenterOfTheFirstRoom()
-//{
-//     mMapContext.centerOfTheFirstRoom = mRooms.front().mCenter;
-// }

@@ -1,5 +1,5 @@
 #include "AStar.h"
-#include "dungeon/map/DungeonGenerator.h"
+#include "dungeon/DungeonGenerator.h"
 #include "dungeon/map/Tile/TileHelper.h"
 #include <algorithm>
 #include <stdexcept>

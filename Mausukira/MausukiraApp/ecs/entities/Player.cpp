@@ -1,6 +1,5 @@
 
 #include "Player.h"
-#include "Entity.h"
 #include "ecs/components/Components.h"
 #include "states_stack/SharedContext.h"
 #include "utils/SpriteSheetHandler.h"
@@ -39,7 +38,8 @@ sf::Sprite& Player::setupPlayer(Scene* scene, sf::Sprite& sprite, Entity& player
     player.addComponent<MovableComponent>();
     player.addComponent<HealthComponent>(100);
     player.addComponent<SpriteComponent>(sprite);
-    player.addComponent<PositionComponent>(scene->mMapContext.centerOfTheFirstRoom);
+    player.addComponent<PositionComponent>(
+        sf::Vector2f(scene->mMapContext.centerOfTheFirstRoom.x, scene->mMapContext.centerOfTheFirstRoom.y));
     player.assignComponent<PlayerComponent>();
     player.addComponent<ScoreComponent>();
     player.addComponent<VelocityComponent>();

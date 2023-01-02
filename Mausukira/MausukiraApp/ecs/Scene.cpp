@@ -31,10 +31,6 @@ void Scene::createSystems()
     mSystemQueue.addSystem<DebugSystem>();
 }
 
-Scene::~Scene()
-{
-}
-
 void Scene::update(const sf::Time& deltaTime)
 {
     mSystemQueue.update(deltaTime);

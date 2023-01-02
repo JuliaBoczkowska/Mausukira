@@ -1,5 +1,6 @@
 #include "Tile.h"
 #include "TileModel.h"
+#include "dungeon/map/Constants.h"
 
 Tile::Tile(TileModel* tileModel, const int& x, const int& y)
     : mTileModel(tileModel)

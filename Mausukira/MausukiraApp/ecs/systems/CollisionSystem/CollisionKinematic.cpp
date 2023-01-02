@@ -1,8 +1,7 @@
 #include "CollisionKinematic.h"
 #include "dungeon/map/MapUtils.h"
 #include "ecs/components/ShootingComponents.h"
-#include "ecs/components/AttachmentPoint.h"
-#include "ecs/systems/SpatialHashing/SpatialHash.h"
+#include "ecs/systems/CollisionSystem/SpatialHashing/SpatialHash.h"
 
 
 CollisionKinematic::CollisionKinematic(entt::registry& registry, MapContext& mapContext, SpatialHash& spatialGrid)
@@ -14,11 +13,6 @@ CollisionKinematic::CollisionKinematic(entt::registry& registry, MapContext& map
 
 void CollisionKinematic::update(const sf::Time& dt)
 {
-    mRegistry.view<AttachmentPoint, ColliderComponent>().each(
-        [&](AttachmentPoint& attachmentPoint, ColliderComponent& colliderComponent)
-        {
-            mSpatialGrid.update(colliderComponent);
-        });
     projectileAndEnemyCollision();
 }
 

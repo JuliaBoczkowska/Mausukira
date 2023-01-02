@@ -1,6 +1,7 @@
 #ifndef ROOMGENERATOR_H
 #define ROOMGENERATOR_H
-#include "Constants.h"
+
+#include "dungeon/map/Constants.h"
 #include "Room.h"
 #include <array>
 #include <list>
@@ -24,14 +25,19 @@ public:
 
 private:
     bool isRoomColliding(Room& temp);
+
     Room::RoomGrid getMultiDimGrid(int width, int height, int value = 1);
+
     Room::RoomGrid generateRoom();
+
     std::vector<std::vector<int>> generateRoomRectangle();
+
     std::vector<std::vector<int>> generateRoomCircle();
+
     bool placeRoomOnMap(std::vector<std::vector<int>> roomOutline);
 
 private:
-    int roomCounter{0};
+    int roomCounter{ 0 };
     std::array<std::array<int, MAP_SIZE_X>, MAP_SIZE_Y>& mMap;
     std::list<Room> mRooms;
 };

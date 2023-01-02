@@ -34,7 +34,6 @@ private:
     sf::Vector2f mAimDirectionNormalized{};
     sf::Vector2f mWeaponCenter{};
     sf::RenderWindow& mRenderWindow;
-    SpatialHash& mSpatialGrid;
 };
 
 #endif //PROJECTILESHOOTSYSTEM_H

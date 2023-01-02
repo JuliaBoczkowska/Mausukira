@@ -1,7 +1,7 @@
 #ifndef DELAUNAYTRIANGULATION_H
 #define DELAUNAYTRIANGULATION_H
 
-#include "../../map/Room.h"
+#include "dungeon/map/room/Room.h"
 #include "../AlgorithmsHelper.h"
 #include "SFML/Graphics/VertexArray.hpp"
 #include "SFML/Graphics/ConvexShape.hpp"
@@ -29,9 +29,11 @@ private:
 
     bool isValid(sf::Vector2i point);
 
-    float calculateArcTan(const Room&) const;
-
     bool cartesianToPolarCoordinates(const Room&, const Room&) const;
+
+    bool areEdgesValid(Edge& first, Edge& second, Edge& third);
+
+    void ifNoEdgesTryAgain(std::list<Room>& rooms);
 
 private:
     /** Triangles (consisting of vertexes) building the current figure. */
@@ -39,7 +41,6 @@ private:
     sf::VertexArray triangleLines;
     std::vector<p2t::Point*> polyline;
     std::set<Edge> mTriangleEdges;
-    sf::ConvexShape shape;
 };
 
 #endif// DELAUNAYTRIANGULATION_H

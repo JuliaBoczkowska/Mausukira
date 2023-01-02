@@ -1,5 +1,5 @@
 #include "RoomGenerator.h"
-#include "dungeon/map/Tile/TileHelper.h"
+#include "dungeon/map/tile/TileHelper.h"
 #include "utils/RandomNumberGenerator.h"
 
 RoomGenerator::RoomGenerator(std::array<std::array<int, MAP_SIZE_X>, MAP_SIZE_Y>& map)
