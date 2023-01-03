@@ -26,7 +26,7 @@ void EnemySpawner::addEnemyEntity(Scene* scene)
 {
     /** First room is reserved for hero character, so iterator++ */
     std::list<Room>::iterator it;
-    for (it = scene->mMapContext.mRooms.begin(), ++it; it != scene->mMapContext.mRooms.end(); ++it)
+    for (it = scene->mMapContext->mRooms.begin(), ++it; it != scene->mMapContext->mRooms.end(); ++it)
     {
         int numberOfEnemies = generateIntNumberInRange(1, 4);
         for (int i = 0; i < numberOfEnemies; ++i)
@@ -37,6 +37,7 @@ void EnemySpawner::addEnemyEntity(Scene* scene)
                 std::make_unique<Enemy>(scene, generateStats(), enemyPosition, mTextureCreator.generate()));
         }
     }
+    selectEnemyToBeADoorToNextLevel();
 }
 
 sf::Vector2i EnemySpawner::getEnemyMapLocation(Room::RoomGrid& mGrid, const sf::Vector2i& size)
@@ -104,4 +105,13 @@ float EnemySpawner::rndGenerateAttackSpeed(EnemyModelInfo& generationConfig)
 float EnemySpawner::rndGenerateMovementSpeed(EnemyModelInfo& generationConfig)
 {
     return generateFloatNumberInRange(generationConfig.movementSpeedMinMax);
+}
+
+void EnemySpawner::selectEnemyToBeADoorToNextLevel()
+{
+
+    auto randomEnemy = mEnemyEntity.at(generateIntNumberInRange(0, mEnemyEntity.size() - 1)).get();
+    auto& entityStatistic = randomEnemy->enemy.getComponent<EntityStatistic>();
+
+    entityStatistic.isTransitionToNextLevel = true;
 }

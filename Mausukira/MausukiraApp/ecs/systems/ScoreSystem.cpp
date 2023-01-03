@@ -8,33 +8,23 @@ ScoreSystem::ScoreSystem(entt::registry& registry)
 {
 }
 
-void ScoreSystem::handleInput(sf::Event& event)
-{
-}
-
-#include <iostream>
 
 void ScoreSystem::update(const sf::Time& dt)
 {
     int tempScore = 0;
-    mRegistry.view<EntityStatistic, HealthComponent>().each(
-        [&](auto entity, EntityStatistic& entityStatistic, HealthComponent& healthComponent)
+    mRegistry.view<EntityState, HealthComponent>().each(
+        [&](auto entity, EntityState& entityStatistic, HealthComponent& healthComponent)
         {
-            if (healthComponent.isDead())
+            if (entityStatistic.state == MobState::Died)
             {
-                mRegistry.remove<HealthComponent>(entity);
                 tempScore += 10;
             }
         });
 
-
-    if (tempScore != 0)
-    {
-        mRegistry.view<ScoreComponent>().each(
-            [&](ScoreComponent& scoreComponent)
-            {
-                scoreComponent.score += tempScore;
-                std::cout << scoreComponent.score << std::endl;
-            });
-    }
+    mRegistry.view<ScoreComponent>().each(
+        [&](ScoreComponent& scoreComponent)
+        {
+            scoreComponent.score += tempScore;
+            scoreComponent.counter.setString("Score: " + std::to_string(scoreComponent.score));
+        });
 }

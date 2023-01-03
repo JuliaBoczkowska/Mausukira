@@ -42,6 +42,8 @@ private:
 
     std::pair<std::string, EnemyModelInfo> chooseEnemyModelType();
 
+    void selectEnemyToBeADoorToNextLevel();
+
 private:
     std::map<EnemyType, EnemyModelInfo> mEnemyTypes;
     EnemyTextureGenerator mTextureCreator;

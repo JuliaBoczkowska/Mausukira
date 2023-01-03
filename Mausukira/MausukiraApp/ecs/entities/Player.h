@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "Entity.h"
+#include "SFML/Graphics/Sprite.hpp"
 
 class Scene;
 

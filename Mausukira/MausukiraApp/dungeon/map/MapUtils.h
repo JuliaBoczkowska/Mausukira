@@ -43,31 +43,5 @@ namespace map_utils
         }
         return collisions;
     }
-
-//    static std::vector<ColliderComponent*> getSurroundingCollisionBoxes(sf::Vector2f position,
-//        TileMap& mTileMap)
-//    {
-//        sf::Vector2i objectTileCoordinates = static_cast<sf::Vector2i>(
-//            tile_helper::worldCoordinateToTileCoordinate(position.x, position.y));
-//
-//        std::vector<ColliderComponent*> collisions;
-//
-//        for (int neighbourIndex = 0; neighbourIndex < 8; ++neighbourIndex)
-//        {
-//            const auto neighbouringTile = objectTileCoordinates + tile_helper::neighbouringEightTiles[neighbourIndex];
-//            if (tile_helper::isInBorders(neighbouringTile))
-//            {
-//
-//                auto view = mRegistry.view<AttachmentPoint, ColliderComponent, ProjectileCollider>();
-//                for (auto entity: view)
-//                {
-//                    auto [attachmentPoint, colliderC, projectile] = view.get(entity);
-//                    auto parent = attachmentPoint.parent;
-//
-//                    auto& position = mRegistry.get<PositionComponent>(parent).mPosition;
-//            }
-//        }
-//        return collisions;
-//    }
 }// namespace map_utils
 #endif// MAPUTILS_H

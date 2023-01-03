@@ -4,10 +4,9 @@
 
 GameState::GameState(StateHandler& stateManager, StateType type, sf::View view)
     : State(stateManager, type, view)
-    , mMap(stateManager.context(), mMapContext)
-    , mScene(stateManager.context(), mMapContext)
+    , mScene(std::make_unique<Scene>(stateManager.context(), mView))
 {
-    mScene.buildScene();
+    mScene->buildScene();
 }
 
 
@@ -22,7 +21,7 @@ void GameState::handleInput(sf::Event& event)
             mStateHandler.switchTo(StateType::GAME_STATE);
         }
     }
-    mScene.handleInput(event);
+    mScene->handleInput(event);
 }
 
 void GameState::checkIfPauseState(const sf::Event& event)
@@ -38,12 +37,10 @@ void GameState::checkIfPauseState(const sf::Event& event)
 
 void GameState::update(const sf::Time& dt)
 {
-    mMap.update(dt);
-    mScene.update(dt);
+    mScene->update(dt);
 }
 
 void GameState::draw()
 {
-    mMap.draw(context().window());
-    mScene.draw(context().window());
+    mScene->draw(context().window());
 }

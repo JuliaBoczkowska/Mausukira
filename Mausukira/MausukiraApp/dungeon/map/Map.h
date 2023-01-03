@@ -21,9 +21,9 @@ public:
 
     ~Map() = default;
 
-    void update(const sf::Time& deltaTime);
-
     void draw(sf::RenderWindow& window);
+
+    void generateMap();
 
 private:
     void loadTiles();
@@ -45,6 +45,8 @@ private:
     void setWallTile(const sf::Vector2i& currentTile, int wallValue);
 
     void setBackground() const;
+
+    void tileBitmasking(const sf::Vector2i& currentTile);
 
 private:
     TileModels mTileModels;
@@ -105,8 +107,6 @@ private:
         { 219, "WALL_5_4" },
         { 123, "WALL_5_5" },
         { 95,  "WALL_5_6" }};
-
-    void tileBitmasking(const sf::Vector2i& currentTile);
 };
 
 #endif// MAP_H

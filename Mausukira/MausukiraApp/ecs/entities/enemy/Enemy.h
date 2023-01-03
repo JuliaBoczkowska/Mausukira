@@ -4,7 +4,7 @@
 #include "SFML/System/Vector2.hpp"
 #include "ecs/components/EntityComponent.h"
 #include "SFML/Graphics/Sprite.hpp"
-#include <map>
+#include "ecs/entities/Entity.h"
 
 struct AttackInfo
 {
@@ -34,10 +34,15 @@ class Entity;
 class Enemy
 {
 public:
-    Enemy(Scene* scene, const EntityStatistic& enemyStats, const sf::Vector2i& position,
+    Enemy(Scene* scene, EntityStatistic enemyStats, const sf::Vector2i& position,
         const std::vector<sf::Sprite>& sprites);
 
-    void prepareColliders(Scene* scene, const std::vector<sf::Sprite>& sprites, Entity& enemy) const;
+    void setupColliderRelationship(Entity& enemy, Entity& colliderFoot, Entity& colliderBody) const;
+
+    void prepareColliders(Entity& colliderFoot, Entity& colliderBody, const std::vector<sf::Sprite>& sprites,
+        Entity& enemy) const;
+
+    Entity enemy;
 };
 
 #endif// ENEMY_H

@@ -16,7 +16,7 @@ void DungeonGenerator::procedurallyGenerateMap()
     minSpanningTree();
     createHallways();
     mMapContext.mRooms = mRooms;
-    mMapContext.centerOfTheFirstRoom = mRooms.front().mCenter;
+    mMapContext.mCenterOfTheFirstRoom = mRooms.front().mCenter;
 }
 
 void DungeonGenerator::generateRooms()
@@ -24,6 +24,7 @@ void DungeonGenerator::generateRooms()
     RoomGenerator generator(mMapContext.mMap);
     mRooms = generator.allocateRooms();
 }
+
 
 void DungeonGenerator::triangulation()
 {

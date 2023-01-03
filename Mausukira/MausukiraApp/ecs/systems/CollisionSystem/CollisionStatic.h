@@ -26,11 +26,12 @@ private:
 
     bool isBulletOutOfBounds(const ColliderComponent& colliderComponent);
 
-    bool isBulletCollidingWall(ColliderComponent& colliderComponent, sf::RectangleShape* const& collider);
+    bool isColliderAndRectShapeColliding(ColliderComponent& colliderComponent, sf::RectangleShape& collider);
 
 private:
     MapContext& mMapContext;
     SpatialHash& mSpatialGrid;
+    ColliderComponent* mPlayerCollider;
 };
 
 

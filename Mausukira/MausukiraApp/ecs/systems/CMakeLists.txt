@@ -11,4 +11,7 @@ target_sources(MausukiraApp PRIVATE
         MoveSystem/PlayerMoveSystem.cpp
         MoveSystem/MoveSystem.cpp
         CollisionSystem/SpatialHashing/SpatialHash.cpp
+        DamageSystem/HealthSystem.cpp
+        LevelChangeSystem.cpp
+        AiSystem/EnemyFollowSystem.cpp
         )

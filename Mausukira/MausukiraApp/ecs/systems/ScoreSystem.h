@@ -7,9 +7,7 @@ class ScoreSystem : public System
 {
 public:
     ScoreSystem(entt::registry& registry);
-
-    void handleInput(sf::Event& event) override;
-
+    
     void update(const sf::Time& dt) override;
 };
 

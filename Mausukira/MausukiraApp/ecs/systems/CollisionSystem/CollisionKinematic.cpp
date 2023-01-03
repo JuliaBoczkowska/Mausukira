@@ -2,6 +2,7 @@
 #include "dungeon/map/MapUtils.h"
 #include "ecs/components/ShootingComponents.h"
 #include "ecs/systems/CollisionSystem/SpatialHashing/SpatialHash.h"
+#include "ecs/components/AttachmentPoint.h"
 
 
 CollisionKinematic::CollisionKinematic(entt::registry& registry, MapContext& mapContext, SpatialHash& spatialGrid)
@@ -18,11 +19,10 @@ void CollisionKinematic::update(const sf::Time& dt)
 
 void CollisionKinematic::projectileAndEnemyCollision()
 {
-    auto view = mRegistry.view<ColliderComponent, ProjectileCollider>();
+    auto view = mRegistry.view<ColliderComponent, AttachmentPoint, ProjectileCollider>();
     for (auto& entity: view)
     {
-        auto [colliderComponent, projectile] = view.get(entity);
-
+        auto [colliderComponent, attachmentPoint, projectile] = view.get(entity);
         auto colliders = mSpatialGrid.getCollidersInTheSameCell(colliderComponent);
 
         for (auto& collider: colliders)
@@ -30,7 +30,8 @@ void CollisionKinematic::projectileAndEnemyCollision()
             if (isColliderIntersectingEnemy(colliderComponent, collider))
             {
                 colliderComponent.isHit = true;
-
+                collider->isHit = true;
+                break;
             }
         }
     }

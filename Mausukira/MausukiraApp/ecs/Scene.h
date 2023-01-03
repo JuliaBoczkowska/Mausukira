@@ -11,6 +11,7 @@
 #include "entt/entt.hpp"
 #include "dungeon/map/MapContext.h"
 #include "ecs/systems/CollisionSystem/SpatialHashing/SpatialHash.h"
+#include "states_stack/LevelInfo.h"
 
 class Entity;
 
@@ -18,14 +19,18 @@ class SharedContext;
 
 class Player;
 
+class Map;
+
 class Scene
 {
 public:
-    Scene(SharedContext& sharedContext, MapContext& mapContext);
+    Scene(SharedContext& sharedContext, sf::View& view);
 
     ~Scene() = default;
 
     void buildScene();
+
+    void nextLevel();
 
     void update(const sf::Time& deltaTime);
 
@@ -41,16 +46,20 @@ public:
 
     /** Registry is container for all components and registries. Contains component data and entity
      * ID's*/
-    entt::registry mRegistry;
+    std::unique_ptr<entt::registry> mRegistry;
     friend Entity;
     friend Player;
     friend EnemySpawner;
 private:
     SharedContext& mSharedContext;
-    SystemQueue mSystemQueue;
-    MapContext& mMapContext;
-    EnemySpawner mEnemySpawner;
+    std::unique_ptr<SystemQueue> mSystemQueue;
+    std::unique_ptr<EnemySpawner> mEnemySpawner;
     SpatialHash mSpatialGrid;
+    sf::View& mView;
+
+    std::unique_ptr<MapContext> mMapContext;
+    std::unique_ptr<Map> mMap;
+    LevelInfo mLevelInfo;
 };
 
 

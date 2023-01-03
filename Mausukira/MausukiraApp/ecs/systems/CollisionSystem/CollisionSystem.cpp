@@ -5,6 +5,8 @@
 #include "ecs/components/AttachmentPoint.h"
 #include "ecs/systems/CollisionSystem/SpatialHashing/SpatialHash.h"
 #include "ecs/components/PositionComponent.h"
+#include "ecs/components/EntityComponent.h"
+#include "ecs/components/ShootingComponents.h"
 
 CollisionSystem::CollisionSystem(entt::registry& registry, MapContext& mapContext, SpatialHash& spatialGrid)
     : System(registry)
@@ -43,9 +45,9 @@ void CollisionSystem::update(const sf::Time& dt)
 
 void CollisionSystem::postUpdate()
 {
-    mRegistry.view<ColliderComponent, AttachmentPoint>().each(
+    mRegistry.view<ColliderComponent, AttachmentPoint, ProjectileCollider>().each(
         [&](auto entity, ColliderComponent& colliderComponent,
-            AttachmentPoint& attachmentPoint)
+            AttachmentPoint& attachmentPoint, ProjectileCollider& projectileComponent)
         {
             if (colliderComponent.isHit)
             {
@@ -56,5 +58,24 @@ void CollisionSystem::postUpdate()
             }
 
         });
+
+    auto view = mRegistry.view<Relationship, EntityState, HealthComponent, EntityStatistic>();
+    for (auto& entity: view)
+    {
+        auto [relationship, entityState, health, entityStatistic] = view.get(entity);
+        auto& comp = mRegistry.get<Relationship>(entity);
+        auto curr = comp.first_child;
+
+        if (entityState.state == MobState::Died)
+        {
+            mRegistry.destroy(entity);
+            while (curr != entt::null)
+            {
+                auto toDestroy = curr;
+                curr = mRegistry.get<Relationship>(curr).next;
+                mRegistry.destroy(toDestroy);
+            }
+        }
+    }
     mSpatialGrid.clearSpatialGridMap();
 }

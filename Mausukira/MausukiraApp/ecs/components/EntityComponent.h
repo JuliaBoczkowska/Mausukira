@@ -5,16 +5,20 @@
 #include "AttackType.h"
 #include <functional>
 #include <string>
-//
-// enum class EntityState
-//{
-//    Idle,
-//    Walking,
-//    Jumping,
-//    Attacking,
-//    Hurt,
-//    Dying
-//};
+
+enum class MobState
+{
+    Idle,
+    Walking,
+    Attacking,
+    Hurt,
+    Died
+};
+
+struct EntityState
+{
+    MobState state{ MobState::Idle };
+};
 
 struct EntityStatistic
 {
@@ -25,10 +29,7 @@ struct EntityStatistic
     float mMovementSpeed{};
     int mHealth{};
     float mReactionTime{};
-
-    std::function<void(const int& damage)> hit;
-
-    int mDefense;
+    bool isTransitionToNextLevel{ false };
 };
 
 #endif// ENTITYCOMPONENT_H

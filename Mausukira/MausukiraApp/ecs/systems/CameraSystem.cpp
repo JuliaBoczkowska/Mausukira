@@ -2,18 +2,18 @@
 #include "states_stack/SharedContext.h"
 
 CameraSystem::CameraSystem(entt::registry& registry, SharedContext& sharedContext,
-    MapContext& mapContext)
+    MapContext& mapContext, sf::View& view)
     : System(registry)
     , mSharedContext(sharedContext)
     , mWindow(sharedContext.window.mRenderWindow)
+    , mCameraView(view)
 {
     setInitialPlayerPosition(mapContext);
 }
 
 void CameraSystem::setInitialPlayerPosition(const MapContext& mapContext)
 {
-    mCameraView.setCenter(mapContext.centerOfTheFirstRoom.x, mapContext.centerOfTheFirstRoom.y);
-    mCameraView.zoom(2);
+    mCameraView.setCenter(mapContext.mCenterOfTheFirstRoom.x, mapContext.mCenterOfTheFirstRoom.y);
     cameraSetView();
     updateBackground();
 }

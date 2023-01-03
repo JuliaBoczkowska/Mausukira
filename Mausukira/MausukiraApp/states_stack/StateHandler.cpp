@@ -101,6 +101,10 @@ void StateHandler::processQueue()
         if (elem.second == ActionType::PUSH)
         {
             auto state = mStateFactory.find(elem.first)->second();
+            if (!mStates.empty())
+            {
+                state->mView = mStates.back()->mView;
+            }
             mStates.emplace_back(std::move(state));
         }
     }

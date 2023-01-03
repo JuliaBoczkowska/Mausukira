@@ -12,6 +12,12 @@ Map::Map(SharedContext& sharedCtx, MapContext& mapContext)
     , mMapContext(mapContext)
     , mDungeonGenerator(mMapContext)
 {
+
+    generateMap();
+}
+
+void Map::generateMap()
+{
     loadTiles();
     setBackground();
     mDungeonGenerator.procedurallyGenerateMap();
@@ -157,9 +163,6 @@ void Map::loadTiles()
     }
 }
 
-void Map::update(const sf::Time& deltaTime)
-{
-}
 
 void Map::draw(sf::RenderWindow& window)
 {

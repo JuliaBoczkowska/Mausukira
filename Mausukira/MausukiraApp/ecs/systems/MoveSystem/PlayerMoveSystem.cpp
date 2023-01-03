@@ -5,7 +5,6 @@
 #include "ecs/components/PlayerComponent.h"
 #include "ecs/components/VelocityComponent.h"
 #include "ecs/components/PositionComponent.h"
-#include "dungeon/map/Tile/TileHelper.h"
 
 PlayerMoveSystem::PlayerMoveSystem(entt::registry& registry)
     : System(registry)
@@ -72,9 +71,6 @@ void PlayerMoveSystem::update(const sf::Time& dt)
             PositionComponent& positionComponent)
         {
             positionComponent.mPosition += (velocityComponent.mVelocity * mDashSpeed * dt.asSeconds());
-//            auto [x, y] = tile_helper::worldCoordinateToTileCoordinate(positionComponent.mPosition.x,
-//                positionComponent.mPosition.y);
-//            std::cout << x << " " << y << std::endl;
         });
     mDashSpeed = 1.f;
 }

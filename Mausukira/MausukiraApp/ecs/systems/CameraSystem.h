@@ -12,7 +12,7 @@ class SharedContext;
 class CameraSystem : public System
 {
 public:
-    CameraSystem(entt::registry& registry, SharedContext& sharedContext, MapContext& mapContext);
+    CameraSystem(entt::registry& registry, SharedContext& sharedContext, MapContext& mapContext, sf::View& view);
 
     void handleInput(sf::Event& event) override;
 
@@ -48,7 +48,7 @@ private:
         const sf::Vector2i& newCoordsOfMouse);
 
 private:
-    sf::View mCameraView;
+    sf::View& mCameraView;
     sf::RenderWindow& mWindow;
     SharedContext& mSharedContext;
 

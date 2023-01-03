@@ -3,29 +3,46 @@
 #include "SFML/Graphics/ConvexShape.hpp"
 #include "dungeon/map/Constants.h"
 
-static constexpr auto PI = 3.141592653589793238463;
-
 std::set<Edge>& DelaunayTriangulation::triangulation(std::list<Room>& rooms)
 {
-    delaunayEdges.setPrimitiveType(sf::Triangles);
-    triangleLines.setPrimitiveType(sf::Lines);
+
+    std::vector<p2t::Point*> polyline;
+    sf::VertexArray triangleLines;
+    sf::VertexArray delaunayEdges;
+    std::set<Edge> triangleEdges;
+
+    mTriangleEdges = triangleEdges;
+    mDelaunayEdges = delaunayEdges;
+    mTriangleLines = triangleLines;
+
+    mDelaunayEdges.setPrimitiveType(sf::Triangles);
+    mTriangleLines.setPrimitiveType(sf::Lines);
     sortRoomsCoordinatesClockwiseOrder(rooms);
+
+    auto last = std::unique(rooms.begin(), rooms.end());
+    rooms.erase(last, rooms.end());
 
     for (auto it = rooms.begin(); it != rooms.end(); ++it)
     {
         polyline.push_back(new p2t::Point(it->mCenter.x, it->mCenter.y));
     }
 
-    p2t::CDT cdt(polyline);
-    cdt.Triangulate();
-    const auto triangulatedMap = cdt.GetTriangles();
-
-    delaunayEdges.resize(triangulatedMap.size() * 3);
-    triangleLines.resize(triangulatedMap.size() * 3 * 3);
-    populateTrianglesVertexArray(triangulatedMap);
-    populateLinesVertexArray();
-    ifNoEdgesTryAgain(rooms);
-    return mTriangleEdges;
+    try
+    {
+        p2t::CDT cdt(polyline);
+        cdt.Triangulate();
+        const auto triangulatedMap = cdt.GetTriangles();
+        mDelaunayEdges.resize(triangulatedMap.size() * 3);
+        mTriangleLines.resize(triangulatedMap.size() * 3 * 3);
+        populateTrianglesVertexArray(triangulatedMap);
+        populateLinesVertexArray();
+        ifNoEdgesTryAgain(rooms);
+        return mTriangleEdges;
+    }
+    catch (...)
+    {
+        triangulation(rooms);
+    }
 }
 
 void DelaunayTriangulation::ifNoEdgesTryAgain(std::list<Room>& rooms)
@@ -102,7 +119,7 @@ bool DelaunayTriangulation::isValid(sf::Vector2i point)
 
 void DelaunayTriangulation::populateLinesVertexArray()
 {
-    for (int arrayIndex = 0, vertexIndex = 0; vertexIndex < delaunayEdges.getVertexCount();)
+    for (int arrayIndex = 0, vertexIndex = 0; vertexIndex < mDelaunayEdges.getVertexCount();)
     {
         auto first = vertexIndex;
         auto second = vertexIndex + 1;
@@ -110,29 +127,29 @@ void DelaunayTriangulation::populateLinesVertexArray()
         vertexIndex = vertexIndex + 3;
 
         // 1 -> 2 triangle edge
-        triangleLines[arrayIndex] = sf::Vertex(
-            sf::Vector2f(delaunayEdges[first].position.x, delaunayEdges[first].position.y));
-        triangleLines[++arrayIndex] = sf::Vertex(
-            sf::Vector2f(delaunayEdges[second].position.x, delaunayEdges[second].position.y));
+        mTriangleLines[arrayIndex] = sf::Vertex(
+            sf::Vector2f(mDelaunayEdges[first].position.x, mDelaunayEdges[first].position.y));
+        mTriangleLines[++arrayIndex] = sf::Vertex(
+            sf::Vector2f(mDelaunayEdges[second].position.x, mDelaunayEdges[second].position.y));
 
         // 1 -> 3 triangle edge
-        triangleLines[++arrayIndex] = sf::Vertex(
-            sf::Vector2f(delaunayEdges[first].position.x, delaunayEdges[first].position.y));
-        triangleLines[++arrayIndex] = sf::Vertex(
-            sf::Vector2f(delaunayEdges[third].position.x, delaunayEdges[third].position.y));
+        mTriangleLines[++arrayIndex] = sf::Vertex(
+            sf::Vector2f(mDelaunayEdges[first].position.x, mDelaunayEdges[first].position.y));
+        mTriangleLines[++arrayIndex] = sf::Vertex(
+            sf::Vector2f(mDelaunayEdges[third].position.x, mDelaunayEdges[third].position.y));
 
 
         // 2 -> 3 triangle edge
-        triangleLines[++arrayIndex] = sf::Vertex(
-            sf::Vector2f(delaunayEdges[second].position.x, delaunayEdges[second].position.y));
-        triangleLines[++arrayIndex] = sf::Vertex(
-            sf::Vector2f(delaunayEdges[third].position.x, delaunayEdges[third].position.y));
+        mTriangleLines[++arrayIndex] = sf::Vertex(
+            sf::Vector2f(mDelaunayEdges[second].position.x, mDelaunayEdges[second].position.y));
+        mTriangleLines[++arrayIndex] = sf::Vertex(
+            sf::Vector2f(mDelaunayEdges[third].position.x, mDelaunayEdges[third].position.y));
         ++arrayIndex;
     }
 
-    for (int arrayIndex = 0; arrayIndex < triangleLines.getVertexCount(); ++arrayIndex)
+    for (int arrayIndex = 0; arrayIndex < mTriangleLines.getVertexCount(); ++arrayIndex)
     {
-        triangleLines[arrayIndex].color = sf::Color::Green;
+        mTriangleLines[arrayIndex].color = sf::Color::Green;
     }
 }
 
@@ -166,7 +183,7 @@ void DelaunayTriangulation::populateTrianglesVertexArray(
     {
         for (size_t vertexIndex = 0; vertexIndex < 3; ++vertexIndex)
         {
-            delaunayEdges[arrayIndex] =
+            mDelaunayEdges[arrayIndex] =
                 sf::Vertex(sf::Vector2f(triangulatedTriangle->GetPoint(vertexIndex)->x,
                     triangulatedTriangle->GetPoint(vertexIndex)->y));
             ++arrayIndex;
@@ -186,6 +203,6 @@ bool DelaunayTriangulation::areEdgesValid(Edge& first, Edge& second, Edge& third
 void DelaunayTriangulation::draw(sf::RenderWindow& window)
 {
 #if DEBUG_ROOM_GENERATION
-    window.draw(triangleLines);
+    window.draw(mTriangleLines);
 #endif
 }

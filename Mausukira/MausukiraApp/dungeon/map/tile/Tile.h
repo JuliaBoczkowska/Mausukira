@@ -16,6 +16,16 @@ struct Tile
 
     ~Tile() = default;
 
+    Tile& operator=(Tile other)
+    {
+        std::swap(mX, other.mX);
+        std::swap(mY, other.mY);
+        std::swap(mTileModel, other.mTileModel);
+        std::swap(mSprite, other.mSprite);
+        std::swap(mRectangle, other.mRectangle);
+        std::swap(mColliding, other.mColliding);
+    }
+
     void draw(sf::RenderWindow& window);
 
     void setupCollisionBox();

@@ -5,6 +5,7 @@
 #include "states_stack/SharedContext.h"
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "State.h"
+#include "states_stack/LevelInfo.h"
 
 class GameState : public State
 {
@@ -24,9 +25,7 @@ private:
 
 private:
     entt::registry registry;
-    MapContext mMapContext;
-    Scene mScene;
-    Map mMap;
+    std::unique_ptr<Scene> mScene;
 };
 
 #endif// GAMESTATE_H

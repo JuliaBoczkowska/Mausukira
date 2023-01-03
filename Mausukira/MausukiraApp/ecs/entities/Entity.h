@@ -2,7 +2,6 @@
 #define ENTITY_H
 
 #include "entt/entt.hpp"
-#include "ecs/Scene.h"
 
 class Entity
 {
@@ -25,10 +24,10 @@ public:
     }
 
 
-    template<typename T>
-    void assignComponent()
+    template<typename T, typename... Args>
+    void assignComponent(Args&& ... args)
     {
-        mRegistry.emplace<T>(mEntity);
+        mRegistry.emplace<T>(mEntity, std::forward<Args>(args)...);
     }
 
     entt::entity& getEntity()

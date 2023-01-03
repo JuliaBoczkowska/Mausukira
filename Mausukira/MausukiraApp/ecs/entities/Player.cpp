@@ -7,9 +7,9 @@
 
 Player::Player(Scene* scene)
 {
-    Entity colliderBody{ scene->mRegistry.create(), &scene->mRegistry };
-    Entity colliderFoot = { scene->mRegistry.create(), &scene->mRegistry };
-    Entity player{ scene->mRegistry.create(), &scene->mRegistry };
+    Entity colliderBody{ scene->mRegistry->create(), scene->mRegistry.get() };
+    Entity colliderFoot = { scene->mRegistry->create(), scene->mRegistry.get() };
+    Entity player{ scene->mRegistry->create(), scene->mRegistry.get() };
 
     scene->mSharedContext.textureManager.load("PLAYER", "resources/tiles/hero.png");
     sf::Sprite sprite = SpriteSheetHandler::extractSpriteFromTileSheet(0,
@@ -25,7 +25,7 @@ Player::Player(Scene* scene)
 
 void Player::setupWeapon(Scene* scene, Entity& player) const
 {
-    Entity weapon = { scene->mRegistry.create(), &scene->mRegistry };
+    Entity weapon = { scene->mRegistry->create(), scene->mRegistry.get() };
     const sf::Vector2f& offsetFromParent{ 14.f, 25.f };
     weapon.addComponent<AttachmentPoint>(player.getEntity(), offsetFromParent);
     weapon.addComponent<PositionComponent>(
@@ -39,7 +39,7 @@ sf::Sprite& Player::setupPlayer(Scene* scene, sf::Sprite& sprite, Entity& player
     player.addComponent<HealthComponent>(100);
     player.addComponent<SpriteComponent>(sprite);
     player.addComponent<PositionComponent>(
-        sf::Vector2f(scene->mMapContext.centerOfTheFirstRoom.x, scene->mMapContext.centerOfTheFirstRoom.y));
+        sf::Vector2f(scene->mMapContext->mCenterOfTheFirstRoom.x, scene->mMapContext->mCenterOfTheFirstRoom.y));
     player.assignComponent<PlayerComponent>();
     player.addComponent<ScoreComponent>();
     player.addComponent<VelocityComponent>();
@@ -57,7 +57,7 @@ Player::setupColliders(const sf::Sprite& sprite, Scene*& scene, Entity& collider
 
 void Player::setupColliderRelationship(Entity& player, Entity& colliderFoot, Entity& colliderBody) const
 {
-    player.addComponent<Relationship>(size_t{ 2 }, colliderBody.getEntity(), entt::null, entt::null);
+    player.addComponent<Relationship>(size_t{ 2 }, colliderBody.getEntity(), entt::null, colliderBody.getEntity());
     colliderBody.addComponent<Relationship>(size_t{ 0 }, entt::null, player.getEntity(), colliderFoot.getEntity(),
         player.getEntity(),
         sf::Vector2f{ 0.f, 0.f });

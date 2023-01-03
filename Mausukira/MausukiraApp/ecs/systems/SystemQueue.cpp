@@ -20,11 +20,17 @@ void SystemQueue::update(const sf::Time& dt)
         system->update(dt);
     }
 
+
+}
+
+void SystemQueue::postUpdate(const sf::Time& dt)
+{
     for (auto& system: mSystemsQueue)
     {
         system->postUpdate();
     }
 }
+
 
 void SystemQueue::draw(sf::RenderWindow& window)
 {

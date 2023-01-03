@@ -8,6 +8,7 @@
 #include "ecs/components/PlayerComponent.h"
 #include "ecs/components/ShootingComponents.h"
 #include "ecs/systems/CollisionSystem/SpatialHashing/SpatialHash.h"
+#include "ecs/components/DoorBodyComponent.h"
 
 CollisionStatic::CollisionStatic(entt::registry& registry, MapContext& mapContext, SpatialHash& spatialGrid)
     : System(registry)
@@ -20,6 +21,16 @@ CollisionStatic::CollisionStatic(entt::registry& registry, MapContext& mapContex
 void CollisionStatic::update(const sf::Time& dt)
 {
     playerAndWallCollision(dt);
+    auto view = mRegistry.view<DoorBodyComponent>();
+    for (auto& entity: view)
+    {
+
+        auto [doorBody] = view.get(entity);
+        if (isColliderAndRectShapeColliding(*mPlayerCollider, doorBody.doorShape))
+        {
+            doorBody.changeLevel = true;
+        }
+    }
     bulletAndWallCollision(dt);
 }
 
@@ -38,9 +49,13 @@ void CollisionStatic::playerAndWallCollision(const sf::Time& dt)
             auto& collider = mRegistry.get<ColliderComponent>(curr);
             if (collider.mCollisionType == CollisionBox::CollisionType::FOOT)
             {
+                mPlayerCollider = &collider;
                 auto futurePositionToCheck = position + velocity * dt.asSeconds();
 
                 collider.mRectangle.setPosition(futurePositionToCheck);
+                auto prev = mRegistry.get<Relationship>(curr).prev;
+                auto& bodyCollider = mRegistry.get<ColliderComponent>(prev);
+                bodyCollider.mRectangle.setPosition(futurePositionToCheck);
 
                 if (checkIfIntersects(collider, futurePositionToCheck))
                 {
@@ -86,7 +101,7 @@ void CollisionStatic::bulletAndWallCollision(const sf::Time& dt)
                 map_utils::getSurroundingTileCollisionBoxes(futurePositionToCheck, mMapContext.mTileMap);
             for (auto& collider: colliders)
             {
-                if (isBulletCollidingWall(colliderComponent, collider))
+                if (isColliderAndRectShapeColliding(colliderComponent, *collider))
                 {
                     colliderComponent.isHit = true;
                 }
@@ -94,9 +109,10 @@ void CollisionStatic::bulletAndWallCollision(const sf::Time& dt)
         });
 }
 
-bool CollisionStatic::isBulletCollidingWall(ColliderComponent& colliderComponent, sf::RectangleShape* const& collider)
+bool
+CollisionStatic::isColliderAndRectShapeColliding(ColliderComponent& colliderComponent, sf::RectangleShape& collider)
 {
-    sf::FloatRect colliderRect{ collider->getGlobalBounds() };
+    sf::FloatRect colliderRect{ collider.getGlobalBounds() };
     sf::FloatRect colliderComponentRect{ colliderComponent.mRectangle.getGlobalBounds() };
     return (colliderRect.intersects(colliderComponentRect) || isBulletOutOfBounds(colliderComponent));
 }

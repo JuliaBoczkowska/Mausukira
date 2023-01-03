@@ -11,5 +11,7 @@
 #include "PositionComponent.h"
 #include "VelocityComponent.h"
 #include "AttachmentPoint.h"
+#include "ShootingComponents.h"
+#include "DoorBodyComponent.h"
 
 #endif// COMPONENTS_H

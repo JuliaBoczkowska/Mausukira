@@ -11,16 +11,11 @@ public:
 
     void setPosition(const sf::Vector2f& position);
 
-    void draw(sf::RenderWindow& window);
-
-    bool isDead();
-
-    float mCurrentHealth{ 0 };
-    float mHealthMax{ 0 };
+    float mCurrentHealth{ 0.f };
+    float mHealthMax{ 0.f };
     float mHpBarWidth{ 16.f };
     sf::RectangleShape mHealthBarRect;
     sf::RectangleShape mHealthBarOutline;
 };
-
 
 #endif// HEALTHCOMPONENT_H

@@ -28,6 +28,11 @@ public:
 
     bool collide(Room& otherRom);
 
+    bool operator==(Room const& r2) const
+    {
+        return (this->mCenter == r2.mCenter) && (this->mCenter == r2.mCenter);
+    }
+
 public:
     static sf::Vector2f centerOfAllPoints;
     sf::Vector2i mLocation;

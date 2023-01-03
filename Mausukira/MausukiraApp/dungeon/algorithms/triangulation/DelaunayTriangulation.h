@@ -37,9 +37,8 @@ private:
 
 private:
     /** Triangles (consisting of vertexes) building the current figure. */
-    sf::VertexArray delaunayEdges;
-    sf::VertexArray triangleLines;
-    std::vector<p2t::Point*> polyline;
+    sf::VertexArray mDelaunayEdges;
+    sf::VertexArray mTriangleLines;
     std::set<Edge> mTriangleEdges;
 };
 

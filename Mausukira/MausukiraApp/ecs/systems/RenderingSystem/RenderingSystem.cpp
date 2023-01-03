@@ -1,8 +1,6 @@
 #include "RenderingSystem.h"
-#include "ecs/components/ColliderComponent.h"
-#include "ecs/components/HealthComponent.h"
-#include "ecs/components/SpriteComponent.h"
-#include "ecs/components/ShootingComponents.h"
+#include "ecs/components/Components.h"
+
 
 RenderingSystem::RenderingSystem(entt::registry& registry, MapContext& mapContext)
     : System(registry)
@@ -20,7 +18,8 @@ void RenderingSystem::draw(sf::RenderWindow& window)
             {
                 window.draw(sprite);
             }
-            healthComponent.draw(window);
+            window.draw(healthComponent.mHealthBarOutline);
+            window.draw(healthComponent.mHealthBarRect);
         });
 
     mRegistry.view<ColliderComponent>().each(
@@ -39,5 +38,22 @@ void RenderingSystem::draw(sf::RenderWindow& window)
         [&](WeaponComponent& weaponComponent)
         {
             window.draw(weaponComponent.mWeapon);
+        });
+
+    mRegistry.view<ScoreComponent>().each(
+        [&](ScoreComponent& scoreComponent)
+        {
+            auto oldView = window.getView();
+            window.setView(window.getDefaultView());
+            window.draw(scoreComponent.counter);
+            window.draw(scoreComponent.rectangle);
+
+            window.setView(oldView);
+        });
+
+    mRegistry.view<DoorBodyComponent>().each(
+        [&](DoorBodyComponent& doorBodyComponent)
+        {
+            window.draw(doorBodyComponent.doorShape);
         });
 }
