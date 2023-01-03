@@ -34,7 +34,7 @@ void PlayerMoveSystem::handlePlayerDash(const sf::Event& event)
     {
         if (event.key.code == sf::Keyboard::LShift)
         {
-            mDashSpeed = 20.f;
+            dashTimer = DASH_DURATION;
         }
     }
 }
@@ -70,9 +70,31 @@ void PlayerMoveSystem::update(const sf::Time& dt)
         [&](VelocityComponent& velocityComponent,
             PositionComponent& positionComponent)
         {
-            positionComponent.mPosition += (velocityComponent.mVelocity * mDashSpeed * dt.asSeconds());
+            if (dashTimer > 0)
+            {
+                performDash(dt, velocityComponent, positionComponent);
+            }
+            else
+            {
+                positionComponent.mPosition += (velocityComponent.mVelocity * dt.asSeconds());
+            }
         });
-    mDashSpeed = 1.f;
+}
+
+void PlayerMoveSystem::performDash(const sf::Time& dt, const VelocityComponent& velocityComponent,
+    PositionComponent& positionComponent)
+{
+    /** Calculate the percentage of the dash that has elapsed */
+    float t = 1.0f - (dashTimer / DASH_DURATION);
+
+    /** Use a smoothed easing function to smoothly decelerate the dash */
+    float speed = DASH_SPEED * (1.0f - cos(t * M_PI)) / 2.0f;
+
+    /** Update the player position based on the calculated speed */
+    positionComponent.mPosition += (velocityComponent.mVelocity * speed * dt.asSeconds());
+
+    /** Decrease the dash timer */
+    dashTimer -= dt.asSeconds();
 }
 
 sf::Vector2f& PlayerMoveSystem::preventHigherSpeedOnDiagonalMov(sf::Vector2f& velocity) const

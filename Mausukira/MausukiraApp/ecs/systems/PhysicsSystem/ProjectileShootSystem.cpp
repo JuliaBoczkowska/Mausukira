@@ -47,6 +47,8 @@ void ProjectileShootSystem::calculateDirectionalVector(const auto& positionCompo
 {
     mWeaponCenter = positionComponent.mPosition;
     mMouseCoordinates = mRenderWindow.mapPixelToCoords((sf::Mouse::getPosition(mRenderWindow)));
+
+    /** Substracting mouse position vector for weapon center gives us*/
     aimDirection = mMouseCoordinates - mWeaponCenter;
 }
 

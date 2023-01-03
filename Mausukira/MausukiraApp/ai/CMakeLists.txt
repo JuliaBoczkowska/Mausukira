@@ -1,2 +1,3 @@
 target_sources(MausukiraApp PRIVATE
-        AiController.cpp)
+        AiController.cpp
+        SteeringBehaviour.cpp)

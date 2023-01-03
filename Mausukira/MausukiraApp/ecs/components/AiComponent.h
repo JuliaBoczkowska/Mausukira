@@ -5,11 +5,11 @@
 
 class PositionComponent;
 
-class AiComponent
+struct AiComponent
 {
     int coverSearchRadius;
     bool playerDetected;
-    PositionComponent* mPlayerPosition;
+    PositionComponent* mPlayerPositionComponent;
 };
 
 

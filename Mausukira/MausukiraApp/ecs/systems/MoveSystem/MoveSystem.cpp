@@ -1,6 +1,5 @@
 #include "MoveSystem.h"
 #include "ecs/components/SpriteComponent.h"
-#include "ecs/components/ColliderComponent.h"
 #include "ecs/components/HealthComponent.h"
 #include "ecs/components/PositionComponent.h"
 #include "ecs/components/ShootingComponents.h"
