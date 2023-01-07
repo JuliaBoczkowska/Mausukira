@@ -1,11 +1,11 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-#include "dungeon/map/Map.h"
-#include "states_stack/SharedContext.h"
-#include "SFML/Graphics/RectangleShape.hpp"
 #include "State.h"
-#include "states_stack/LevelInfo.h"
+#include "ecs/Scene.h"
+#include "entt/entity/registry.hpp"
+
+class Scene;
 
 class GameState : public State
 {
@@ -25,7 +25,7 @@ private:
 
 private:
     entt::registry registry;
-    std::unique_ptr<Scene> mScene;
+    Scene mScene;
 };
 
 #endif// GAMESTATE_H

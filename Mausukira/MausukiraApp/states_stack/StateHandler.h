@@ -2,6 +2,7 @@
 #define STATEHANDLER_H
 
 #include "SharedContext.h"
+#include "Window.h"
 #include "states/State.h"
 #include <functional>
 #include <unordered_map>
@@ -19,15 +20,21 @@ public:
     using States = std::vector<std::unique_ptr<State>>;
 
     StateHandler(SharedContext& sharedCtx);
+
     ~StateHandler() = default;
 
     void handleInput(sf::Event& event);
+
     void update(const sf::Time& dt);
+
     void draw();
 
     void processQueue();
+
     void switchTo(const StateType& stateType);
+
     void removeState(const StateType& stateType);
+
     SharedContext& context();
 
     template<class State, typename... Args>

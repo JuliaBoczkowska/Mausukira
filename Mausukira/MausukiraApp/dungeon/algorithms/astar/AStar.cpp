@@ -4,17 +4,16 @@
 #include <algorithm>
 #include <stdexcept>
 
-
 AStar::AStar(GeneratedMap& map)
     : mMap((map))
 {
 }
 
-void AStar::checkTilesAround(const sf::Vector2i& cell, const PathCost& costOfTile)
+void AStar::checkTilesAround(const sf::Vector2i& tile, const PathCost& costOfTile)
 {
     for (int neighbourIndex = 0; neighbourIndex < 4; ++neighbourIndex)
     {
-        if (const auto closeNode = cell + tile_helper::neighbouringFourTiles[neighbourIndex];
+        if (const auto closeNode = tile + tile_helper::neighbouringFourTiles[neighbourIndex];
             tile_helper::isInBorders(closeNode))
         {
             if (closeNode == mFinalPoint)
@@ -23,20 +22,17 @@ void AStar::checkTilesAround(const sf::Vector2i& cell, const PathCost& costOfTil
                 return;
             }
 
-            auto distanceToNeighbouringCell{ 0 };
-            switch (mMap[cell.x][cell.y])
+            auto distanceToNeighbouringCell{0};
+            switch (mMap[tile.x][tile.y])
             {
-                case CellType::ROOM: distanceToNeighbouringCell = 10;
-                    break;
-                case CellType::NONE: distanceToNeighbouringCell = 5;
-                    break;
-                case CellType::HALL: distanceToNeighbouringCell = 1;
-                    break;
+                case CellType::ROOM: distanceToNeighbouringCell = 10; break;
+                case CellType::NONE: distanceToNeighbouringCell = 5; break;
+                case CellType::HALL: distanceToNeighbouringCell = 1; break;
             }
 
             auto costOfCloseNode =
                 PathCost(costOfTile.mDistanceFromStart + distanceToNeighbouringCell,
-                    std::pair<sf::Vector2i, sf::Vector2i>{ closeNode, mFinalPoint }, cell);
+                         std::pair<sf::Vector2i, sf::Vector2i>{closeNode, mFinalPoint}, tile);
 
             if (auto unvisitedNode = mVisitedTiles.find(closeNode);
                 unvisitedNode == mVisitedTiles.end())
@@ -47,16 +43,27 @@ void AStar::checkTilesAround(const sf::Vector2i& cell, const PathCost& costOfTil
     }
 }
 
-void AStar::drawFinalPathOnMap(const sf::Vector2i& lastHandledCell)
+void AStar::drawFinalPathOnMap(const sf::Vector2i& lastHandledTile)
 {
-    setCellTypeOnMap(lastHandledCell, CellType::ROOM);
-    for (auto tileItCameFrom = mVisitedTiles.at(lastHandledCell).mParentTileCoords;
+    setOnMapTileType(lastHandledTile, CellType::ROOM);
+    for (auto tileItCameFrom = mVisitedTiles.at(lastHandledTile).mParentTileCoords,
+              lastTile = lastHandledTile;
          tileItCameFrom != mVisitedTiles.at(tileItCameFrom).mParentTileCoords;
-         tileItCameFrom = mVisitedTiles.at(tileItCameFrom).mParentTileCoords)
+         lastTile = tileItCameFrom,
+              tileItCameFrom = mVisitedTiles.at(tileItCameFrom).mParentTileCoords)
     {
-        setCellTypeOnMap(tileItCameFrom, CellType::ROOM);
+        auto lastIdx = lastTile - tileItCameFrom;
+        if (lastIdx.x == -1 || lastIdx.x == 1)
+        {
+            setOnMapTileType(sf::Vector2i{tileItCameFrom.x, tileItCameFrom.y + 1}, CellType::ROOM);
+        }
+        if (lastIdx.y == -1 || lastIdx.y == 1)
+        {
+            setOnMapTileType(sf::Vector2i{tileItCameFrom.x + 1, tileItCameFrom.y}, CellType::ROOM);
+        }
+        setOnMapTileType(tileItCameFrom, CellType::ROOM);
     }
-    setCellTypeOnMap(mStartPoint, CellType::ROOM);
+    setOnMapTileType(mStartPoint, CellType::ROOM);
 }
 
 void AStar::updateMapAroundTile(const sf::Vector2i& centerOfTileCoordinates, const PathCost& cost)
@@ -73,14 +80,14 @@ void AStar::updateMapAroundTile(const sf::Vector2i& centerOfTileCoordinates, con
 }
 
 GeneratedMap AStar::generateHallway(const sf::Vector2i& startingPoint,
-    const sf::Vector2i& finalPoint)
+                                    const sf::Vector2i& finalPoint)
 {
     mFinalPoint = finalPoint;
     mStartPoint = startingPoint;
     updateMapAroundTile(startingPoint,
-        PathCost{ 0,
-                  std::pair<sf::Vector2i, sf::Vector2i>{ startingPoint, mFinalPoint },
-                  startingPoint });
+                        PathCost{0,
+                                 std::pair<sf::Vector2i, sf::Vector2i>{startingPoint, mFinalPoint},
+                                 startingPoint});
 
     for (auto it = mUnvisitedTiles.begin(); it != mUnvisitedTiles.end();
          it = mUnvisitedTiles.begin())
@@ -113,12 +120,7 @@ void AStar::reInitializeAlgorithm()
     isFinalPointFound = false;
 }
 
-CellType AStar::getCellType(const sf::Vector2i& cell)
-{
-    return static_cast<CellType>(mMap[cell.x][cell.y]);
-}
-
-void AStar::setCellTypeOnMap(const sf::Vector2i& tile, CellType type)
+void AStar::setOnMapTileType(const sf::Vector2i& tile, CellType type)
 {
     mMap[tile.x][tile.y] = type;
 }

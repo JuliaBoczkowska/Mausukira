@@ -19,15 +19,13 @@ public:
 private:
     void updateMapAroundTile(const sf::Vector2i& centerOfTileCoordinates, const PathCost& cost);
 
-    void checkTilesAround(const sf::Vector2i& cell, const PathCost& costOfTile);
+    void checkTilesAround(const sf::Vector2i& tile, const PathCost& costOfTile);
 
-    void drawFinalPathOnMap(const sf::Vector2i& lastHandledCell);
+    void drawFinalPathOnMap(const sf::Vector2i& lastHandledTile);
 
-    void setCellTypeOnMap(const sf::Vector2i& tile, CellType type);
+    void setOnMapTileType(const sf::Vector2i& tile, CellType type);
 
     void reInitializeAlgorithm();
-
-    CellType getCellType(const sf::Vector2i& cell);
 
 private:
     sf::Vector2i mStartPoint;

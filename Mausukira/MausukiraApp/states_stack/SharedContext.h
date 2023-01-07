@@ -1,17 +1,15 @@
 #ifndef SHAREDCONTEXT_H
 #define SHAREDCONTEXT_H
 
-#include "../Window.h"
-#include "ecs/Scene.h"
-#include "../utils/TextureManager.h"
+#include "SFML/Graphics/Sprite.hpp"
+
+class Window;
+
+class TextureManager;
 
 struct SharedContext
 {
-    SharedContext(Window& window, TextureManager& textureManager)
-        : window(window)
-        , textureManager(textureManager)
-    {
-    }
+    SharedContext(Window& window, TextureManager& textureManager);
 
     Window& window;
     TextureManager& textureManager;
