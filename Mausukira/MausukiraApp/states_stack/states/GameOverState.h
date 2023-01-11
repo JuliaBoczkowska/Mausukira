@@ -21,7 +21,7 @@ public:
 
 private:
     void setupPlayAgainButton();
-    void setupQuitButton();
+    void setupConntinueButton();
     void setupMainMenuButton();
     void setupText();
 

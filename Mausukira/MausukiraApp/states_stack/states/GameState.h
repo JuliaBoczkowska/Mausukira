@@ -26,6 +26,7 @@ private:
 private:
     entt::registry registry;
     Scene mScene;
+    bool isPlayerDead{false};
 };
 
 #endif// GAMESTATE_H

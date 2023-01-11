@@ -2,13 +2,17 @@
 #include "states/GameState.h"
 #include "states/MenuState.h"
 #include "states/PauseState.h"
+#include "states_stack/states/GameOverState.h"
+#include "states_stack/states/ScoreBoardState.h"
 
 StateHandler::StateHandler(SharedContext& sharedCtx)
     : mSharedCtx(sharedCtx)
 {
     registerState<MenuState>(StateType::MENU_STATE);
     registerState<GameState>(StateType::GAME_STATE);
+    registerState<GameOverState>(StateType::GAME_OVER_STATE, true);
     registerState<PauseState>(StateType::PAUSE_STATE, true);
+    registerState<ScoreBoardState>(StateType::SCORE_STATE);
 
     std::unique_ptr<State> firstState = mStateFactory.find(StateType::MENU_STATE)->second();
     mStates.push_back(std::move(firstState));

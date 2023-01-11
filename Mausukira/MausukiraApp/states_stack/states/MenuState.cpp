@@ -6,6 +6,7 @@
 MenuState::MenuState(StateHandler& stateManager, StateType type, sf::View view)
     : State(stateManager, type, view)
     , gui(context().window())
+    , theme("resources/BabyBlue.txt")
 {
     setupBackground();
     setupStartButton();
@@ -17,7 +18,7 @@ void MenuState::setupText()
 {
     auto size = context().window().getSize();
     mGameTitle.setColor(sf::Color::White);
-    mGameTitle.setCharacterSize(30);
+    mGameTitle.setCharacterSize(50);
     font.loadFromFile("resources/arial.ttf");
     mGameTitle.setFont(font);
     mGameTitle.setString({"Roguelike game"});
@@ -30,8 +31,8 @@ void MenuState::setupText()
 void MenuState::setupQuitButton()
 {
     auto quit = tgui::Button::create("Quit");
-    quit->setSize({"40%", "10%"});
-    quit->setPosition({"30%", "60%"});
+    quit->setSize({"30%", "10%"});
+    quit->setPosition({"35%", "55%"});
     quit->onPress(
         [this]()
         {
@@ -43,8 +44,8 @@ void MenuState::setupQuitButton()
 void MenuState::setupStartButton()
 {
     auto start = tgui::Button::create("New Game");
-    start->setSize({"40%", "10%"});
-    start->setPosition({"30%", "40%"});
+    start->setSize({"30%", "10%"});
+    start->setPosition({"35%", "40%"});
     start->onPress(
         [this]()
         {
@@ -72,6 +73,7 @@ void MenuState::update(const sf::Time& dt)
 
 void MenuState::draw()
 {
+    context().window().setView(context().window().getDefaultView());
     gui.draw();
     context().window().draw(mGameTitle);
 }

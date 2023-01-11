@@ -24,6 +24,7 @@ private:
     void setupText();
 
 private:
+    tgui::Theme theme;
     tgui::GuiSFML gui;
     sf::Font font;
     sf::Text mGameTitle;

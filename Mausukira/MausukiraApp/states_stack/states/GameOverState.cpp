@@ -1,5 +1,4 @@
 #include "GameOverState.h"
-#include "TGUI/Widgets/Picture.hpp"
 #include "Window.h"
 #include "states_stack/SharedContext.h"
 #include "states_stack/StateHandler.h"
@@ -17,7 +16,7 @@ GameOverState::GameOverState(StateHandler& stateManager, StateType type, sf::Vie
     background.setFillColor(sf::Color(100, 0, 0, 100));
     setupText();
     setupPlayAgainButton();
-    setupQuitButton();
+    setupConntinueButton();
     setupMainMenuButton();
 }
 
@@ -53,7 +52,7 @@ void GameOverState::setupPlayAgainButton()
     gui.add(start);
 }
 
-void GameOverState::setupQuitButton()
+void GameOverState::setupConntinueButton()
 {
     auto continueButton = tgui::Button::create("Continue");
     continueButton->setSize({"30%", "5%"});
@@ -61,7 +60,7 @@ void GameOverState::setupQuitButton()
     continueButton->onPress(
         [this]()
         {
-            mStateHandler.switchTo(StateType::MENU_STATE);
+            mStateHandler.switchTo(StateType::SCORE_STATE);
             mStateHandler.removeState(mStateType);
         });
     gui.add(continueButton);
@@ -85,7 +84,7 @@ void GameOverState::setupText()
 {
     auto size = context().window().getSize();
     mTitle.setColor(sf::Color::White);
-    mTitle.setCharacterSize(30);
+    mTitle.setCharacterSize(60);
     font.loadFromFile("resources/arial.ttf");
     mTitle.setFont(font);
     mTitle.setString({"You lost!"});

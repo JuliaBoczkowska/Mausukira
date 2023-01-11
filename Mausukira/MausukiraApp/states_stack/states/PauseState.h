@@ -19,14 +19,13 @@ public:
 
 private:
     void setupText();
+    void setupBackground();
 
 private:
     sf::Font font;
     sf::Text mPaused;
     sf::Text mText;
-    sf::Sprite overlay;
     sf::RectangleShape background;
-    void setupBackground();
 };
 
 #endif// PAUSESTATE_H

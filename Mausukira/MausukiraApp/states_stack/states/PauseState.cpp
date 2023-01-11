@@ -2,7 +2,7 @@
 #include "states_stack/StateHandler.h"
 
 PauseState::PauseState(StateHandler& stateManager, StateType type, sf::View view,
-    bool isTransparent)
+                       bool isTransparent)
     : State(stateManager, type, view, isTransparent)
 {
     setupBackground();
@@ -25,20 +25,20 @@ void PauseState::setupText()
     mText.setCharacterSize(30);
     font.loadFromFile("resources/arial.ttf");
     mText.setFont(font);
-    mText.setString({ "Paused" });
+    mText.setString({"Paused"});
     mText.setOrigin(mText.getLocalBounds().left + mText.getLocalBounds().width / 2.0f,
-        mText.getLocalBounds().top + mText.getLocalBounds().height / 2.0f);
+                    mText.getLocalBounds().top + mText.getLocalBounds().height / 2.0f);
     mText.setPosition(sf::Vector2f(context().window().getDefaultView().getCenter()));
 
     mPaused.setColor(sf::Color::White);
     mPaused.setCharacterSize(15);
     font.loadFromFile("resources/arial.ttf");
     mPaused.setFont(font);
-    mPaused.setString({ "Click esc to continue" });
+    mPaused.setString({"Click esc to continue"});
     mPaused.setOrigin(mText.getLocalBounds().left + mText.getLocalBounds().width / 2.0f,
-        mText.getLocalBounds().top + mText.getLocalBounds().height / 2.0f);
+                      mText.getLocalBounds().top + mText.getLocalBounds().height / 2.0f);
     mPaused.setPosition(sf::Vector2f(context().window().getDefaultView().getCenter()) +
-                        sf::Vector2f{ -12.f, 50.f });
+                        sf::Vector2f{-12.f, 50.f});
 }
 
 void PauseState::handleInput(sf::Event& event)
@@ -54,13 +54,11 @@ void PauseState::handleInput(sf::Event& event)
 
 void PauseState::update(const sf::Time& dt)
 {
-
 }
 
 void PauseState::draw()
 {
     context().window().draw(background);
-    context().window().draw(overlay);
 
     context().window().setView(context().window().getDefaultView());
     context().window().draw(mPaused);

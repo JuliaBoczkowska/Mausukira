@@ -14,6 +14,8 @@ struct SharedContext
     Window& window;
     TextureManager& textureManager;
     sf::Sprite background;
+    int levelNumber{0};
+    int score{0};
 };
 
 #endif// SHAREDCONTEXT_H

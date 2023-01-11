@@ -3,8 +3,10 @@
 
 struct LevelInfo
 {
-    int levelNumber{ 0 };
-    int changeNextLevel{ false };
+    int levelNumber{};
+    int changeNextLevel{false};
+    int score{0};
+    int playerHealth{20};
 };
 
-#endif //LEVELINFO_H
+#endif// LEVELINFO_H
