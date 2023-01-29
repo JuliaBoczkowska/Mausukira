@@ -1,22 +1,26 @@
 #include "LevelChangeSystem.h"
-#include "ecs/components/EntityComponent.h"
-#include "ecs/entities/Entity.h"
-#include "ecs/components/PositionComponent.h"
-#include "ecs/components/SpriteComponent.h"
 #include "ecs/components/DoorBodyComponent.h"
-#include "states_stack/states/State.h"
+#include "ecs/components/EntityComponent.h"
+#include "ecs/components/HealthComponent.h"
+#include "ecs/components/PositionComponent.h"
+#include "ecs/components/ScoreComponent.h"
+#include "ecs/components/SpriteComponent.h"
+#include "ecs/entities/Entity.h"
 #include "states_stack/LevelInfo.h"
+#include "utils/TextureManager.h"
 
 
-LevelChangeSystem::LevelChangeSystem(entt::registry& registry, LevelInfo& levelInfo)
+LevelChangeSystem::LevelChangeSystem(entt::registry& registry, LevelInfo& levelInfo,
+                                     TextureManager& textureManager)
     : System(registry)
     , mLevelInfo(levelInfo)
+    , mTextureManager(textureManager)
 {
-
 }
 
 void LevelChangeSystem::update(const sf::Time& dt)
 {
+
     whenEnemyIsDeadCreateDoor();
     auto view = mRegistry.view<DoorBodyComponent>();
     for (auto& entity: view)
@@ -25,6 +29,13 @@ void LevelChangeSystem::update(const sf::Time& dt)
 
         if (doorBodyComponent.changeLevel)
         {
+            auto view = mRegistry.view<ScoreComponent, HealthComponent>();
+            for (auto& entity: view)
+            {
+                auto [scoreComponent, healthComponent] = view.get(entity);
+                mLevelInfo.score = scoreComponent.score;
+                mLevelInfo.playerHealth = healthComponent.mCurrentHealth;
+            }
             mLevelInfo.changeNextLevel = true;
         }
     }
@@ -39,11 +50,19 @@ void LevelChangeSystem::whenEnemyIsDeadCreateDoor()
 
         if (entityState.state == MobState::Died)
         {
-            if (entityStatistic.isTransitionToNextLevel)
+            if (entityStatistic.isSelectedAsTransitionToNextLevel)
             {
-                Entity doorToNextLevel = { mRegistry.create(), &mRegistry };
+                Entity doorToNextLevel = {mRegistry.create(), &mRegistry};
                 doorToNextLevel.addComponent<PositionComponent>(positionComponent.mPosition);
-                doorToNextLevel.assignComponent<DoorBodyComponent>(positionComponent.mPosition);
+                doorToNextLevel.assignComponent<DoorBodyComponent>(positionComponent.mPosition,
+                                                                   mTextureManager.get("DOOR"));
+            }
+            else
+            {
+                Entity grave = {mRegistry.create(), &mRegistry};
+                grave.addComponent<PositionComponent>(positionComponent.mPosition);
+                sf::Sprite sprite(mTextureManager.get("GRAVE"));
+                grave.addComponent<SpriteComponent>(sprite);
             }
         }
     }

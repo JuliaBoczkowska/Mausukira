@@ -74,9 +74,10 @@ public:
 
     void draw(sf::RenderWindow& window)
     {
-#if DEBUG_ROOM_GENERATION
-        window.draw(mstLines);
-#endif
+        if (debug::DEBUG_ROOM_GENERATION)
+        {
+            window.draw(mstLines);
+        }
     }
 
     void populateMSTVertexArray()
@@ -90,7 +91,8 @@ public:
             mstLines[arrayIndex] = sf::Vertex(
                 sf::Vector2f(mstEdges[vertexIndex].mVertexA.x, mstEdges[vertexIndex].mVertexA.y));
             mstLines[++arrayIndex] = sf::Vertex(
-                sf::Vector2f(mstEdges[vertexIndex].mVertexB.x, mstEdges[vertexIndex].mVertexB.y));;
+                sf::Vector2f(mstEdges[vertexIndex].mVertexB.x, mstEdges[vertexIndex].mVertexB.y));
+            ;
         }
 
         for (int vertexIndex = 0; vertexIndex < mstLines.getVertexCount(); ++vertexIndex)

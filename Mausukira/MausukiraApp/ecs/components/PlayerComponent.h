@@ -3,6 +3,6 @@
 
 struct PlayerComponent
 {
-    int empty = 0;
+    bool isDead{false};
 };
 #endif// PLAYERCOMPONENT_H

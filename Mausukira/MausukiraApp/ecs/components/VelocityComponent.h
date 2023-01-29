@@ -5,8 +5,16 @@
 
 struct VelocityComponent
 {
-    sf::Vector2f mVelocity{ 0.f, 0.f };
+    /** Maximum velocity of the enemy unit */
+    sf::Vector2f mVelocity{0.f, 0.f};
 };
 
 
-#endif //VELOCITYCOMPONENT_H
+struct ProjectileVelocityComponent
+{
+    /** Maximum velocity of the enemy unit */
+    sf::Vector2f mVelocity{0.f, 0.f};
+};
+
+
+#endif// VELOCITYCOMPONENT_H

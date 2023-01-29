@@ -1,10 +1,10 @@
 #ifndef DELAUNAYTRIANGULATION_H
 #define DELAUNAYTRIANGULATION_H
 
-#include "dungeon/map/room/Room.h"
 #include "../AlgorithmsHelper.h"
-#include "SFML/Graphics/VertexArray.hpp"
 #include "SFML/Graphics/ConvexShape.hpp"
+#include "SFML/Graphics/VertexArray.hpp"
+#include "dungeon/map/room/Room.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <poly2tri/poly2tri.h>
 #include <set>
@@ -36,7 +36,6 @@ private:
     void ifNoEdgesTryAgain(std::list<Room>& rooms);
 
 private:
-    /** Triangles (consisting of vertexes) building the current figure. */
     sf::VertexArray mDelaunayEdges;
     sf::VertexArray mTriangleLines;
     std::set<Edge> mTriangleEdges;

@@ -9,13 +9,11 @@
 struct SpriteComponent
 {
     SpriteComponent(const sf::Sprite& sprite);
-
     SpriteComponent(const std::vector<sf::Sprite>& sprites);
 
-    unsigned mScale{ 2 };
+    unsigned mScale{2};
     std::vector<sf::Sprite> mSprites;
-    sf::Color mColor{ 1, 1, 1 };
-    unsigned mLayer{ 0 };
+    sf::Color mColor{1, 1, 1};
 };
 
 #endif// SPRITECOMPONENT_H

@@ -19,8 +19,6 @@ void SystemQueue::update(const sf::Time& dt)
     {
         system->update(dt);
     }
-
-
 }
 
 void SystemQueue::postUpdate(const sf::Time& dt)

@@ -7,10 +7,16 @@ class Entity
 {
 public:
     Entity(entt::entity handle, entt::registry* registry);
+    Entity& operator=(Entity other)
+    {
+        std::swap(mRegistry, other.mRegistry);
+        std::swap(mEntity, other.mEntity);
+        return *this;
+    }
 
 public:
     template<typename T, typename... Args>
-    T& addComponent(Args&& ... args)
+    T& addComponent(Args&&... args)
     {
         T& component = mRegistry.emplace<T>(mEntity, std::forward<Args>(args)...);
         return component;
@@ -25,7 +31,7 @@ public:
 
 
     template<typename T, typename... Args>
-    void assignComponent(Args&& ... args)
+    void assignComponent(Args&&... args)
     {
         mRegistry.emplace<T>(mEntity, std::forward<Args>(args)...);
     }
@@ -36,7 +42,7 @@ public:
     }
 
 private:
-    entt::entity mEntity{ entt::null };
+    entt::entity mEntity{entt::null};
     entt::registry& mRegistry;
 };
 

@@ -13,15 +13,7 @@ enum class Direction
 
 struct MovableComponent
 {
-    MovableComponent() = default;
-    MovableComponent(const MovableComponent&) = default;
-
-    float mVelocity{1.f};
-    float mVelocityMax;
-    sf::Vector2f mSpeed;
-    sf::Vector2f mAcceleration;
-    Direction mDirection;
+    int id;
 };
-
 
 #endif// MOVABLECOMPONENT_H

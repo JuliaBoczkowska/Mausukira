@@ -1,18 +1,18 @@
 #include "MoveSystem.h"
-#include "ecs/components/SpriteComponent.h"
+#include "ecs/components/AttachmentPoint.h"
 #include "ecs/components/HealthComponent.h"
 #include "ecs/components/PositionComponent.h"
 #include "ecs/components/ShootingComponents.h"
+#include "ecs/components/SpriteComponent.h"
 #include "ecs/components/VelocityComponent.h"
-#include "ecs/components/AttachmentPoint.h"
 
 MoveSystem::MoveSystem(entt::registry& registry)
     : System(registry)
     , mPlayerMoveSystem(registry)
 {
     mRegistry.view<SpriteComponent, HealthComponent, PositionComponent>().each(
-        [&](SpriteComponent& spriteComponent,
-            HealthComponent& healthComponent, PositionComponent& positionComponent)
+        [&](SpriteComponent& spriteComponent, HealthComponent& healthComponent,
+            PositionComponent& positionComponent)
         {
             const auto& position = positionComponent.mPosition;
             for (auto& sprite: spriteComponent.mSprites)
@@ -33,11 +33,11 @@ void MoveSystem::update(const sf::Time& dt)
     mPlayerMoveSystem.update(dt);
 
     // projectile
-    mRegistry.view<ProjectileBody, PositionComponent, VelocityComponent>().each(
-        [&](ProjectileBody& projectileBody,
-            PositionComponent& positionComponent, VelocityComponent velocityComponent)
+    mRegistry.view<ProjectileBody, PositionComponent, ProjectileVelocityComponent>().each(
+        [&](ProjectileBody& projectileBody, PositionComponent& positionComponent,
+            ProjectileVelocityComponent velocityComponent)
         {
-            positionComponent.mPosition += (velocityComponent.mVelocity * dt.asSeconds());
+            positionComponent.mPosition += velocityComponent.mVelocity;
         });
 
     // weapon
@@ -50,13 +50,23 @@ void MoveSystem::update(const sf::Time& dt)
         auto& positionParent = mRegistry.get<PositionComponent>(parent).mPosition;
         weaponPosition.mPosition = positionParent + attachmentPoint.offsetFromParent;
     }
+
+    mRegistry.view<SpriteComponent, PositionComponent>(entt::exclude<HealthComponent>).each(
+        [&](SpriteComponent& spriteComponent, PositionComponent& positionComponent)
+        {
+            const auto& position = positionComponent.mPosition;
+            for (auto& sprite: spriteComponent.mSprites)
+            {
+                sprite.setPosition(position);
+            }
+        });
 }
 
 void MoveSystem::postUpdate()
 {
     mRegistry.view<SpriteComponent, HealthComponent, PositionComponent>().each(
-        [&](SpriteComponent& spriteComponent,
-            HealthComponent& healthComponent, PositionComponent& positionComponent)
+        [&](SpriteComponent& spriteComponent, HealthComponent& healthComponent,
+            PositionComponent& positionComponent)
         {
             const auto& position = positionComponent.mPosition;
             healthComponent.setPosition(position);
@@ -67,15 +77,13 @@ void MoveSystem::postUpdate()
         });
 
     mRegistry.view<ProjectileBody, PositionComponent>().each(
-        [&](ProjectileBody& projectileBody,
-            PositionComponent& positionComponent)
+        [&](ProjectileBody& projectileBody, PositionComponent& positionComponent)
         {
             projectileBody.mProjectile.setPosition(positionComponent.mPosition);
         });
 
     mRegistry.view<WeaponComponent, PositionComponent>().each(
-        [&](WeaponComponent& weaponComponent,
-            PositionComponent& positionComponent)
+        [&](WeaponComponent& weaponComponent, PositionComponent& positionComponent)
         {
             weaponComponent.mWeapon.setPosition(positionComponent.mPosition);
         });

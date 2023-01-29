@@ -25,8 +25,8 @@ void Tile::setupCollisionBox()
 void Tile::draw(sf::RenderWindow& window)
 {
     window.draw(mSprite);
-    if (mColliding)
-    {
-        window.draw(mRectangle);
-    }
+    //    if (mColliding)
+    //    {
+    //        window.draw(mRectangle);
+    //    }
 }

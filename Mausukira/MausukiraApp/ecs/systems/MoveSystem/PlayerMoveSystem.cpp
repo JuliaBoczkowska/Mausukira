@@ -1,10 +1,11 @@
-#include <iostream>
 #include "PlayerMoveSystem.h"
+#include "dungeon/map/Constants.h"
 #include "ecs/components/ColliderComponent.h"
 #include "ecs/components/MovableComponent.h"
 #include "ecs/components/PlayerComponent.h"
-#include "ecs/components/VelocityComponent.h"
 #include "ecs/components/PositionComponent.h"
+#include "ecs/components/VelocityComponent.h"
+#include <iostream>
 
 PlayerMoveSystem::PlayerMoveSystem(entt::registry& registry)
     : System(registry)
@@ -13,7 +14,7 @@ PlayerMoveSystem::PlayerMoveSystem(entt::registry& registry)
 
 void PlayerMoveSystem::handleInput(sf::Event& event)
 {
-    sf::Vector2f velocity{ 0.f, 0.f };
+    sf::Vector2f velocity{0.f, 0.f};
     float speed = 100.f;
     Direction direction;
 
@@ -40,7 +41,7 @@ void PlayerMoveSystem::handlePlayerDash(const sf::Event& event)
 }
 
 void PlayerMoveSystem::handlePlayerBasicMovement(float speed, sf::Vector2f& velocity,
-    Direction& direction) const
+                                                 Direction& direction) const
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
@@ -66,8 +67,8 @@ void PlayerMoveSystem::handlePlayerBasicMovement(float speed, sf::Vector2f& velo
 
 void PlayerMoveSystem::update(const sf::Time& dt)
 {
-    mRegistry.view<VelocityComponent, PositionComponent>().each(
-        [&](VelocityComponent& velocityComponent,
+    mRegistry.view<PlayerComponent, VelocityComponent, PositionComponent>().each(
+        [&](PlayerComponent& playerComponent, VelocityComponent& velocityComponent,
             PositionComponent& positionComponent)
         {
             if (dashTimer > 0)
@@ -81,14 +82,14 @@ void PlayerMoveSystem::update(const sf::Time& dt)
         });
 }
 
-void PlayerMoveSystem::performDash(const sf::Time& dt, const VelocityComponent& velocityComponent,
-    PositionComponent& positionComponent)
+void PlayerMoveSystem::performDash(const sf::Time& dt, VelocityComponent& velocityComponent,
+                                   PositionComponent& positionComponent)
 {
     /** Calculate the percentage of the dash that has elapsed */
     float t = 1.0f - (dashTimer / DASH_DURATION);
 
     /** Use a smoothed easing function to smoothly decelerate the dash */
-    float speed = DASH_SPEED * (1.0f - cos(t * M_PI)) / 2.0f;
+    float speed = DASH_SPEED * (1.0f - cos(t * PI)) / 2.0f;
 
     /** Update the player position based on the calculated speed */
     positionComponent.mPosition += (velocityComponent.mVelocity * speed * dt.asSeconds());

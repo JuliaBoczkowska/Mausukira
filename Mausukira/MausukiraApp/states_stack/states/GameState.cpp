@@ -1,6 +1,6 @@
 #include "GameState.h"
+#include "dungeon/Debug.h"
 #include "states_stack/StateHandler.h"
-
 
 GameState::GameState(StateHandler& stateManager, StateType type, sf::View view)
     : State(stateManager, type, view)
@@ -24,6 +24,28 @@ void GameState::handleInput(sf::Event& event)
         {
             mStateHandler.removeState(StateType::GAME_STATE);
             mStateHandler.switchTo(StateType::SCORE_STATE);
+        }
+        if (event.key.code == sf::Keyboard::F1)
+        {
+            if (debug::DEBUG_AI)
+            {
+                debug::DEBUG_AI = 0;
+            }
+            else
+            {
+                debug::DEBUG_AI = 1;
+            }
+        }
+        if (event.key.code == sf::Keyboard::F2)
+        {
+            if (debug::DEBUG_ROOM_GENERATION)
+            {
+                debug::DEBUG_ROOM_GENERATION = 0;
+            }
+            else
+            {
+                debug::DEBUG_ROOM_GENERATION = 1;
+            }
         }
     }
     mScene.handleInput(event);

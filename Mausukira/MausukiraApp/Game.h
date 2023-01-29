@@ -3,6 +3,7 @@
 
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/System/Time.hpp"
+#include "states_stack/LevelInfo.h"
 #include <memory>
 
 namespace sf

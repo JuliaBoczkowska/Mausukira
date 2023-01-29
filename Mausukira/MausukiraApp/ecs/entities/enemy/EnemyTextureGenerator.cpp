@@ -1,6 +1,7 @@
 #include "EnemyTextureGenerator.h"
 #include "utils/RandomNumberGenerator.h"
 #include "utils/SpriteSheetHandler.h"
+#include "utils/TextureManager.h"
 
 EnemyTextureGenerator::EnemyTextureGenerator(TextureManager& textureManager)
     : mTextureManager(textureManager)
@@ -19,11 +20,12 @@ EnemyTextureGenerator::EnemyTextureGenerator(EnemyTextureGenerator&& c) noexcept
 {
 }
 
-std::vector<sf::Sprite> EnemyTextureGenerator::generate()
+std::pair<std::vector<sf::Sprite>, float> EnemyTextureGenerator::generate()
 {
+    mCalculatedDefense = 0;
     std::vector<sf::Sprite> spritesPartsToDraw;
-    createPartialSprite(spritesPartsToDraw);
-    return spritesPartsToDraw;
+    createEnemySpriteElements(spritesPartsToDraw);
+    return {spritesPartsToDraw, mCalculatedDefense};
 }
 
 void EnemyTextureGenerator::loadEnemyTextures()
@@ -32,31 +34,28 @@ void EnemyTextureGenerator::loadEnemyTextures()
     mTextureSheet = mTextureManager.get("ENEMIES");
 }
 
-void EnemyTextureGenerator::createPartialSprite(std::vector<sf::Sprite>& spritesPartsToDraw)
+void EnemyTextureGenerator::createEnemySpriteElements(std::vector<sf::Sprite>& enemySpriteElements)
 {
-    /** 20% chance to generate any of the armour type 1:4 chances*/
     auto face = generateFace();
-    if (face)
-    {
-        face->setScale({ 2.f, 2.f });
-        spritesPartsToDraw.emplace_back(*face);
-    }
+    face.setScale({2.f, 2.f});
+    enemySpriteElements.emplace_back(face);
+
     auto helmet = generateHelmet();
     if (helmet)
     {
-        spritesPartsToDraw.push_back(*helmet);
+        enemySpriteElements.push_back(*helmet);
     }
 
     auto torso = generateTorso();
     if (torso)
     {
-        spritesPartsToDraw.push_back(*torso);
+        enemySpriteElements.push_back(*torso);
     }
 
     auto boots = generateBoots();
     if (boots)
     {
-        spritesPartsToDraw.push_back(*boots);
+        enemySpriteElements.push_back(*boots);
     }
 }
 
@@ -67,6 +66,7 @@ std::optional<sf::Sprite> EnemyTextureGenerator::generateBoots()
         sf::Sprite sprite = SpriteSheetHandler::extractSpriteFromTileSheet(
             static_cast<int>(EnemySpritesID::BOOTS), mTextureSheet);
         generateArmourType(sprite);
+        mCalculatedDefense += mBootsProtection;
         return sprite;
     }
     return std::nullopt;
@@ -79,14 +79,17 @@ void EnemyTextureGenerator::generateArmourType(sf::Sprite& sprite)
     if (percentValue <= 10.f)
     {
         sprite.setColor(DIAMOND);
+        mCalculatedDefense += mDiamondDefense;
     }
     else if (percentValue > 10.f && percentValue < 30.f)
     {
         sprite.setColor(GOLD);
+        mCalculatedDefense += mGoldDefense;
     }
     else
     {
         sprite.setColor(IRON);
+        mCalculatedDefense += mIronDefense;
     }
 }
 
@@ -97,6 +100,7 @@ std::optional<sf::Sprite> EnemyTextureGenerator::generateTorso()
         sf::Sprite sprite = SpriteSheetHandler::extractSpriteFromTileSheet(
             static_cast<int>(EnemySpritesID::TORSO), mTextureSheet);
         generateArmourType(sprite);
+        mCalculatedDefense += mChestplateProtection;
         return sprite;
     }
     return std::nullopt;
@@ -109,13 +113,19 @@ std::optional<sf::Sprite> EnemyTextureGenerator::generateHelmet()
         sf::Sprite sprite = SpriteSheetHandler::extractSpriteFromTileSheet(
             static_cast<int>(EnemySpritesID::HELMET), mTextureSheet);
         generateArmourType(sprite);
+        mCalculatedDefense += mHelmetProtection;
         return sprite;
     }
     return std::nullopt;
 }
 
-std::optional<sf::Sprite> EnemyTextureGenerator::generateFace()
+sf::Sprite EnemyTextureGenerator::generateFace()
 {
     return SpriteSheetHandler::extractSpriteFromTileSheet(generateIntNumberInRange(0, 6),
-        mTextureSheet);
+                                                          mTextureSheet);
+}
+EnemyTextureGenerator& EnemyTextureGenerator::operator=(EnemyTextureGenerator&& other)
+{
+    mTextureManager = std::move(other.mTextureManager);
+    return *this;
 }

@@ -54,7 +54,7 @@ void GameOverState::setupPlayAgainButton()
 
 void GameOverState::setupConntinueButton()
 {
-    auto continueButton = tgui::Button::create("Continue");
+    auto continueButton = tgui::Button::create("Save score");
     continueButton->setSize({"30%", "5%"});
     continueButton->setPosition({"35%", "50%"});
     continueButton->onPress(

@@ -1,35 +1,45 @@
 #ifndef ENTITYCOMPONENT_H
 #define ENTITYCOMPONENT_H
 
-#include "SFML/System/Vector2.hpp"
 #include "AttackType.h"
+#include "SFML/System/Clock.hpp"
+#include "SFML/System/Vector2.hpp"
 #include <functional>
 #include <string>
 
 enum class MobState
 {
     Idle,
-    Walking,
     Attacking,
-    Hurt,
     Died
 };
 
 struct EntityState
 {
-    MobState state{ MobState::Idle };
+    MobState state{MobState::Idle};
 };
 
 struct EntityStatistic
 {
-    std::string mNameTag{};
     AttackType mAttackType{};
     float mAttackDamage{};
     float mAttackSpeed{};
     float mMovementSpeed{};
     int mHealth{};
     float mReactionTime{};
-    bool isTransitionToNextLevel{ false };
+    float mDecelerationSpeed{};
+    float mActiveWanderTime{};
+    float mRestTime{};
+    bool isSelectedAsTransitionToNextLevel{false};
+};
+
+struct EnemyDamage
+{
+    float mAttackDamage{};
+    float mAttackSpeed{};
+    float mTimeProjectileShot{};
+    sf::Clock clock;
+    sf::Clock shootingClock{};
 };
 
 #endif// ENTITYCOMPONENT_H

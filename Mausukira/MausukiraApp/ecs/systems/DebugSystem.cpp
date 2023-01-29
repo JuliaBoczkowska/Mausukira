@@ -16,7 +16,6 @@ void DebugSystem::update(const sf::Time& dt)
             {
                 std::cout << std::endl;
                 std::string temp;
-                std::cout << "Name: " << entityStatistic.mNameTag << std::endl;
                 std::cout << "Health: " << entityStatistic.mHealth << std::endl;
                 std::cout << "MovementSpeed: " << entityStatistic.mMovementSpeed << std::endl;
                 if (entityStatistic.mAttackType == AttackType::Melee)
@@ -32,6 +31,6 @@ void DebugSystem::update(const sf::Time& dt)
                 std::cout << "AttackSpeed: " << entityStatistic.mAttackSpeed << std::endl;
                 std::cout << "AttackDamage: " << entityStatistic.mAttackDamage << std::endl;
             });
-        doOnce = false;
+        doOnce = true;
     }
 }

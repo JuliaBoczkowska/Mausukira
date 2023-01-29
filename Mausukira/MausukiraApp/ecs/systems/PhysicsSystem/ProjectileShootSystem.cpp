@@ -1,101 +1,104 @@
 #include "ProjectileShootSystem.h"
-#include "ecs/components/PositionComponent.h"
-#include "ecs/entities/Entity.h"
-#include "ecs/components/VelocityComponent.h"
-#include "ecs/components/ShootingComponents.h"
+#include "Window.h"
+#include "ecs/components/AiComponent.h"
 #include "ecs/components/AttachmentPoint.h"
-#include "ecs/components/ColliderComponent.h"
-#include "poly2tri/common/utils.h"
+#include "ecs/components/EntityComponent.h"
+#include "ecs/components/PositionComponent.h"
+#include "ecs/components/ShootingComponents.h"
+#include "ecs/entities/Entity.h"
 #include "ecs/systems/CollisionSystem/SpatialHashing/SpatialHash.h"
+#include "ecs/systems/PhysicsSystem/weapon/MachineGun.h"
+#include "ecs/systems/PhysicsSystem/weapon/Pistol.h"
+#include "ecs/systems/PhysicsSystem/weapon/Shotgun.h"
 
 ProjectileShootSystem::ProjectileShootSystem(entt::registry& registry, SharedContext& sharedContext,
-    SpatialHash& spatialGrid)
+                                             SpatialHash& spatialGrid)
     : System(registry)
     , mRenderWindow(sharedContext.window())
 {
+    registerWeapon<Shotgun>(WeaponType::SHOTGUN);
+    registerWeapon<MachineGun>(WeaponType::MACHINE_GUN);
+    registerWeapon<Pistol>(WeaponType::PISTOL);
 
+    mRegistry.view<WeaponComponent, AttachmentPoint>().each(
+        [&](auto entity, WeaponComponent& weaponComponent, AttachmentPoint& attachmentPoint)
+        {
+            mWeapon.emplace(attachmentPoint.parent,
+                            mWeaponFactory.find(weaponComponent.type)->second());
+        });
 }
 
 void ProjectileShootSystem::update(const sf::Time& dt)
 {
-    sf::Vector2f aimDirection{ 0.f, 0.f };
-    float rotAngle{ 0 };
-
-    mRegistry.view<WeaponComponent, PositionComponent>().each(
-        [&](WeaponComponent& weaponComponent, auto& positionComponent)
-        {
-            calculateDirectionalVector(positionComponent, aimDirection);
-            normalizeDirectionalVector(aimDirection);
-            setWeaponRotation(aimDirection, rotAngle, weaponComponent);
-        });
-
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1))
+    {
+        checkIfChangeWeaponTriggered(WeaponType::MACHINE_GUN);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num2))
+    {
+        checkIfChangeWeaponTriggered(WeaponType::SHOTGUN);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num3))
+    {
+        checkIfChangeWeaponTriggered(WeaponType::PISTOL);
+    }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
     {
-        mRegistry.view<WeaponComponent>().each(
-            [&](WeaponComponent& weaponComponent)
-            {
-                if (weaponComponent.clock.getElapsedTime().asMilliseconds() > 10)
-                {
-                    shootProjectile(dt);
-                    weaponComponent.clock.restart();
-                }
-            });
+        playerShoot(dt);
     }
+    enemyShoot(dt);
 }
 
-void ProjectileShootSystem::calculateDirectionalVector(const auto& positionComponent, sf::Vector2f& aimDirection)
+void ProjectileShootSystem::enemyShoot(const sf::Time& dt)
 {
-    mWeaponCenter = positionComponent.mPosition;
-    mMouseCoordinates = mRenderWindow.mapPixelToCoords((sf::Mouse::getPosition(mRenderWindow)));
-
-    /** Substracting mouse position vector for weapon center gives us*/
-    aimDirection = mMouseCoordinates - mWeaponCenter;
-}
-
-void ProjectileShootSystem::setWeaponRotation(const sf::Vector2f& aimDirection, float rotAngle,
-    WeaponComponent& weaponComponent) const
-{
-    rotAngle = atan2(aimDirection.x, aimDirection.y) * (180 / M_PI);
-    weaponComponent.mWeapon.setRotation(180 - rotAngle);
-}
-
-void ProjectileShootSystem::normalizeDirectionalVector(sf::Vector2f aimDirection)
-{
-    mAimDirectionNormalized = aimDirection / calculateVectorLength(aimDirection);
-}
-
-float ProjectileShootSystem::calculateVectorLength(sf::Vector2f aimDirection) const
-{
-    return static_cast<float>(sqrt(pow(aimDirection.x, 2) + pow(aimDirection.y, 2)));
-}
-
-void ProjectileShootSystem::shootProjectile(const sf::Time& dt)
-{
-    mRegistry.view<WeaponComponent>().each(
-        [&](auto weaponEntity, WeaponComponent& weapon)
+    mRegistry.view<WeaponComponent, WeaponEnemy, AttachmentPoint>().each(
+        [&](auto entity, WeaponComponent& weaponComponent, WeaponEnemy& weaponPlayer,
+            AttachmentPoint& attachmentPoint)
         {
-            setupProjectile(dt, weaponEntity);
+            auto aiComponent = mRegistry.get<AiComponent>(attachmentPoint.parent);
+            auto sensorComponent = mRegistry.get<SensorComponent>(attachmentPoint.parent);
+            auto& enemyDamageComponent = mRegistry.get<EnemyDamage>(attachmentPoint.parent);
+            auto weaponPosition = mRegistry.get<PositionComponent>(entity);
+            EntityStatistic entityStats = mRegistry.get<EntityStatistic>(attachmentPoint.parent);
+
+            auto playerPos = aiComponent.mPlayerPositionComponent;
+            auto time = enemyDamageComponent.shootingClock.getElapsedTime().asMilliseconds();
+            if (time - enemyDamageComponent.mTimeProjectileShot > entityStats.mAttackSpeed)
+            {
+                if (sensorComponent.mIsPlayerInFieldOfView)
+                {
+                    mWeapon.find(attachmentPoint.parent)
+                        ->second->shootProjectile(dt, entity, weaponComponent,
+                                                  weaponPosition.mPosition, playerPos->mPosition);
+                    enemyDamageComponent.mTimeProjectileShot =
+                        enemyDamageComponent.shootingClock.getElapsedTime().asMilliseconds();
+                }
+            }
         });
 }
 
-void ProjectileShootSystem::setupProjectile(const sf::Time& dt, auto weaponEntity)
+void ProjectileShootSystem::playerShoot(const sf::Time& dt)
 {
-    Entity projectile{ mRegistry.create(), &mRegistry };
-    projectile.addComponent<PositionComponent>(
-        mRegistry.get<PositionComponent>(weaponEntity).mPosition);
-    projectile.addComponent<VelocityComponent>(mAimDirectionNormalized * 5000.f * dt.asSeconds());
-    projectile.addComponent<ProjectileBody>();
-
-    setupProjectileCollider(projectile);
+    mRegistry.view<WeaponComponent, WeaponPlayer, AttachmentPoint>().each(
+        [&](auto entity, WeaponComponent& weaponComponent, WeaponPlayer& weaponPlayer,
+            AttachmentPoint& attachmentPoint)
+        {
+            auto weaponPosition = mRegistry.template get<PositionComponent>(entity).mPosition;
+            auto mouseCoordinates =
+                mRenderWindow.mapPixelToCoords((sf::Mouse::getPosition(mRenderWindow)));
+            mWeapon.find(attachmentPoint.parent)
+                ->second->shootProjectile(dt, entity, weaponComponent, weaponPosition,
+                                          mouseCoordinates);
+        });
 }
 
-void ProjectileShootSystem::setupProjectileCollider(Entity& projectile)
+void ProjectileShootSystem::checkIfChangeWeaponTriggered(const WeaponType& type)
 {
-    Entity colliderProjectile{ mRegistry.create(), &mRegistry };
-    sf::RectangleShape rect(CollisionBox::setupCollider(
-        projectile.getComponent<ProjectileBody>().mProjectile.getGlobalBounds(),
-        CollisionBox::CollisionType::PROJECTILE));
-    colliderProjectile.addComponent<ColliderComponent>(rect, CollisionBox::CollisionType::PROJECTILE);
-    colliderProjectile.addComponent<AttachmentPoint>(projectile.getEntity());
-    colliderProjectile.addComponent<ProjectileCollider>();
+    mRegistry.view<WeaponComponent, AttachmentPoint, WeaponPlayer>().each(
+        [&](auto entity, WeaponComponent& weaponComponent, AttachmentPoint& attachmentPoint,
+            WeaponPlayer)
+        {
+            mWeapon.find(attachmentPoint.parent)->second =
+                std::unique_ptr<Weapon>(mWeaponFactory.find(type)->second());
+        });
 }

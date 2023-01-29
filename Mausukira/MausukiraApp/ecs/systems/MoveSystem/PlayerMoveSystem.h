@@ -8,15 +8,12 @@
 
 class PlayerMoveSystem : public System
 {
-    /** PI value used for calculations */
-    const double M_PI = 3.14159265358979323846264338327;
-
     /** The duration of the dash in seconds */
-    const float DASH_DURATION = 3.f;
+    const float DASH_DURATION = 0.5f;
     /** The speed at which the player will dash */
     const float DASH_SPEED = 6.f;
-public:
 
+public:
     PlayerMoveSystem(entt::registry& registry);
 
     void handleInput(sf::Event& event);
@@ -29,11 +26,10 @@ public:
 
     void handlePlayerDash(const sf::Event& event);
 
+    void performDash(const sf::Time& dt, VelocityComponent& velocityComponent, PositionComponent& positionComponent);
+
     /** A timer to keep track of how long the dash has been active */
     float dashTimer;
-
-    void
-    performDash(const sf::Time& dt, const VelocityComponent& velocityComponent, PositionComponent& positionComponent);
 };
 
 

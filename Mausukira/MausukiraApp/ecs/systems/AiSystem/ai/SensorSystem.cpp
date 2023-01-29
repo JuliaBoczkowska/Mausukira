@@ -29,11 +29,19 @@ void SensorSystem::updateEnemyVisionSensor()
                 {
                     /** Cast a ray from enemy to player to see if anything is on the path between
                      * them */
+                    sensorComponent.lineOfSight = {positionComponent.mPosition,
+                                                   aiComponent.mPlayerPositionComponent->mPosition};
                     if (!isLineOfSightCollidingWithWall(
                             positionComponent.mPosition,
                             aiComponent.mPlayerPositionComponent->mPosition))
                     {
                         sensorComponent.mIsPlayerInFieldOfView = true;
+                        sensorComponent.mTimePlayerWasLastSeen =
+                            sensorComponent.clock.getElapsedTime().asSeconds();
+                    }
+                    else
+                    {
+                        sensorComponent.mIsPlayerInFieldOfView = false;
                     }
                 }
             });
@@ -42,8 +50,8 @@ void SensorSystem::updateEnemyVisionSensor()
 bool SensorSystem::isPlayerInEnemyFieldOfView(sf::Vector2f enemyPosition,
                                               sf::Vector2f facingDirectionVector,
                                               sf::Vector2f playerPosition, float fov)
-{
 
+{
     /** Comparing angle of the sight cone with angle between facing vector enemy player position */
     sf::Vector2f vecEnemyPlayer = normalizeVector(playerPosition - enemyPosition);
 
@@ -53,6 +61,11 @@ bool SensorSystem::isPlayerInEnemyFieldOfView(sf::Vector2f enemyPosition,
 bool SensorSystem::isLineOfSightCollidingWithWall(sf::Vector2f vectorA, sf::Vector2f vectorB)
 {
 
+    auto vecLength = calculateVectorLength(vectorB - vectorA);
+    if (vecLength > 300)
+    {
+        return true;
+    }
     for (auto wall: mMapContext.noTraversableTiles)
     {
         if (lineIntersectsRectangle(wall->mRectangle.getGlobalBounds(), vectorA, vectorB))

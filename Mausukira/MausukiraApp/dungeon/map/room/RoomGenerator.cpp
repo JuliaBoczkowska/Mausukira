@@ -2,11 +2,9 @@
 #include "dungeon/map/tile/TileHelper.h"
 #include "utils/RandomNumberGenerator.h"
 
-RoomGenerator::RoomGenerator(std::array<std::array<int, MAP_SIZE_X>, MAP_SIZE_Y>& map)
-    : mMap(map)
+RoomGenerator::RoomGenerator()
 {
 }
-
 
 Room::RoomGrid RoomGenerator::getMultiDimGrid(int width, int height, int value)
 {
@@ -15,12 +13,10 @@ Room::RoomGrid RoomGenerator::getMultiDimGrid(int width, int height, int value)
     return grid;
 }
 
-std::list<Room> RoomGenerator::allocateRooms()
+std::list<Room> RoomGenerator::allocateRooms(
+    std::array<std::array<int, MAP_SIZE_X>, MAP_SIZE_Y>& map)
 {
-    //    int count = 0;
-    //    while (count != 5)
-    //    {
-    //        count++;
+    mMap = &map;
     while (true)
     {
         if (!placeRoomOnMap(generateRoom()))
@@ -42,13 +38,8 @@ Room::RoomGrid RoomGenerator::generateRoom()
 
     switch (roomType)
     {
-        case RECTANGLE: return generateRoomRectangle();
-            break;
-        case CIRCLE: return generateRoomCircle();
-            break;
-        default:
-        RECTANGLE:
-            return generateRoomRectangle();
+        case RECTANGLE: return generateRoomRectangle(); break;
+        case CIRCLE: return generateRoomCircle(); break;
     }
 }
 
@@ -94,8 +85,8 @@ bool RoomGenerator::placeRoomOnMap(std::vector<std::vector<int>> roomOutline)
 
     Room roomToBeAdded;
     int count = 0;
-    int roomRow{ 0 };
-    int roomCol{ 0 };
+    int roomRow{0};
+    int roomCol{0};
 
     do
     {
@@ -109,7 +100,7 @@ bool RoomGenerator::placeRoomOnMap(std::vector<std::vector<int>> roomOutline)
         roomCol = roomOutline.at(0).size();
 
         if (!tile_helper::isInBorders(
-            sf::Vector2i{ tileLocation.x + roomRow, tileLocation.y + roomCol }))
+                sf::Vector2i{tileLocation.x + roomRow, tileLocation.y + roomCol}))
         {
             tileLocation.x = MAP_SIZE_X - 1 - roomRow;
             tileLocation.y = MAP_SIZE_Y - 1 - roomCol;
@@ -126,7 +117,7 @@ bool RoomGenerator::placeRoomOnMap(std::vector<std::vector<int>> roomOutline)
         /** Additional two is added in order to obtain space between rooms and for outlines of
          * rooms*/
         roomToBeAdded =
-            Room(tileLocation, sf::Vector2i{ roomRow - 1, roomCol - 1 }, roomOutline, center);
+            Room(tileLocation, sf::Vector2i{roomRow - 1, roomCol - 1}, roomOutline, center);
         ++count;
     }
     while (isRoomColliding(roomToBeAdded));
@@ -136,10 +127,10 @@ bool RoomGenerator::placeRoomOnMap(std::vector<std::vector<int>> roomOutline)
     int temp_row = 0, temp_col = 0;
 
     for (int i = roomToBeAdded.mLocation.x;
-         i < mMap.size() && (i < (roomToBeAdded.mLocation.x + roomRow)); ++i)
+         i < mMap->size() && (i < (roomToBeAdded.mLocation.x + roomRow)); ++i)
     {
         for (int j = roomToBeAdded.mLocation.y;
-             j < mMap.size() && (j < (roomToBeAdded.mLocation.y + roomCol)); ++j)
+             j < mMap->size() && (j < (roomToBeAdded.mLocation.y + roomCol)); ++j)
         {
             if (temp_row == roomRow)
             {
@@ -157,7 +148,7 @@ bool RoomGenerator::placeRoomOnMap(std::vector<std::vector<int>> roomOutline)
                 continue;
             }
             temp_row++;
-            mMap[i][j] = 1;
+            mMap->at(i).at(j) = 1;
         }
     }
     return true;

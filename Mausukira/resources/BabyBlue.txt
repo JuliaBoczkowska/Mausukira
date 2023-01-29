@@ -182,3 +182,17 @@ ToolTip {
     Borders         = (1, 1, 1, 1);
     Padding         = (2, 2, 2, 2);
 }
+
+ListView {
+    TextColor                    = rgb(100, 100, 100);
+    TextColorHover               = rgb(250, 250, 250);
+    BackgroundColor              = rgb(210, 210, 210);
+    BackgroundColorHover         = rgb(210, 210, 210);
+    SelectedBackgroundColor      = rgb(190, 225, 235);
+    SelectedBackgroundColorHover = rgb(170, 185, 255);
+    SelectedTextColor            = rgb(150, 150, 150);
+    BorderColor                  = White;
+    Padding                      = (3, 3, 3, 3);
+    Scrollbar                    = &Scrollbar;
+}
+

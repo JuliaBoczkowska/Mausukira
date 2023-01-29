@@ -238,10 +238,5 @@
         "name" : "FLOOR",
         "isDeadly": true,
         "isTraversable": true
-    },
-    {
-        "name" : "LAVA",
-        "isDeadly": false,
-        "isTraversable": true
     }
 ]

@@ -13,7 +13,6 @@ public:
     sf::RenderWindow& operator()();
     const sf::RenderWindow& operator()() const;
     void handlePolledEvents(sf::Event& event, StateHandler& mStateHandler);
-    sf::FloatRect getViewSpace();
 
 public:
     sf::RenderWindow mRenderWindow;

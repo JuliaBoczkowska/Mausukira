@@ -1,16 +1,16 @@
-//
-// Created by Julchan on 08-Jan-23.
-//
-
 #ifndef SHOTGUN_H
 #define SHOTGUN_H
 
 
+#include "Weapon.h"
+class Shotgun : public Weapon
+{
 
-class Shotgun {
-
+public:
+    Shotgun(entt::registry& registry, sf::RenderWindow& window);
+    void setupProjectile(const sf::Time& dt, entt::entity entity,
+                         sf::Vector2f& weaponPosition) override;
 };
 
 
-
-#endif //SHOTGUN_H
+#endif// SHOTGUN_H

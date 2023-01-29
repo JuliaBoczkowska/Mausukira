@@ -14,6 +14,7 @@ void DungeonGenerator::procedurallyGenerateMap()
     generateRooms();
     triangulation();
     minSpanningTree();
+    addRandomEdgesToMst();
     createHallways();
     mMapContext.mRooms = mRooms;
     mMapContext.mCenterOfTheFirstRoom = mRooms.front().mCenter;
@@ -21,10 +22,8 @@ void DungeonGenerator::procedurallyGenerateMap()
 
 void DungeonGenerator::generateRooms()
 {
-    RoomGenerator generator(mMapContext.mMap);
-    mRooms = generator.allocateRooms();
+    mRooms = mRoomGenerator.allocateRooms(mMapContext.mMap);
 }
-
 
 void DungeonGenerator::triangulation()
 {
@@ -35,7 +34,6 @@ void DungeonGenerator::minSpanningTree()
 {
     copyTriangleEdgesToMst();
     mFinalEdges = mMinSpanningTree.processMST(mFinalEdges);
-    addRandomEdgesToMst();
 }
 
 void DungeonGenerator::createHallways()
@@ -52,11 +50,12 @@ void DungeonGenerator::createHallways()
 
 void DungeonGenerator::drawDebugLines(sf::RenderWindow& window)
 {
-#if DEBUG_ROOM_GENERATION
-    mDelaunayTriangulation.draw(window);
-    mMinSpanningTree.draw(window);
-    drawRoomCenter(window);
-#endif
+    if (debug::DEBUG_ROOM_GENERATION)
+    {
+        mDelaunayTriangulation.draw(window);
+        mMinSpanningTree.draw(window);
+        drawRoomCenter(window);
+    }
 }
 
 void DungeonGenerator::drawRoomCenter(sf::RenderWindow& window)
@@ -81,7 +80,7 @@ void DungeonGenerator::addRandomEdgesToMst()
 {
     UniqueEdges notAddedEdges = mTriangleEdges;
     UniqueEdges mstUniqueEdges;
-    float chanceOfAddingEdge{ 20.f };
+    float chanceOfAddingEdge{20.f};
 
     storeUniqueEdges(mstUniqueEdges);
 

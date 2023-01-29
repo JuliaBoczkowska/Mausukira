@@ -10,4 +10,5 @@
 #define MAP_SIZE_X_WORLD_COORD (MAP_SIZE_X * TILE_SIZE)
 #define MAP_SIZE_Y_WORLD_COORD (MAP_SIZE_Y * TILE_SIZE)
 
-#endif// CONSTANTS_H
+#define PI 3.14159265358979323846 /* pi */
+#endif                            // CONSTANTS_H

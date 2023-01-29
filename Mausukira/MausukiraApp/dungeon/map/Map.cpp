@@ -38,7 +38,7 @@ void Map::tileMap()
     {
         for (int y = 0; y < MAP_SIZE_Y; ++y)
         {
-            sf::Vector2i currentTile{ x, y };
+            sf::Vector2i currentTile{x, y};
             auto currentTileType = mMapContext.mMap[currentTile.x][currentTile.y];
 
             if (!currentTileType == NONE)
@@ -72,17 +72,17 @@ void Map::tileBitmasking(const sf::Vector2i& currentTile)
 
     // Corners are only relevant when its primary neighbours have a true value
     auto TOP_LEFT_TILE = (TOP_TILE && LEFT_TILE)
-                         ? isValidForCalculations(currentTile + tile_helper::cornerTiles[0])
-                         : 0;
-    auto TOP_RIGHT_TILE = (TOP_TILE && RIGHT_TILE)
-                          ? isValidForCalculations(currentTile + tile_helper::cornerTiles[1])
-                          : 0;
-    auto BOTTOM_LEFT_TILE = (BOTTOM_TILE && LEFT_TILE)
-                            ? isValidForCalculations(currentTile + tile_helper::cornerTiles[2])
-                            : 0;
-    auto BOTTOM_RIGHT_TILE = (BOTTOM_TILE && RIGHT_TILE)
-                             ? isValidForCalculations(currentTile + tile_helper::cornerTiles[3])
+                             ? isValidForCalculations(currentTile + tile_helper::cornerTiles[0])
                              : 0;
+    auto TOP_RIGHT_TILE = (TOP_TILE && RIGHT_TILE)
+                              ? isValidForCalculations(currentTile + tile_helper::cornerTiles[1])
+                              : 0;
+    auto BOTTOM_LEFT_TILE = (BOTTOM_TILE && LEFT_TILE)
+                                ? isValidForCalculations(currentTile + tile_helper::cornerTiles[2])
+                                : 0;
+    auto BOTTOM_RIGHT_TILE = (BOTTOM_TILE && RIGHT_TILE)
+                                 ? isValidForCalculations(currentTile + tile_helper::cornerTiles[3])
+                                 : 0;
 
     auto wallValue = TOP_LEFT_TILE * 1 + TOP_TILE * 2 + TOP_RIGHT_TILE * 4 + LEFT_TILE * 8 +
                      RIGHT_TILE * 16 + BOTTOM_LEFT_TILE * 32 + BOTTOM_TILE * 64 +
@@ -101,6 +101,8 @@ void Map::setWallTile(const sf::Vector2i& currentTile, int wallValue)
     {
         setTile(currentTile.x, currentTile.y, "WALL_2_4");
     }
+    mMapContext.noTraversableTiles.push_back(
+        mMapContext.mTileMap.at(map_utils::convertCoordsTo1D(currentTile.x, currentTile.y)).get());
 }
 
 bool Map::isValidForCalculations(const sf::Vector2i& tile)
@@ -117,8 +119,7 @@ std::string Map::chooseTile(const int& tileType)
     switch (tileType)
     {
         case ROOM:
-        case HALL: return "FLOOR";
-            break;
+        case HALL: return "FLOOR"; break;
         default: return "FLOOR";
     }
 }
@@ -151,9 +152,9 @@ void Map::loadTiles()
                 static_cast<TileModel::TILE_TYPE>(tiles[index]["isTraversable"].asBool());
 
             auto tileModel = std::make_unique<TileModel>(
-                mSharedCtx.textureManager, TileModel::TileProperties{ isDeadly, isTraversable }, name,
+                mSharedCtx.textureManager, TileModel::TileProperties{isDeadly, isTraversable}, name,
                 tileID);
-            mTileModels.insert({ name, std::move(tileModel) });
+            mTileModels.insert({name, std::move(tileModel)});
             ++tileID;
         }
     }

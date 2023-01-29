@@ -1,14 +1,15 @@
 #include "CollisionSystem.h"
-#include "ecs/components/ColliderComponent.h"
-#include "ecs/components/HealthComponent.h"
 #include "dungeon/map/MapUtils.h"
 #include "ecs/components/AttachmentPoint.h"
-#include "ecs/systems/CollisionSystem/SpatialHashing/SpatialHash.h"
-#include "ecs/components/PositionComponent.h"
+#include "ecs/components/ColliderComponent.h"
 #include "ecs/components/EntityComponent.h"
+#include "ecs/components/HealthComponent.h"
+#include "ecs/components/PositionComponent.h"
 #include "ecs/components/ShootingComponents.h"
+#include "ecs/systems/CollisionSystem/SpatialHashing/SpatialHash.h"
 
-CollisionSystem::CollisionSystem(entt::registry& registry, MapContext& mapContext, SpatialHash& spatialGrid)
+CollisionSystem::CollisionSystem(entt::registry& registry, MapContext& mapContext,
+                                 SpatialHash& spatialGrid)
     : System(registry)
     , mMapContext(mapContext)
     , mSpatialGrid(spatialGrid)
@@ -30,24 +31,42 @@ CollisionSystem::CollisionSystem(entt::registry& registry, MapContext& mapContex
 
 void CollisionSystem::update(const sf::Time& dt)
 {
-    mRegistry.view<AttachmentPoint, ColliderComponent>().each(
-        [&](AttachmentPoint& attachmentPoint, ColliderComponent& colliderComponent)
-        {
-            if (CollisionBox::CollisionType::PROJECTILE == colliderComponent.mCollisionType ||
-                CollisionBox::CollisionType::ENEMY == colliderComponent.mCollisionType)
-            {
-                mSpatialGrid.update(colliderComponent);
-            }
-        });
+    updateSpatialGrid();
     mCollisionStatic.update(dt);
     mCollisionKinematic.update(dt);
 }
 
+void CollisionSystem::updateSpatialGrid()
+{
+    mRegistry.view<ColliderComponent>().each(
+        [&](ColliderComponent& colliderComponent)
+        {
+            if (CollisionBox::CollisionType::PROJECTILE == colliderComponent.mCollisionType ||
+                CollisionBox::CollisionType::ENEMY == colliderComponent.mCollisionType ||
+                CollisionBox::CollisionType::HERO == colliderComponent.mCollisionType)
+            {
+                mSpatialGrid.update(colliderComponent);
+            }
+        });
+}
+
 void CollisionSystem::postUpdate()
 {
+    handleEntitiesRemovalAfterCollision();
+}
+
+void CollisionSystem::handleEntitiesRemovalAfterCollision()
+{
+    removeProjectileFromMap();
+    removeEnemyFromMap();
+    mSpatialGrid.clearSpatialGridMap();
+}
+
+void CollisionSystem::removeProjectileFromMap()
+{
     mRegistry.view<ColliderComponent, AttachmentPoint, ProjectileCollider>().each(
-        [&](auto entity, ColliderComponent& colliderComponent,
-            AttachmentPoint& attachmentPoint, ProjectileCollider& projectileComponent)
+        [&](auto entity, ColliderComponent& colliderComponent, AttachmentPoint& attachmentPoint,
+            ProjectileCollider& projectileComponent)
         {
             if (colliderComponent.isHit)
             {
@@ -56,9 +75,11 @@ void CollisionSystem::postUpdate()
                 mRegistry.destroy(parent);
                 mRegistry.destroy(entity);
             }
-
         });
+}
 
+void CollisionSystem::removeEnemyFromMap()
+{
     auto view = mRegistry.view<Relationship, EntityState, HealthComponent, EntityStatistic>();
     for (auto& entity: view)
     {
@@ -68,6 +89,15 @@ void CollisionSystem::postUpdate()
 
         if (entityState.state == MobState::Died)
         {
+            mRegistry.view<WeaponEnemy, AttachmentPoint>().each(
+                [&](auto weaponEntity, WeaponEnemy& weaponEnemy, AttachmentPoint& attachmentPoint)
+                {
+                    auto parent = attachmentPoint.parent;
+                    if (parent == entity)
+                    {
+                        mRegistry.destroy(weaponEntity);
+                    }
+                });
             mRegistry.destroy(entity);
             while (curr != entt::null)
             {
@@ -77,5 +107,4 @@ void CollisionSystem::postUpdate()
             }
         }
     }
-    mSpatialGrid.clearSpatialGridMap();
 }

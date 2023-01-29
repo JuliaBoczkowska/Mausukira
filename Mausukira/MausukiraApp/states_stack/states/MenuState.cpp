@@ -10,6 +10,7 @@ MenuState::MenuState(StateHandler& stateManager, StateType type, sf::View view)
 {
     setupBackground();
     setupStartButton();
+    setupScoreButton();
     setupQuitButton();
     setupText();
 }
@@ -31,8 +32,8 @@ void MenuState::setupText()
 void MenuState::setupQuitButton()
 {
     auto quit = tgui::Button::create("Quit");
-    quit->setSize({"30%", "10%"});
-    quit->setPosition({"35%", "55%"});
+    quit->setSize({"30%", "6%"});
+    quit->setPosition({"35%", "60%"});
     quit->onPress(
         [this]()
         {
@@ -44,7 +45,7 @@ void MenuState::setupQuitButton()
 void MenuState::setupStartButton()
 {
     auto start = tgui::Button::create("New Game");
-    start->setSize({"30%", "10%"});
+    start->setSize({"30%", "6%"});
     start->setPosition({"35%", "40%"});
     start->onPress(
         [this]()
@@ -53,6 +54,20 @@ void MenuState::setupStartButton()
             mStateHandler.removeState(mStateType);
         });
     gui.add(start);
+}
+
+void MenuState::setupScoreButton()
+{
+    auto score = tgui::Button::create("Scoreboard");
+    score->setSize({"30%", "6%"});
+    score->setPosition({"35%", "50%"});
+    score->onPress(
+        [this]()
+        {
+            mStateHandler.switchTo(StateType::SCORE_STATE);
+            mStateHandler.removeState(mStateType);
+        });
+    gui.add(score);
 }
 
 void MenuState::setupBackground()

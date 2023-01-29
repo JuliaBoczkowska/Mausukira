@@ -18,6 +18,7 @@ public:
     void draw() override;
 
 private:
+    void setupScoreButton();
     void setupBackground();
     void setupStartButton();
     void setupQuitButton();

@@ -1,12 +1,12 @@
 #ifndef COLLISIONSYSTEM_H
 #define COLLISIONSYSTEM_H
 
-#include "SFML/Graphics/CircleShape.hpp"
-#include "ecs/systems/System.h"
-#include "ecs/components/ColliderComponent.h"
-#include "dungeon/map/MapContext.h"
 #include "CollisionKinematic.h"
 #include "CollisionStatic.h"
+#include "SFML/Graphics/CircleShape.hpp"
+#include "dungeon/map/MapContext.h"
+#include "ecs/components/ColliderComponent.h"
+#include "ecs/systems/System.h"
 
 class CollisionBox;
 
@@ -18,6 +18,12 @@ public:
     void update(const sf::Time& dt);
 
     void postUpdate() override;
+
+private:
+    void removeEnemyFromMap();
+    void removeProjectileFromMap();
+    void updateSpatialGrid();
+    void handleEntitiesRemovalAfterCollision();
 
 private:
     CollisionKinematic mCollisionKinematic;

@@ -1,8 +1,6 @@
 #include "Window.h"
 #include "SFML/Window/Event.hpp"
-#include "SFML/Window/Keyboard.hpp"
 #include "states_stack/StateHandler.h"
-#include <iostream>
 
 Window::Window(sf::VideoMode videoMode)
     : mRenderWindow(videoMode, "Mausukira")
@@ -27,15 +25,6 @@ void Window::handlePolledEvents(sf::Event& event, StateHandler& mStateHandler)
             mRenderWindow.setView(view);
         }
     }
-}
-
-sf::FloatRect Window::getViewSpace()
-{
-    sf::Vector2f viewCenter = mRenderWindow.getView().getCenter();
-    sf::Vector2f viewSize = mRenderWindow.getView().getSize();
-    sf::Vector2f viewSizeHalf(viewSize.x / 4, viewSize.y / 4);
-    sf::FloatRect viewSpace(viewCenter - viewSizeHalf, viewSize);
-    return viewSpace;
 }
 
 sf::RenderWindow& Window::operator()()

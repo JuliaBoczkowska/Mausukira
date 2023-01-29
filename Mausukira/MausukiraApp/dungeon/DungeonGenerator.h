@@ -1,14 +1,14 @@
 #ifndef DUNGEONGENERATOR_H
 #define DUNGEONGENERATOR_H
 
+#include "SFML/Graphics/VertexArray.hpp"
 #include "dungeon/algorithms/mst/MinSpanningTree.h"
 #include "dungeon/algorithms/triangulation/DelaunayTriangulation.h"
 #include "dungeon/map/CellType.h"
 #include "dungeon/map/MapContext.h"
+#include "dungeon/map/Tile/Tile.h"
 #include "dungeon/map/room/Room.h"
 #include "dungeon/map/room/RoomGenerator.h"
-#include "SFML/Graphics/VertexArray.hpp"
-#include "dungeon/map/Tile/Tile.h"
 #include <functional>
 
 class Map;
@@ -51,6 +51,7 @@ private:
 
 private:
     Rooms mRooms;
+    RoomGenerator mRoomGenerator;
     MinSpanningTree mMinSpanningTree;
     DelaunayTriangulation mDelaunayTriangulation;
     MapContext& mMapContext;

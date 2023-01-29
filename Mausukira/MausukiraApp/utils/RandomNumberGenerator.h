@@ -1,6 +1,7 @@
 #ifndef RANDOMNUMBERGENERATOR_H
 #define RANDOMNUMBERGENERATOR_H
 
+#include "Math.h"
 #include "SFML/System/Vector2.hpp"
 #include <random>
 
@@ -38,7 +39,8 @@ static sf::Vector2i generateTwoIntNumbersInRange(const auto& minSize, const auto
     const std::uniform_int_distribution<int> generatePosHeight(minSize, maxSize);
     const std::uniform_int_distribution<int> generatePosWidth(minSize, maxSize);
 
-    return sf::Vector2i{ generatePosWidth(engine), generatePosHeight(engine) };
+    return sf::Vector2i{generatePosWidth(engine), generatePosHeight(engine)};
 }
+
 
 #endif// RANDOMNUMBERGENERATOR_H

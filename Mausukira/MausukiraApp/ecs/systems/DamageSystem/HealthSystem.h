@@ -1,6 +1,7 @@
 #ifndef HEALTHSYSTEM_H
 #define HEALTHSYSTEM_H
 
+#include "ecs/components/ShootingComponents.h"
 #include "ecs/systems/System.h"
 
 class HealthComponent;
@@ -17,10 +18,15 @@ private:
 
     void whenEnemyIsHitDoDamage();
 
-    void whenEnemyDiedChangeEntityState();
+    void whenHealthBelowZeroChangeEntityState();
 
     bool isDead(const int& mCurrentHealth);
+    void checkEnemyDeath();
+    void checkPlayerDeath();
+    
+private:
+    WeaponComponent* mWeaponComponent;
 };
 
 
-#endif //HEALTHSYSTEM_H
+#endif// HEALTHSYSTEM_H

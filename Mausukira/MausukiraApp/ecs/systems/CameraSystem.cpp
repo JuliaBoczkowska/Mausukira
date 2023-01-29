@@ -2,13 +2,14 @@
 #include "states_stack/SharedContext.h"
 
 CameraSystem::CameraSystem(entt::registry& registry, SharedContext& sharedContext,
-    MapContext& mapContext, sf::View& view)
+                           MapContext& mapContext, sf::View& view)
     : System(registry)
     , mSharedContext(sharedContext)
     , mWindow(sharedContext.window.mRenderWindow)
     , mCameraView(view)
 {
     setInitialPlayerPosition(mapContext);
+    mWindow.setView(mWindow.getDefaultView());
 }
 
 void CameraSystem::setInitialPlayerPosition(const MapContext& mapContext)
@@ -28,8 +29,7 @@ void CameraSystem::updateCamera()
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
         sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
         mRegistry.view<PositionComponent>().each(
             [&](PositionComponent& positionComponent)
@@ -44,8 +44,8 @@ void CameraSystem::updateBackground()
 {
     mSharedContext.background.setTextureRect(
         sf::IntRect(0, 0, static_cast<int>(mCameraView.getSize().x),
-            static_cast<int>(mCameraView.getSize().y)));
-    mSharedContext.background.setPosition(mWindow.mapPixelToCoords({ 0, 0 }));
+                    static_cast<int>(mCameraView.getSize().y)));
+    mSharedContext.background.setPosition(mWindow.mapPixelToCoords({0, 0}));
 }
 
 void CameraSystem::followPlayer(const sf::Vector2f& position)
@@ -73,7 +73,7 @@ void CameraSystem::moveViewWithMiddleMouseButton()
 }
 
 void CameraSystem::moveViewRelativeToMouseCoords(const sf::Vector2i& oldCoordsOfMouse,
-    const sf::Vector2i& newCoordsOfMouse)
+                                                 const sf::Vector2i& newCoordsOfMouse)
 {
     mCameraView.move(mWindow.mapPixelToCoords(oldCoordsOfMouse) -
                      mWindow.mapPixelToCoords(newCoordsOfMouse));
@@ -84,11 +84,11 @@ void CameraSystem::handleInput(sf::Event& event)
 {
     if (event.type == sf::Event::MouseWheelScrolled)
     {
-        const auto oldCoordsOfMouse{ getCursorCoordinates(event) };
+        const auto oldCoordsOfMouse{getCursorCoordinates(event)};
         zoomInAndOut(event);
         cameraSetView();
 
-        const auto newCoordsOfMouse{ getCursorCoordinates(event) };
+        const auto newCoordsOfMouse{getCursorCoordinates(event)};
         zoomIntoMouseCursor(oldCoordsOfMouse, newCoordsOfMouse);
         updateBackground();
     }
@@ -96,14 +96,14 @@ void CameraSystem::handleInput(sf::Event& event)
 
 sf::Vector2f CameraSystem::getCursorCoordinates(const sf::Event& event) const
 {
-    return mWindow.mapPixelToCoords({ event.mouseWheelScroll.x, event.mouseWheelScroll.y });
+    return mWindow.mapPixelToCoords({event.mouseWheelScroll.x, event.mouseWheelScroll.y});
 }
 
 void CameraSystem::zoomIntoMouseCursor(const sf::Vector2f& oldCoordsOfMouse,
-    const sf::Vector2f& newCoordsOfMouse)
+                                       const sf::Vector2f& newCoordsOfMouse)
 {
     /** Prevents zooming into center of window */
-    mCameraView.move({ oldCoordsOfMouse - newCoordsOfMouse });
+    mCameraView.move({oldCoordsOfMouse - newCoordsOfMouse});
     mWindow.setView(mCameraView);
 }
 

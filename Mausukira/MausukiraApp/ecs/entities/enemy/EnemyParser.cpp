@@ -1,8 +1,8 @@
 #include "EnemyParser.h"
 #include "EnemySpawner.h"
+#include "json/json.h"
 #include <fstream>
 #include <iostream>
-#include "json/json.h"
 #include <unordered_map>
 
 void EnemyParser::loadEnemies(EnemySpawner& enemySpawner)
@@ -28,7 +28,7 @@ void EnemyParser::loadEnemies(EnemySpawner& enemySpawner)
 }
 
 void EnemyParser::parseEnemies(const Json::Value& enemiesJson, unsigned int index,
-    EnemySpawner& enemySpawner)
+                               EnemySpawner& enemySpawner)
 {
     std::string name = enemiesJson[index]["Name"].asString();
     int attackType = enemiesJson[index]["AttackType"].asInt();
@@ -44,16 +44,39 @@ void EnemyParser::parseEnemies(const Json::Value& enemiesJson, unsigned int inde
     auto attackSpeedMinMax =
         sf::Vector2f(attackSpeed["min"].asFloat(), attackSpeed["max"].asFloat());
 
-    auto movementSpeed = enemiesJson[index]["Movement_Speed"];
+    auto movementSpeed = enemiesJson[index]["Speed"];
     auto movementSpeedMinMax =
+        sf::Vector2f(movementSpeed["min"].asFloat(), movementSpeed["max"].asFloat());
+
+    auto mass = enemiesJson[index]["Mass"];
+    auto massMinMax = sf::Vector2f(movementSpeed["min"].asFloat(), movementSpeed["max"].asFloat());
+
+    auto force = enemiesJson[index]["Force"];
+    auto forceMinMax = sf::Vector2f(movementSpeed["min"].asFloat(), movementSpeed["max"].asFloat());
+
+    auto deceleration = enemiesJson[index]["Deceleration_speed"];
+    auto decelerationMinMax =
+        sf::Vector2f(movementSpeed["min"].asFloat(), movementSpeed["max"].asFloat());
+
+    auto activeWanderTime = enemiesJson[index]["ActiveWanderTime"];
+    auto activeWanderTimeMinMax =
+        sf::Vector2f(movementSpeed["min"].asFloat(), movementSpeed["max"].asFloat());
+
+    auto restTime = enemiesJson[index]["RestTime"];
+    auto restTimeTimeMinMax =
         sf::Vector2f(movementSpeed["min"].asFloat(), movementSpeed["max"].asFloat());
 
     auto reactionTime = enemiesJson[index]["Reaction_Time"].asFloat();
 
     EnemyModelInfo enemyStats{
         name,
-        AttackInfo{ static_cast<AttackType>(attackType), attackDamageMinMax, attackSpeedMinMax },
-        healthMinMax, movementSpeedMinMax, reactionTime };
+        AttackInfo{static_cast<AttackType>(attackType), attackDamageMinMax, attackSpeedMinMax},
+        healthMinMax,
+        movementSpeedMinMax,
+        decelerationMinMax,
+        reactionTime,
+        activeWanderTimeMinMax,
+        restTimeTimeMinMax};
 
     enemySpawner.addEnemyInfo(name, enemyStats);
 }

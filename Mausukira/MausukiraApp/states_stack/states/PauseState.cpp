@@ -22,7 +22,7 @@ void PauseState::setupBackground()
 void PauseState::setupText()
 {
     mText.setColor(sf::Color::White);
-    mText.setCharacterSize(30);
+    mText.setCharacterSize(50);
     font.loadFromFile("resources/arial.ttf");
     mText.setFont(font);
     mText.setString({"Paused"});
@@ -31,14 +31,14 @@ void PauseState::setupText()
     mText.setPosition(sf::Vector2f(context().window().getDefaultView().getCenter()));
 
     mPaused.setColor(sf::Color::White);
-    mPaused.setCharacterSize(15);
+    mPaused.setCharacterSize(30);
     font.loadFromFile("resources/arial.ttf");
     mPaused.setFont(font);
     mPaused.setString({"Click esc to continue"});
     mPaused.setOrigin(mText.getLocalBounds().left + mText.getLocalBounds().width / 2.0f,
                       mText.getLocalBounds().top + mText.getLocalBounds().height / 2.0f);
     mPaused.setPosition(sf::Vector2f(context().window().getDefaultView().getCenter()) +
-                        sf::Vector2f{-12.f, 50.f});
+                        sf::Vector2f{-80.f, 100.f});
 }
 
 void PauseState::handleInput(sf::Event& event)

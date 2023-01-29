@@ -9,12 +9,13 @@
 #include "ecs/components/PositionComponent.h"
 #include "ecs/components/SteeringBehaviourComponent.h"
 #include "ecs/components/VelocityComponent.h"
-#include "ecs/entities/Player.h"
 #include "utils/Math.h"
 
-EnemyStateSystem::EnemyStateSystem(entt::registry& registry, MapContext& mapContext)
+EnemyStateSystem::EnemyStateSystem(entt::registry& registry, MapContext& mapContext,
+                                   std::vector<std::unique_ptr<Enemy>>& enemyEntity)
     : System(registry)
-    , mSteeringBehaviour(mapContext)
+    , mSteeringBehaviour(mapContext, registry)
+    , mEnemyEntity(enemyEntity)
 {
     mEnemyBehaviourMap.insert({MobState::Attacking, std::make_unique<AttackStateSystem>(
                                                         (*this), mSteeringBehaviour, mRegistry)});
@@ -28,36 +29,60 @@ EnemyStateSystem::EnemyStateSystem(entt::registry& registry, MapContext& mapCont
             playerPositionComponent = &positionComponent;
         });
 
-    mRegistry.view<AiComponent, EnemyComponent, PositionComponent, SteeringBehaviourComponent>()
+    mRegistry
+        .view<AiComponent, EnemyComponent, PositionComponent, SteeringBehaviourComponent,
+              VelocityComponent>()
         .each(
             [&](AiComponent& aiComponent, EnemyComponent& enemyComponent,
-                PositionComponent& positionComponent, SteeringBehaviourComponent& steering)
+                PositionComponent& positionComponent, SteeringBehaviourComponent& steering,
+                VelocityComponent& velocityComponent)
             {
                 sf::Vector2f newHeading = normalizeVector(playerPositionComponent->mPosition -
                                                           positionComponent.mPosition);
                 steering.mDirectionVector = newHeading;
                 steering.mSideVectorToDirection = perpendicular(newHeading);
                 aiComponent.mPlayerPositionComponent = playerPositionComponent;
+                aiComponent.mVelocity = &velocityComponent;
             });
 }
 
-#include <cmath>
+void EnemyStateSystem::indicateWhichEnemiesAreClose(entt::entity selectedEntity)
+{
+    auto positionSelectedEntity = mRegistry.get<PositionComponent>(selectedEntity);
+
+    mRegistry
+        .view<AiComponent, EnemyComponent, PositionComponent, SteeringBehaviourComponent,
+              VelocityComponent>()
+        .each(
+            [&](auto entity, AiComponent& aiComponent, EnemyComponent& enemyComponent,
+                PositionComponent& positionComponent, SteeringBehaviourComponent& steering,
+                VelocityComponent& velocityComponent)
+            {
+                steering.isInCloseDistanceWithOtherEnemy = false;
+
+                sf::Vector2f vecEnemyToEnemy =
+                    positionComponent.mPosition - positionSelectedEntity.mPosition;
+                double range = 30;
+
+                auto lengthSquared = (vecEnemyToEnemy.x * vecEnemyToEnemy.x) +
+                                     (vecEnemyToEnemy.y * vecEnemyToEnemy.y);
+                if ((entity != selectedEntity) && (lengthSquared < range * range))
+                {
+                    steering.isInCloseDistanceWithOtherEnemy = true;
+                }
+            });
+}
 
 void EnemyStateSystem::update(const sf::Time& dt)
 {
     sf::Vector2f force;
-    if (std::isnan(force.x) || std::isnan(force.y))
-    {
-        std::cout << "THATS BED" << std::endl;
-    }
-
-    auto view =
-        mRegistry
-            .view<EntityState, VelocityComponent, SteeringBehaviourComponent, PositionComponent>();
+    auto view = mRegistry.view<EntityState, VelocityComponent, SteeringBehaviourComponent,
+                               PositionComponent, AiComponent>();
     for (auto entity: view)
     {
-
-        auto [entityState, velocity, steering, position] = view.get(entity);
+        /** Crucial for separation behaviour */
+        indicateWhichEnemiesAreClose(entity);
+        auto [entityState, velocity, steering, position, aiComponent] = view.get(entity);
         switch (entityState.state)
         {
             case MobState::Idle:
@@ -68,22 +93,30 @@ void EnemyStateSystem::update(const sf::Time& dt)
                 break;
             case MobState::Died: break;
         }
-        // if no steering force is produced decelerate the player by applying a
-        // braking force
-        if (force == sf::Vector2f{0, 0})
-        {
-            float BrakingRate = 0.8;
-
-            velocity.mVelocity *= BrakingRate;
-        }
-
-        // calculate the acceleration
-        sf::Vector2f accel = force / steering.mMass;
-        velocity.mVelocity += accel;
-        velocity.mVelocity = truncate(velocity.mVelocity, steering.maxSpeed);
+        /** When no force is applied slow down enemy */
+        whenNoForceSlowDownEnemy(force, velocity.mVelocity, steering.deceleration);
+        calculateNewVelocity(force, velocity.mVelocity, steering, aiComponent);
 
         position.mPosition += velocity.mVelocity;
         steering.mDirectionVector = normalizeVector(velocity.mVelocity);
         steering.mSideVectorToDirection = perpendicular(steering.mDirectionVector);
+    }
+}
+void EnemyStateSystem::calculateNewVelocity(const sf::Vector2f& force, sf::Vector2f& velocity,
+                                            SteeringBehaviourComponent& steering,
+                                            AiComponent& aiComponent) const
+{
+    sf::Vector2f acceleration = force / steering.mMass;
+    velocity += acceleration;
+    velocity = truncate(velocity, steering.maxSpeed);
+    aiComponent.mVelocity->mVelocity = velocity;
+}
+
+void EnemyStateSystem::whenNoForceSlowDownEnemy(const sf::Vector2f& force, sf::Vector2f& velocity,
+                                                const float& deceleration) const
+{
+    if (force == sf::Vector2f{0, 0})
+    {
+        velocity *= deceleration;
     }
 }

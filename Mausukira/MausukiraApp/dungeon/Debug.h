@@ -1,3 +1,5 @@
-#include <iostream>
-
-#define DEBUG_ROOM_GENERATION 1
+namespace debug
+{
+extern int DEBUG_ROOM_GENERATION;
+extern int DEBUG_AI;
+}// namespace debug

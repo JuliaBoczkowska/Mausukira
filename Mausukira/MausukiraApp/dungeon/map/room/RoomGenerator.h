@@ -1,19 +1,18 @@
 #ifndef ROOMGENERATOR_H
 #define ROOMGENERATOR_H
 
-#include "dungeon/map/Constants.h"
 #include "Room.h"
+#include "dungeon/map/Constants.h"
 #include <array>
 #include <list>
 
 class RoomGenerator
 {
 public:
-    RoomGenerator(std::array<std::array<int, MAP_SIZE_X>, MAP_SIZE_Y>& map);
+    RoomGenerator();
 
     enum RoomTypes
     {
-        CELLULAR_AUTOMATA = 0,
         RECTANGLE = 1,
         CIRCLE = 2
     };
@@ -21,7 +20,7 @@ public:
     /**
      * @brief Randomly allocate some number of rooms on the map
      */
-    std::list<Room> allocateRooms();
+    std::list<Room> allocateRooms(std::array<std::array<int, MAP_SIZE_X>, MAP_SIZE_Y>& map);
 
 private:
     bool isRoomColliding(Room& temp);
@@ -37,8 +36,8 @@ private:
     bool placeRoomOnMap(std::vector<std::vector<int>> roomOutline);
 
 private:
-    int roomCounter{ 0 };
-    std::array<std::array<int, MAP_SIZE_X>, MAP_SIZE_Y>& mMap;
+    int roomCounter{0};
+    std::array<std::array<int, MAP_SIZE_X>, MAP_SIZE_Y>* mMap;
     std::list<Room> mRooms;
 };
 

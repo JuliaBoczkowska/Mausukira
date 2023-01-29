@@ -4,23 +4,26 @@
 #include "SFML/System/Vector2.hpp"
 #include <cmath>
 
-class Vertex : public sf::Vector2i
+struct Vertex
 {
-public:
-    Vertex(int x, int y)
-        : sf::Vector2i(x, y)
+    Vertex(sf::Vector2i coord)
+        : x(coord.x)
+        , y(coord.y)
     {
     }
 
-    explicit Vertex(sf::Vector2i x)
-        : sf::Vector2i(x)
+    bool operator==(const Vertex& other) const
     {
+        return (x == other.x) && (y == other.y);
     }
 
     bool operator<(const Vertex& other) const
     {
         return (this->x < other.x) || ((this->x == other.x) && (this->y < other.y));
     }
+
+    int x;
+    int y;
 };
 
 class Edge
@@ -81,5 +84,4 @@ public:
     sf::Vector2i mVertexB;
     float mDistance{0};
 };
-
 #endif// ALGORITHMSHELPER_H

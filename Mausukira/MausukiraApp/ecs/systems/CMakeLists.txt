@@ -4,7 +4,6 @@ target_sources(MausukiraApp PRIVATE
         CollisionSystem/CollisionSystem.cpp
         CollisionSystem/CollisionStatic.cpp
         CollisionSystem/CollisionKinematic.cpp
-        PhysicsSystem/ProjectileShootSystem.cpp
         CameraSystem.cpp
         DebugSystem.cpp
         ScoreSystem.cpp
@@ -13,5 +12,7 @@ target_sources(MausukiraApp PRIVATE
         CollisionSystem/SpatialHashing/SpatialHash.cpp
         DamageSystem/HealthSystem.cpp
         LevelChangeSystem.cpp
-        AiSystem/EnemyFollowSystem.cpp
         )
+
+add_subdirectory(AiSystem/EnemySystems)
+add_subdirectory(PhysicsSystem)

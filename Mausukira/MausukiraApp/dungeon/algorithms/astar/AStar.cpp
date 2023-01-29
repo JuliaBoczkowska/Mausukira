@@ -13,31 +13,31 @@ void AStar::checkTilesAround(const sf::Vector2i& tile, const PathCost& costOfTil
 {
     for (int neighbourIndex = 0; neighbourIndex < 4; ++neighbourIndex)
     {
-        if (const auto closeNode = tile + tile_helper::neighbouringFourTiles[neighbourIndex];
-            tile_helper::isInBorders(closeNode))
+        if (const auto closeTile = tile + tile_helper::neighbouringFourTiles[neighbourIndex];
+            tile_helper::isInBorders(closeTile))
         {
-            if (closeNode == mFinalPoint)
+            if (closeTile == mFinalPoint)
             {
                 isFinalPointFound = true;
                 return;
             }
 
-            auto distanceToNeighbouringCell{0};
+            auto distanceToNeighbouringTile{0};
             switch (mMap[tile.x][tile.y])
             {
-                case CellType::ROOM: distanceToNeighbouringCell = 10; break;
-                case CellType::NONE: distanceToNeighbouringCell = 5; break;
-                case CellType::HALL: distanceToNeighbouringCell = 1; break;
+                case CellType::ROOM: distanceToNeighbouringTile = 10; break;
+                case CellType::NONE: distanceToNeighbouringTile = 5; break;
+                case CellType::HALL: distanceToNeighbouringTile = 1; break;
             }
 
             auto costOfCloseNode =
-                PathCost(costOfTile.mDistanceFromStart + distanceToNeighbouringCell,
-                         std::pair<sf::Vector2i, sf::Vector2i>{closeNode, mFinalPoint}, tile);
+                PathCost(costOfTile.mDistanceFromStart + distanceToNeighbouringTile,
+                         std::pair<sf::Vector2i, sf::Vector2i>{closeTile, mFinalPoint}, tile);
 
-            if (auto unvisitedNode = mVisitedTiles.find(closeNode);
+            if (auto unvisitedNode = mVisitedTiles.find(closeTile);
                 unvisitedNode == mVisitedTiles.end())
             {
-                mUnvisitedTiles.emplace(std::move(costOfCloseNode), closeNode);
+                mUnvisitedTiles.emplace(std::move(costOfCloseNode), closeTile);
             }
         }
     }
@@ -66,16 +66,12 @@ void AStar::drawFinalPathOnMap(const sf::Vector2i& lastHandledTile)
     setOnMapTileType(mStartPoint, CellType::ROOM);
 }
 
-void AStar::updateMapAroundTile(const sf::Vector2i& centerOfTileCoordinates, const PathCost& cost)
+void AStar::updateMapAroundTile(const sf::Vector2i& tile, const PathCost& cost)
 {
-    if (tile_helper::isInBorders(centerOfTileCoordinates))
+    if (tile_helper::isInBorders(tile))
     {
-        checkTilesAround(centerOfTileCoordinates, cost);
-        mVisitedTiles.emplace(centerOfTileCoordinates, cost);
-    }
-    else
-    {
-        throw std::runtime_error("ERR: AStar::updateMapAroundTile - Out of map border");
+        checkTilesAround(tile, cost);
+        mVisitedTiles.emplace(tile, cost);
     }
 }
 

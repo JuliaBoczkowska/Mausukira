@@ -3,12 +3,14 @@
 
 #include "System.h"
 
+class TextureManager;
 class LevelInfo;
 
 class LevelChangeSystem : public System
 {
 public:
-    explicit LevelChangeSystem(entt::registry& registry, LevelInfo& levelInfo);
+    LevelChangeSystem(entt::registry& registry, LevelInfo& levelInfo,
+                      TextureManager& textureManager);
 
     void update(const sf::Time& dt) override;
 
@@ -16,7 +18,8 @@ public:
 
 private:
     LevelInfo& mLevelInfo;
+    TextureManager& mTextureManager;
 };
 
 
-#endif //LEVELCHANGESYSTEM_H
+#endif// LEVELCHANGESYSTEM_H

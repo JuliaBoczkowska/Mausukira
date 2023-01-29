@@ -7,13 +7,13 @@
 class HealthComponent
 {
 public:
-    HealthComponent(float health);
+    HealthComponent(float health, float maxHealth = 100);
 
     void setPosition(const sf::Vector2f& position);
 
-    float mCurrentHealth{ 0.f };
-    float mHealthMax{ 0.f };
-    float mHpBarWidth{ 16.f };
+    float mCurrentHealth{0.f};
+    float mHealthMax{100.f};
+    float mHpBarWidth{16.f};
     sf::RectangleShape mHealthBarRect;
     sf::RectangleShape mHealthBarOutline;
 };
