@@ -1,3 +1,3 @@
-target_sources(MausukiraApp PRIVATE Entity.cpp Player.cpp)
+target_sources(MausukiraSrc PRIVATE Entity.cpp Player.cpp)
 
 add_subdirectory(enemy)

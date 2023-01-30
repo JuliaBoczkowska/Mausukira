@@ -1,3 +1,3 @@
-target_sources(MausukiraApp PRIVATE SensorSystem.cpp)
+target_sources(MausukiraSrc PRIVATE SensorSystem.cpp)
 
 add_subdirectory(SteeringBehaviour)

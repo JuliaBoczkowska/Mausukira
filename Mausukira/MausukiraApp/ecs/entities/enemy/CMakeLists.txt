@@ -1,4 +1,4 @@
-target_sources(MausukiraApp PRIVATE
+target_sources(MausukiraSrc PRIVATE
         EnemyParser.cpp
         EnemySpawner.cpp
         EnemyTextureGenerator.cpp

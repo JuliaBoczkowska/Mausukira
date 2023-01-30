@@ -1,1 +1,1 @@
-target_sources(MausukiraApp PRIVATE MinSpanningTree.h)
+target_sources(MausukiraSrc PRIVATE MinSpanningTree.h)

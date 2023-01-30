@@ -1,1 +1,1 @@
-target_sources(MausukiraApp PRIVATE AStar.cpp)
+target_sources(MausukiraSrc PRIVATE AStar.cpp)

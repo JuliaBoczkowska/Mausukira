@@ -1,4 +1,4 @@
-target_sources(MausukiraApp PRIVATE Scene.cpp)
+target_sources(MausukiraSrc PRIVATE Scene.cpp)
 
 add_subdirectory(components)
 add_subdirectory(systems)

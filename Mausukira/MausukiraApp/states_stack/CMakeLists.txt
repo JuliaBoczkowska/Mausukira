@@ -1,3 +1,3 @@
-target_sources(MausukiraApp PRIVATE StateHandler.cpp SharedContext.cpp)
+target_sources(MausukiraSrc PRIVATE StateHandler.cpp SharedContext.cpp)
 
 add_subdirectory(states)

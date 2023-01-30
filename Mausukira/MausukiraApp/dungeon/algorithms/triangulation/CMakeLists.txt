@@ -1,1 +1,1 @@
-target_sources(MausukiraApp PRIVATE DelaunayTriangulation.cpp)
+target_sources(MausukiraSrc PRIVATE DelaunayTriangulation.cpp)

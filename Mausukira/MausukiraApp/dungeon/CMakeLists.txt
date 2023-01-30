@@ -1,4 +1,4 @@
-target_sources(MausukiraApp PRIVATE
+target_sources(MausukiraSrc PRIVATE
         ../ecs/Scene.cpp
         CollisionBox.cpp
         ../ecs/entities/enemy/EnemyParser.cpp
